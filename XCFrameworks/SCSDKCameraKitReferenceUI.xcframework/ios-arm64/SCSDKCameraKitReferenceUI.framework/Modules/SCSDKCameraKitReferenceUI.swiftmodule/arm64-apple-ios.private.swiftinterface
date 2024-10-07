@@ -1,0 +1,831 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0 effective-5.10 (swiftlang-6.0.0.9.10 clang-1600.0.26.2)
+// swift-module-flags: -target arm64-apple-ios13 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -enable-experimental-feature OpaqueTypeErasure -enable-bare-slash-regex -module-name SCSDKCameraKitReferenceUI
+import ARKit
+import AVFoundation
+import AVKit
+import DeveloperToolsSupport
+import Foundation
+import Photos
+import SCSDKCameraKit
+@_exported import SCSDKCameraKitReferenceUI
+import Swift
+import SwiftUI
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public class Recorder {
+  final public let output: SCSDKCameraKit.AVWriterOutput
+  public init(url: Foundation.URL, orientation: AVFoundation.AVCaptureVideoOrientation, size: CoreFoundation.CGSize) throws
+  public func startRecording()
+  public func finishRecording(completion: ((Foundation.URL?, (any Swift.Error)?) -> Swift.Void)?)
+  @objc deinit
+}
+public protocol AppOrientationDelegate : AnyObject {
+  func lockOrientation(_ orientation: UIKit.UIInterfaceOrientationMask)
+  func unlockOrientation()
+}
+@objc @_Concurrency.MainActor @preconcurrency open class CameraViewController : UIKit.UIViewController, SCSDKCameraKitReferenceUI.CameraControllerUIDelegate {
+  @_Concurrency.MainActor @preconcurrency final public let cameraController: SCSDKCameraKitReferenceUI.CameraController
+  @_Concurrency.MainActor @preconcurrency weak public var appOrientationDelegate: (any SCSDKCameraKitReferenceUI.AppOrientationDelegate)?
+  @_Concurrency.MainActor @preconcurrency final public let cameraView: SCSDKCameraKitReferenceUI.CameraView
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func loadView()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func viewDidDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency convenience public init(repoGroups: [Swift.String], sessionConfig: SCSDKCameraKit.SessionConfig? = nil)
+  @_Concurrency.MainActor @preconcurrency convenience public init(cameraKit: any SCSDKCameraKit.CameraKitProtocol, captureSession: AVFoundation.AVCaptureSession, repoGroups: [Swift.String])
+  @_Concurrency.MainActor @preconcurrency public init(cameraController: SCSDKCameraKitReferenceUI.CameraController)
+  @available(*, unavailable)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor @preconcurrency open func getMessage(lens: any SCSDKCameraKit.Lens) -> Swift.String
+  @_Concurrency.MainActor @preconcurrency open func showMessage(lens: any SCSDKCameraKit.Lens)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewWillTransition(to size: CoreFoundation.CGSize, with coordinator: any UIKit.UIViewControllerTransitionCoordinator)
+  @_Concurrency.MainActor @preconcurrency open func applyLens(_ lens: any SCSDKCameraKit.Lens)
+  @_Concurrency.MainActor @preconcurrency open func clearLens()
+  @_Concurrency.MainActor @preconcurrency open func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, updatedLenses lenses: [any SCSDKCameraKit.Lens])
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedActivityIndicatorShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedActivityIndicatorHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedRingLightShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedRingLightHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedFlashControlHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedSnapAttributionViewShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedSnapAttributionViewHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraControllerRequestedCameraFlip(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  @_Concurrency.MainActor @preconcurrency open func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, requestedHintDisplay hint: Swift.String, for lens: any SCSDKCameraKit.Lens, autohide: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency open func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, requestedHintHideFor lens: any SCSDKCameraKit.Lens)
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.CameraViewController : SCSDKCameraKit.AdjustmentsProcessorObserver {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func processorUpdatedAdjustmentsAvailability(_ adjustmentsProcessor: any SCSDKCameraKit.AdjustmentsProcessor)
+}
+extension SCSDKCameraKitReferenceUI.CameraViewController : SCSDKCameraKitReferenceUI.CarouselViewDelegate, SCSDKCameraKitReferenceUI.CarouselViewDataSource {
+  @_Concurrency.MainActor @preconcurrency public func carouselView(_ view: SCSDKCameraKitReferenceUI.CarouselView, didSelect item: SCSDKCameraKitReferenceUI.CarouselItem, at index: Swift.Int)
+  @_Concurrency.MainActor @preconcurrency public func itemsForCarouselView(_ view: SCSDKCameraKitReferenceUI.CarouselView) -> [SCSDKCameraKitReferenceUI.CarouselItem]
+}
+extension SCSDKCameraKitReferenceUI.CameraViewController : SCSDKCameraKitReferenceUI.CameraButtonDelegate {
+  @_Concurrency.MainActor @preconcurrency public func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  @_Concurrency.MainActor @preconcurrency public func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  @_Concurrency.MainActor @preconcurrency public func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  @_Concurrency.MainActor @preconcurrency public func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+}
+extension SCSDKCameraKitReferenceUI.CameraViewController : SCSDKCameraKitReferenceUI.FlashControlViewDelegate {
+  @_Concurrency.MainActor @preconcurrency public func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, updatedRingLightValue value: Swift.Float)
+  @_Concurrency.MainActor @preconcurrency public func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, selectedRingLightColor color: UIKit.UIColor)
+  @_Concurrency.MainActor @preconcurrency public func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, updatedFlashMode flashMode: SCSDKCameraKitReferenceUI.CameraController.FlashMode)
+}
+extension SCSDKCameraKitReferenceUI.CameraViewController : UIKit.UIAdaptivePresentationControllerDelegate {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic open func presentationControllerWillDismiss(_ presentationController: UIKit.UIPresentationController)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class VideoPreviewViewController : SCSDKCameraKitReferenceUI.PreviewViewController {
+  @_Concurrency.MainActor @preconcurrency final public let videoUrl: Foundation.URL
+  @_Concurrency.MainActor @preconcurrency public init(videoUrl: Foundation.URL)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor @preconcurrency @objc override public func openSnapchatPressed(_ sender: UIKit.UIButton)
+  @_Concurrency.MainActor @preconcurrency @objc override public func sharePreviewPressed(_ sender: UIKit.UIButton)
+  @_Concurrency.MainActor @preconcurrency @objc override public func savePreviewPressed(_ sender: UIKit.UIButton)
+  @objc deinit
+}
+public protocol MediaPickerViewDelegate : ObjectiveC.NSObjectProtocol {
+  func mediaPickerView(_ mediaPickerView: SCSDKCameraKitReferenceUI.MediaPickerView, selectedAsset: any SCSDKCameraKit.LensMediaPickerProviderAsset)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class MediaPickerView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.MediaPickerViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var provider: (any SCSDKCameraKit.LensMediaPickerProvider)? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public init()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.MediaPickerView : SCSDKCameraKit.LensMediaPickerProviderUIDelegate {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func mediaPickerProviderRequestedUIPresentation(_ provider: any SCSDKCameraKit.LensMediaPickerProvider)
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func mediaPickerProviderRequestedUIDismissal(_ provider: any SCSDKCameraKit.LensMediaPickerProvider)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class CarouselCollectionViewCell : UIKit.UICollectionViewCell {
+  @_Concurrency.MainActor @preconcurrency final public let imageView: UIKit.UIImageView
+  @_Concurrency.MainActor @preconcurrency final public let activityIndicatorView: UIKit.UIActivityIndicatorView
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public init()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol CameraControllerUIDelegate : AnyObject {
+  func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, updatedLenses lenses: [any SCSDKCameraKit.Lens])
+  func cameraControllerRequestedActivityIndicatorShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedActivityIndicatorHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedRingLightShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedRingLightHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedFlashControlHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedSnapAttributionViewShow(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedSnapAttributionViewHide(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraControllerRequestedCameraFlip(_ controller: SCSDKCameraKitReferenceUI.CameraController)
+  func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, requestedHintDisplay hint: Swift.String, for lens: any SCSDKCameraKit.Lens, autohide: Swift.Bool)
+  func cameraController(_ controller: SCSDKCameraKitReferenceUI.CameraController, requestedHintHideFor lens: any SCSDKCameraKit.Lens)
+}
+@objc open class CameraController : ObjectiveC.NSObject, SCSDKCameraKit.LensRepositoryGroupObserver, SCSDKCameraKit.LensPrefetcherObserver, SCSDKCameraKit.LensHintDelegate, SCSDKCameraKitReferenceUI.MediaPickerViewDelegate, SCSDKCameraKitReferenceUI.AdjustmentControlViewDelegate {
+  final public let captureSession: AVFoundation.AVCaptureSession
+  final public let cameraKit: any SCSDKCameraKit.CameraKitProtocol
+  public var cameraPosition: AVFoundation.AVCaptureDevice.Position {
+    get
+  }
+  public var photoCaptureOutput: SCSDKCameraKit.PhotoCaptureOutput? {
+    get
+  }
+  public var recorder: SCSDKCameraKitReferenceUI.Recorder? {
+    get
+  }
+  final public let lensMediaProvider: SCSDKCameraKit.LensMediaPickerProviderPhotoLibrary
+  weak public var snapchatDelegate: (any SCSDKCameraKitReferenceUI.SnapchatDelegate)?
+  weak public var uiDelegate: (any SCSDKCameraKitReferenceUI.CameraControllerUIDelegate)?
+  public var currentLens: (any SCSDKCameraKit.Lens)? {
+    get
+  }
+  public var groupIDs: [Swift.String] {
+    get
+    set
+  }
+  public var isToneMapAdjustmentAvailable: Swift.Bool {
+    get
+  }
+  public var isPortraitAdjustmentAvailable: Swift.Bool {
+    get
+  }
+  public var flashState: SCSDKCameraKitReferenceUI.CameraController.FlashState {
+    get
+    set
+  }
+  convenience public init(sessionConfig: SCSDKCameraKit.SessionConfig? = nil)
+  public init(cameraKit: any SCSDKCameraKit.CameraKitProtocol, captureSession: AVFoundation.AVCaptureSession)
+  public func configure(orientation: AVFoundation.AVCaptureVideoOrientation, textInputContextProvider: (any SCSDKCameraKit.TextInputContextProvider)?, agreementsPresentationContextProvider: (any SCSDKCameraKit.AgreementsPresentationContextProvider)?, completion: (() -> Swift.Void)?)
+  open func configureLenses(orientation: AVFoundation.AVCaptureVideoOrientation, textInputContextProvider: (any SCSDKCameraKit.TextInputContextProvider)?, agreementsPresentationContextProvider: (any SCSDKCameraKit.AgreementsPresentationContextProvider)?)
+  open func configureDataProvider() -> SCSDKCameraKit.DataProviderComponent
+  public func zoomExistingLevel(by factor: CoreFoundation.CGFloat)
+  public func finalizeZoom()
+  public func flipCamera()
+  public struct PointOfInterestOptions : Swift.OptionSet {
+    public let rawValue: Swift.Int
+    public init(rawValue: Swift.Int)
+    public static let exposure: SCSDKCameraKitReferenceUI.CameraController.PointOfInterestOptions
+    public static let focus: SCSDKCameraKitReferenceUI.CameraController.PointOfInterestOptions
+    public typealias ArrayLiteralElement = SCSDKCameraKitReferenceUI.CameraController.PointOfInterestOptions
+    public typealias Element = SCSDKCameraKitReferenceUI.CameraController.PointOfInterestOptions
+    public typealias RawValue = Swift.Int
+  }
+  public func setPointOfInterest(at point: CoreFoundation.CGPoint, for options: SCSDKCameraKitReferenceUI.CameraController.PointOfInterestOptions = [.exposure, .focus])
+  open func takePhoto(completion: ((UIKit.UIImage?, (any Swift.Error)?) -> Swift.Void)?)
+  @objc open func repository(_ repository: any SCSDKCameraKit.LensRepository, didUpdateLenses lenses: [any SCSDKCameraKit.Lens], forGroupID groupID: Swift.String)
+  @objc open func repository(_ repository: any SCSDKCameraKit.LensRepository, didFailToUpdateLensesForGroupID groupID: Swift.String, error: (any Swift.Error)?)
+  @objc public func prefetcher(_ prefetcher: any SCSDKCameraKit.LensPrefetcher, didUpdate lens: any SCSDKCameraKit.Lens, status: SCSDKCameraKit.LensFetchStatus)
+  open func startRecording()
+  open func cancelRecording()
+  open func finishRecording(completion: ((Foundation.URL?, (any Swift.Error)?) -> Swift.Void)?)
+  public func applyLens(_ lens: any SCSDKCameraKit.Lens, completion: ((Swift.Bool) -> Swift.Void)? = nil)
+  public func clearLens(willReapply: Swift.Bool = false, completion: ((Swift.Bool) -> Swift.Void)? = nil)
+  public func reapplyCurrentLens()
+  public func enableToneMapAdjustment() -> Swift.Float?
+  public func disableToneMapAdjustment()
+  public func enablePortraitAdjustment() -> Swift.Float?
+  public func disablePortraitAdjustment()
+  @objc public func lensProcessor(_ lensProcessor: any SCSDKCameraKit.LensProcessor, shouldDisplayHint hint: Swift.String, for lens: any SCSDKCameraKit.Lens, autohide: Swift.Bool)
+  @objc public func lensProcessor(_ lensProcessor: any SCSDKCameraKit.LensProcessor, shouldHideAllHintsFor lens: any SCSDKCameraKit.Lens)
+  public func mediaPickerView(_ mediaPickerView: SCSDKCameraKitReferenceUI.MediaPickerView, selectedAsset: any SCSDKCameraKit.LensMediaPickerProviderAsset)
+  public func adjustmentControlView(_ control: SCSDKCameraKitReferenceUI.AdjustmentControlView, sliderValueChanged value: Swift.Double)
+  public var brightnessToRestore: CoreFoundation.CGFloat?
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.CameraController {
+  public enum FlashMode : Swift.Int {
+    case standard
+    case ring
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public enum FlashState : Swift.Equatable {
+    case off
+    case on(SCSDKCameraKitReferenceUI.CameraController.FlashMode)
+    public var captureDeviceFlashMode: AVFoundation.AVCaptureDevice.FlashMode {
+      get
+    }
+    public var captureDeviceTorchMode: AVFoundation.AVCaptureDevice.TorchMode {
+      get
+    }
+    public static func == (a: SCSDKCameraKitReferenceUI.CameraController.FlashState, b: SCSDKCameraKitReferenceUI.CameraController.FlashState) -> Swift.Bool
+  }
+  public func enableFlash()
+  public func disableFlash()
+  public func restoreBrightnessIfNecessary()
+  public func increaseBrightnessIfNecessary()
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class RingLightView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let topBorder: UIKit.UIView
+  @_Concurrency.MainActor @preconcurrency final public let bottomBorder: UIKit.UIView
+  @_Concurrency.MainActor @preconcurrency final public let ringLightGradient: SCSDKCameraKitReferenceUI.RingLightGradientView
+  @_Concurrency.MainActor @preconcurrency public func changeColor(to color: UIKit.UIColor)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class RingLightColorSelectionViewCell : UIKit.UICollectionViewCell {
+  @_Concurrency.MainActor @preconcurrency public static let reuseIdentifer: Swift.String
+  @_Concurrency.MainActor @preconcurrency public func setColor(_ color: UIKit.UIColor)
+  @_Concurrency.MainActor @preconcurrency public func highlight()
+  @_Concurrency.MainActor @preconcurrency public func unhighlight()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class CameraBottomBar : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let snapButton: UIKit.UIButton
+  @_Concurrency.MainActor @preconcurrency final public let closeButton: UIKit.UIButton
+  @objc deinit
+}
+extension UIKit.UIColor {
+  convenience public init(hex: Swift.UInt, alpha: CoreFoundation.CGFloat = 1.0)
+}
+public protocol AdjustmentControlViewDelegate : AnyObject {
+  func adjustmentControlView(_ control: SCSDKCameraKitReferenceUI.AdjustmentControlView, sliderValueChanged value: Swift.Double)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class AdjustmentControlView : UIKit.UIView {
+  public enum Variant : Swift.Int {
+    case tone
+    case portrait
+    public var label: Swift.String {
+      get
+    }
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.AdjustmentControlViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var intensityValue: Swift.Float {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public let primaryLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let secondaryLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.AdjustmentControlView : SCSDKCameraKitReferenceUI.ControlSliderDelegate {
+  @_Concurrency.MainActor @preconcurrency public func controlSlider(_ slider: SCSDKCameraKitReferenceUI.ControlSlider, updatedValue value: Swift.Float, done: Swift.Bool)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class CameraActionsView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public var flipCameraButton: UIKit.UIButton {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var flashToggleButtonBaseSelectedImage: UIKit.UIImage? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var flashActionView: SCSDKCameraKitReferenceUI.CameraConfigurableActionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public func setupFlashToggleButtonForFront()
+  @_Concurrency.MainActor @preconcurrency public func setupFlashToggleButtonForBack()
+  @_Concurrency.MainActor @preconcurrency public var toneMapActionView: SCSDKCameraKitReferenceUI.CameraConfigurableActionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var portraitActionView: SCSDKCameraKitReferenceUI.CameraConfigurableActionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var buttonStackView: UIKit.UIStackView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public func collapse()
+  @_Concurrency.MainActor @preconcurrency public func expand()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class UserDataProvider : ObjectiveC.NSObject, SCSDKCameraKit.UserDataProvider {
+  @objc weak public var delegate: (any SCSDKCameraKit.UserDataProviderDelegate)?
+  @objc public var userData: SCSDKCameraKit.UserData? {
+    @objc get
+    @objc set
+  }
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol FlashControlViewDelegate : AnyObject {
+  func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, selectedRingLightColor color: UIKit.UIColor)
+  func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, updatedRingLightValue value: Swift.Float)
+  func flashControlView(_ view: SCSDKCameraKitReferenceUI.FlashControlView, updatedFlashMode flashMode: SCSDKCameraKitReferenceUI.CameraController.FlashMode)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class FlashControlView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.FlashControlViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var ringLightIntensityValue: Swift.Float {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public let primaryLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency public var flashModeSelectionView: SCSDKCameraKitReferenceUI.FlashModeSelectionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var ringLightColorSelectionView: SCSDKCameraKitReferenceUI.RingLightColorSelectionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.FlashControlView : SCSDKCameraKitReferenceUI.FlashModeSelectionViewDelegate {
+  @_Concurrency.MainActor @preconcurrency public func flashModeSelectionView(_ view: SCSDKCameraKitReferenceUI.FlashModeSelectionView, updatedMode mode: SCSDKCameraKitReferenceUI.CameraController.FlashMode)
+}
+extension SCSDKCameraKitReferenceUI.FlashControlView : SCSDKCameraKitReferenceUI.ControlSliderDelegate {
+  @_Concurrency.MainActor @preconcurrency public func controlSlider(_ slider: SCSDKCameraKitReferenceUI.ControlSlider, updatedValue value: Swift.Float, done: Swift.Bool)
+}
+extension SCSDKCameraKitReferenceUI.FlashControlView : SCSDKCameraKitReferenceUI.RingLightColorSelectionViewDelegate {
+  @_Concurrency.MainActor @preconcurrency public func ringLightColorSelectionView(_ view: SCSDKCameraKitReferenceUI.RingLightColorSelectionView, selectedColor color: UIKit.UIColor)
+}
+extension UIKit.UIFont {
+  public static func sc_ultraLightFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+  public static func sc_regularFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+  public static func sc_mediumFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+  public static func sc_demiBoldFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+  public static func sc_boldFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+  public static func sc_heavyFont(size: CoreFoundation.CGFloat) -> UIKit.UIFont?
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class KeyboardAccessoryViewProvider : ObjectiveC.NSObject, SCSDKCameraKit.TextInputKeyboardAccessoryProvider {
+  @objc final public let textView: UIKit.UITextView
+  @objc final public let accessoryView: UIKit.UIView
+  @objc public var placeholderText: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc final public let maximumHeight: CoreFoundation.CGFloat
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class RingLightGradientView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public func updateIntensity(to intensity: CoreFoundation.CGFloat, animated: Swift.Bool)
+  @_Concurrency.MainActor @preconcurrency public func changeColor(to color: UIKit.UIColor)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol CameraButtonDelegate : AnyObject {
+  func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+  func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class CameraButton : UIKit.UIView, UIKit.UIGestureRecognizerDelegate {
+  public enum Constants {
+  }
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.CameraButtonDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var minimumHoldDuration: Swift.Double
+  @_Concurrency.MainActor @preconcurrency public var ringWidth: CoreFoundation.CGFloat {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var allowWhileRecording: [UIKit.UIGestureRecognizer]
+  @_Concurrency.MainActor @preconcurrency public var ringColor: UIKit.UIColor? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var tapGestureRecognizer: UIKit.UITapGestureRecognizer {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public var pressGestureRecognizer: UIKit.UILongPressGestureRecognizer {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public init()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func willMove(toSuperview newSuperview: UIKit.UIView?)
+  @_Concurrency.MainActor @preconcurrency @objc public func gestureRecognizer(_ gestureRecognizer: UIKit.UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIKit.UIGestureRecognizer) -> Swift.Bool
+  @_Concurrency.MainActor @preconcurrency @objc public func gestureRecognizer(_ gestureRecognizer: UIKit.UIGestureRecognizer, shouldReceive touch: UIKit.UITouch) -> Swift.Bool
+  @_Concurrency.MainActor @preconcurrency public func startRecordingAnimation(ringFillDuration: Foundation.TimeInterval = 10.0, maxRecordingDuration: Foundation.TimeInterval = 60.0)
+  @_Concurrency.MainActor @preconcurrency public func stopRecordingAnimation()
+}
+extension SCSDKCameraKitReferenceUI.CameraButton : QuartzCore.CAAnimationDelegate {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func animationDidStop(_ anim: QuartzCore.CAAnimation, finished flag: Swift.Bool)
+}
+extension UIKit.UIButton {
+  @_Concurrency.MainActor @preconcurrency public func applyCameraActionButtonShadow()
+}
+@_hasMissingDesignatedInitializers public class BundleHelper {
+  public class var resourcesBundle: Foundation.Bundle {
+    get
+  }
+  @objc deinit
+}
+public protocol FlashModeSelectionViewDelegate : AnyObject {
+  func flashModeSelectionView(_ view: SCSDKCameraKitReferenceUI.FlashModeSelectionView, updatedMode mode: SCSDKCameraKitReferenceUI.CameraController.FlashMode)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class FlashModeSelectionView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.FlashModeSelectionViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var flashMode: SCSDKCameraKitReferenceUI.CameraController.FlashMode {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @objc deinit
+}
+extension UIKit.UILabel {
+  @_Concurrency.MainActor @preconcurrency public static func controlDismissalHint() -> UIKit.UILabel
+}
+public enum SnapchatScreen {
+  case profile
+  case lens(any SCSDKCameraKit.Lens)
+  case photo(UIKit.UIImage)
+  case video(Foundation.URL)
+}
+public protocol SnapchatDelegate : AnyObject {
+  func cameraKitViewController(_ viewController: UIKit.UIViewController, openSnapchat screen: SCSDKCameraKitReferenceUI.SnapchatScreen)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class MessageNotificationView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let label: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class CameraConfigurableActionView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public var configurable: Swift.Bool {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var toggleButton: UIKit.UIButton {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var configurationButton: UIKit.UIButton {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public let blurEffectView: UIKit.UIVisualEffectView
+  @_Concurrency.MainActor @preconcurrency public func collapse()
+  @_Concurrency.MainActor @preconcurrency public func expand()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency public var enableAction: (() -> Swift.Void)?
+  @_Concurrency.MainActor @preconcurrency public var disableAction: (() -> Swift.Void)?
+  @_Concurrency.MainActor @preconcurrency public var showActionSettings: (() -> Swift.Void)?
+  @_Concurrency.MainActor @preconcurrency public var hideActionSettings: (() -> Swift.Void)?
+  @_Concurrency.MainActor @preconcurrency public var toggleActionSettingsVisibility: (() -> Swift.Void)?
+  @objc deinit
+}
+public protocol CarouselViewDelegate : AnyObject {
+  func carouselView(_ view: SCSDKCameraKitReferenceUI.CarouselView, didSelect item: SCSDKCameraKitReferenceUI.CarouselItem, at index: Swift.Int)
+}
+public protocol CarouselViewDataSource : AnyObject {
+  func itemsForCarouselView(_ view: SCSDKCameraKitReferenceUI.CarouselView) -> [SCSDKCameraKitReferenceUI.CarouselItem]
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class CarouselView : UIKit.UIView, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.CarouselViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency weak public var dataSource: (any SCSDKCameraKitReferenceUI.CarouselViewDataSource)? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public func reloadData()
+  @_Concurrency.MainActor @preconcurrency public var selectedItem: SCSDKCameraKitReferenceUI.CarouselItem {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @discardableResult
+  @_Concurrency.MainActor @preconcurrency public func selectItem(_ selected: SCSDKCameraKitReferenceUI.CarouselItem) -> Swift.Bool
+  @_Concurrency.MainActor @preconcurrency public func hideCarousel()
+  @_Concurrency.MainActor @preconcurrency public func showCarousel()
+  @_Concurrency.MainActor @preconcurrency @objc public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor @preconcurrency @objc public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor @preconcurrency @objc public func collectionView(_ collectionView: UIKit.UICollectionView, willDisplay cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor @preconcurrency @objc public func collectionView(_ collectionView: UIKit.UICollectionView, didEndDisplaying cell: UIKit.UICollectionViewCell, forItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor @preconcurrency @objc public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor @preconcurrency @objc public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.CarouselView : SCSDKCameraKitReferenceUI.CarouselCollectionViewLayoutDelegate {
+  @_Concurrency.MainActor @preconcurrency public func carouselLayout(_ layout: SCSDKCameraKitReferenceUI.CarouselCollectionViewLayout, willTargetIndex index: Swift.Int)
+}
+extension SCSDKCameraKitReferenceUI.CarouselView : SCSDKCameraKitReferenceUI.CarouselCollectionViewLayoutDataSource {
+  @_Concurrency.MainActor @preconcurrency public func carouselLayout(_ layout: SCSDKCameraKitReferenceUI.CarouselCollectionViewLayout, transformForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGAffineTransform
+}
+public protocol TestableElement {
+  var id: Swift.String { get }
+}
+extension SCSDKCameraKitReferenceUI.TestableElement where Self : Swift.RawRepresentable {
+  public var id: Swift.String {
+    get
+  }
+}
+public enum CameraBottomBarElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case closeButton
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum CameraElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case lensLabel
+  case flipCameraButton
+  case flashToggleButton
+  case flashConfigurationButton
+  case flashControl
+  case flashControlDismissalHint
+  case toneMapToggleButton
+  case toneMapConfigurationButton
+  case toneMapControl
+  case toneMapControlDismissalHint
+  case portraitToggleButton
+  case portraitConfigurationButton
+  case portraitControl
+  case portraitControlDismissalHint
+  case ringLightView
+  case photoLibraryButton
+  case cameraButton
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension SCSDKCameraKitReferenceUI.CameraElements {
+  public enum CameraFlip {
+    public static let front: Swift.String
+    public static let back: Swift.String
+  }
+}
+public enum CarouselElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case collectionView
+  case lensCell
+  case facadeSelectionRingView
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum PreviewElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case closeButton
+  case snapchatButton
+  case shareButton
+  case imageView
+  case playerControllerView
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum MessageNotificationElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case label
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum FlashControlElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case flashModeSelector
+  case ringLightColorSelector
+  case ringLightIntensitySlider
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum OtherElements : Swift.String, SCSDKCameraKitReferenceUI.TestableElement {
+  case noOpButton
+  case arkitButton
+  case agreementsButton
+  case tapToFocusView
+  case pairingButton
+  case connectedLensStartButton
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public class CarouselItem : Swift.Identifiable, Swift.Equatable {
+  final public let id: Swift.String
+  final public let lensId: Swift.String
+  final public let groupId: Swift.String
+  final public let imageUrl: Foundation.URL?
+  public var image: UIKit.UIImage?
+  public init(lensId: Swift.String, groupId: Swift.String, imageUrl: Foundation.URL? = nil, image: UIKit.UIImage? = nil)
+  public static func == (lhs: SCSDKCameraKitReferenceUI.CarouselItem, rhs: SCSDKCameraKitReferenceUI.CarouselItem) -> Swift.Bool
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  public typealias ID = Swift.String
+  @objc deinit
+}
+public class EmptyItem : SCSDKCameraKitReferenceUI.CarouselItem {
+  public init()
+  @objc deinit
+}
+public protocol CarouselImageLoader {
+  func loadImage(url: Foundation.URL, completion: ((_ image: UIKit.UIImage?, _ error: (any Swift.Error)?) -> Swift.Void)?)
+}
+public class DefaultCarouselImageLoader : SCSDKCameraKitReferenceUI.CarouselImageLoader {
+  final public let urlSession: Foundation.URLSession
+  public init(urlSession: Foundation.URLSession = .shared)
+  public func loadImage(url: Foundation.URL, completion: ((UIKit.UIImage?, (any Swift.Error)?) -> Swift.Void)?)
+  public func loadImage(url: Foundation.URL, cachePolicy: Foundation.URLRequest.CachePolicy = .useProtocolCachePolicy, queue: Dispatch.DispatchQueue, completion: ((UIKit.UIImage?, (any Swift.Error)?) -> Swift.Void)?)
+  public func cancelImageLoad(from url: Foundation.URL)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class SnapAttributionView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let poweredByLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let snapIconImage: UIKit.UIImageView
+  @objc deinit
+}
+extension UIKit.UIImage {
+  public func circleHighlightedImage(radius: CoreFoundation.CGFloat, color: UIKit.UIColor = .white) -> UIKit.UIImage?
+}
+public protocol RingLightColorSelectionViewDelegate : AnyObject {
+  func ringLightColorSelectionView(_ view: SCSDKCameraKitReferenceUI.RingLightColorSelectionView, selectedColor color: UIKit.UIColor)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class RingLightColorSelectionView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.RingLightColorSelectionViewDelegate)?
+  @_Concurrency.MainActor @preconcurrency public var collectionView: UIKit.UICollectionView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.RingLightColorSelectionView {
+  @_Concurrency.MainActor @preconcurrency public func performInitialSelection(indexPath: Foundation.IndexPath = IndexPath(row: 0, section: 0))
+}
+extension SCSDKCameraKitReferenceUI.RingLightColorSelectionView : UIKit.UICollectionViewDelegate {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, didDeselectItemAt indexPath: Foundation.IndexPath)
+}
+extension SCSDKCameraKitReferenceUI.RingLightColorSelectionView : UIKit.UICollectionViewDataSource {
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor @preconcurrency @objc dynamic public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class PreviewViewController : UIKit.UIViewController {
+  @_Concurrency.MainActor @preconcurrency weak public var snapchatDelegate: (any SCSDKCameraKitReferenceUI.SnapchatDelegate)? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var onDismiss: (() -> Swift.Void)?
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor @preconcurrency open func openSnapchatPressed(_ sender: UIKit.UIButton)
+  @objc @_Concurrency.MainActor @preconcurrency open func savePreviewPressed(_ sender: UIKit.UIButton)
+  @objc @_Concurrency.MainActor @preconcurrency open func sharePreviewPressed(_ sender: UIKit.UIButton)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol CarouselCollectionViewLayoutDelegate : AnyObject {
+  func carouselLayout(_ layout: SCSDKCameraKitReferenceUI.CarouselCollectionViewLayout, willTargetIndex index: Swift.Int)
+}
+public protocol CarouselCollectionViewLayoutDataSource : AnyObject {
+  func carouselLayout(_ layout: SCSDKCameraKitReferenceUI.CarouselCollectionViewLayout, transformForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGAffineTransform
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency public class CarouselCollectionViewLayout : UIKit.UICollectionViewFlowLayout {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.CarouselCollectionViewLayoutDelegate)?
+  @_Concurrency.MainActor @preconcurrency weak public var dataSource: (any SCSDKCameraKitReferenceUI.CarouselCollectionViewLayoutDataSource)?
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func targetContentOffset(forProposedContentOffset proposedContentOffset: CoreFoundation.CGPoint, withScrollingVelocity velocity: CoreFoundation.CGPoint) -> CoreFoundation.CGPoint
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutAttributesForElements(in rect: CoreFoundation.CGRect) -> [UIKit.UICollectionViewLayoutAttributes]?
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init()
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class TapAnimationView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public init(center: CoreFoundation.CGPoint)
+  @_Concurrency.MainActor @preconcurrency public func show()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor @preconcurrency open class CameraView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency final public let previewView: SCSDKCameraKit.PreviewView
+  @_Concurrency.MainActor @preconcurrency final public let cameraBottomBar: SCSDKCameraKitReferenceUI.CameraBottomBar
+  @_Concurrency.MainActor @preconcurrency final public let hintLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let lensLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let ringLightView: SCSDKCameraKitReferenceUI.RingLightView
+  @_Concurrency.MainActor @preconcurrency final public let cameraActionsView: SCSDKCameraKitReferenceUI.CameraActionsView
+  @_Concurrency.MainActor @preconcurrency public var flashControlView: SCSDKCameraKitReferenceUI.FlashControlView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public let flashControlDismissalHint: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let toneMapControlView: SCSDKCameraKitReferenceUI.AdjustmentControlView
+  @_Concurrency.MainActor @preconcurrency final public let toneMapControlDismissalHintLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let portraitControlView: SCSDKCameraKitReferenceUI.AdjustmentControlView
+  @_Concurrency.MainActor @preconcurrency final public let portraitControlDismissalHintLabel: UIKit.UILabel
+  @_Concurrency.MainActor @preconcurrency final public let carouselView: SCSDKCameraKitReferenceUI.CarouselView
+  @_Concurrency.MainActor @preconcurrency final public let cameraButton: SCSDKCameraKitReferenceUI.CameraButton
+  @_Concurrency.MainActor @preconcurrency public var mediaPickerView: SCSDKCameraKitReferenceUI.MediaPickerView {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public let messageView: SCSDKCameraKitReferenceUI.MessageNotificationView
+  @_Concurrency.MainActor @preconcurrency final public let snapAttributionView: SCSDKCameraKitReferenceUI.SnapAttributionView
+  @_Concurrency.MainActor @preconcurrency final public let activityIndicator: UIKit.UIActivityIndicatorView
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @available(*, unavailable)
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func layoutSubviews()
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.CameraView {
+  @_Concurrency.MainActor @preconcurrency public func showMessage(text: Swift.String, numberOfLines: Swift.Int, duration: Foundation.TimeInterval = 1.5)
+}
+extension SCSDKCameraKitReferenceUI.CameraView {
+  @_Concurrency.MainActor @preconcurrency public func setupActivityIndicator()
+}
+extension SCSDKCameraKitReferenceUI.CameraView {
+  @_Concurrency.MainActor @preconcurrency public var isAnyControlVisible: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public func hideAllControls()
+}
+extension SCSDKCameraKitReferenceUI.CameraView {
+  @_Concurrency.MainActor @preconcurrency public func drawTapAnimationView(at point: CoreFoundation.CGPoint)
+}
+public protocol ControlSliderDelegate : AnyObject {
+  func controlSlider(_ slider: SCSDKCameraKitReferenceUI.ControlSlider, updatedValue value: Swift.Float, done: Swift.Bool)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ControlSlider : UIKit.UISlider {
+  @_Concurrency.MainActor @preconcurrency weak public var delegate: (any SCSDKCameraKitReferenceUI.ControlSliderDelegate)?
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func setValue(_ value: Swift.Float, animated: Swift.Bool)
+  @available(iOS 13.0, *)
+  @_Concurrency.MainActor @preconcurrency public func setThumbColor(_ color: UIKit.UIColor)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @objc deinit
+}
+@objc extension Foundation.NSString {
+  @objc dynamic public class func cameraKit_localized(key: Swift.String, bundle: Foundation.Bundle?, preferredLanguages: [Swift.String] = NSLocale.preferredLanguages, comment: Swift.String?, table: Swift.String? = nil) -> Swift.String
+}
+public func CameraKitLocalizedString(key: Swift.String, bundle: Foundation.Bundle? = nil, preferredLanguages: [Swift.String] = NSLocale.preferredLanguages, comment: Swift.String?, table: Swift.String? = nil) -> Swift.String
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class ImagePreviewViewController : SCSDKCameraKitReferenceUI.PreviewViewController {
+  @_Concurrency.MainActor @preconcurrency final public let image: UIKit.UIImage
+  @_Concurrency.MainActor @preconcurrency public init(image: UIKit.UIImage)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor @preconcurrency @objc override public func openSnapchatPressed(_ sender: UIKit.UIButton)
+  @_Concurrency.MainActor @preconcurrency @objc override public func sharePreviewPressed(_ sender: UIKit.UIButton)
+  @_Concurrency.MainActor @preconcurrency @objc override public func savePreviewPressed(_ sender: UIKit.UIButton)
+  @objc deinit
+}
+extension SCSDKCameraKitReferenceUI.CameraController.FlashMode : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.CameraController.FlashMode : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.CameraController.FlashMode : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.AdjustmentControlView.Variant : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.AdjustmentControlView.Variant : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.AdjustmentControlView.Variant : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.CameraBottomBarElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.CameraBottomBarElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.CameraBottomBarElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.CameraElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.CameraElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.CameraElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.CarouselElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.CarouselElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.CarouselElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.PreviewElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.PreviewElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.PreviewElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.MessageNotificationElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.MessageNotificationElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.MessageNotificationElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.FlashControlElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.FlashControlElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.FlashControlElements : Swift.RawRepresentable {}
+extension SCSDKCameraKitReferenceUI.OtherElements : Swift.Equatable {}
+extension SCSDKCameraKitReferenceUI.OtherElements : Swift.Hashable {}
+extension SCSDKCameraKitReferenceUI.OtherElements : Swift.RawRepresentable {}
