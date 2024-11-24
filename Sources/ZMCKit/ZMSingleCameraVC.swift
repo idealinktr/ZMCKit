@@ -37,6 +37,7 @@ class ZMSingleCameraVC: UIViewController {
         super.viewDidAppear(animated)
         view = previewView
         setupCameraKit()
+        fetchLens()
     }
     
     public func setupCameraKit() {
