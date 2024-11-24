@@ -12,10 +12,18 @@ public struct ZMCKit {
         print("ZMCKit initialized")
     }
     
-    public static func presentSplashExperience(from viewController: UIViewController,
+    public static func presentGroupProducts(from viewController: UIViewController,
                                                   snapAPIToken: String,
                                                   partnerGroupId: String) {
            let zMCameraVC = ZMCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
            viewController.present(zMCameraVC, animated: true, completion: nil)
-       }
+    }
+    
+    public static func presentSingleProduct (from viewController: UIViewController,
+                                             snapAPIToken: String,
+                                             partnerGroupId: String,
+                                             lensId: String) {
+        let zmSingleCameraVC = ZMSingleCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, lensId: lensId, bundleIdentifier: Bundle.main.bundleIdentifier ?? "com.idealink.ziylanmedya.portakal")
+        viewController.present(zmSingleCameraVC, animated: true, completion: nil)
+    }
 }
