@@ -35,6 +35,7 @@ class ZMSingleCameraVC: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        view = previewView
         setupCameraKit()
     }
     
