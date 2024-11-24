@@ -37,7 +37,7 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
         cameraController.snapchatDelegate = self
         
         let cameraViewController = CameraViewController(cameraController: cameraController)
-        cameraViewController.cameraView.isHidden = true
+        cameraViewController.cameraView.cameraActionsView.isHidden = true
         cameraViewController.cameraControllerRequestedCameraFlip(cameraController)
         
         self.present(cameraViewController, animated: true, completion: nil)
