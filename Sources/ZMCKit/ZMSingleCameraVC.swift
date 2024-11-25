@@ -52,6 +52,25 @@ class ZMSingleCameraVC: UIViewController {
         button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         return button
     }()
+    
+    private let centerIconView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        imageView.layer.cornerRadius = 35
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        return imageView
+    }()
+    
+    private let closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: "xmark.circle.fill")
+        button.setImage(image, for: .normal)
+        button.tintColor = .white
+        return button
+    }()
         
     public init(snapAPIToken: String, partnerGroupId: String, lensId: String, bundleIdentifier: String) {
         self.snapAPIToken = snapAPIToken
@@ -124,12 +143,36 @@ class ZMSingleCameraVC: UIViewController {
         ])
         
         showAllButton.addTarget(self, action: #selector(showAllLenses), for: .touchUpInside)
+        
+        view.addSubview(centerIconView)
+        centerIconView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            centerIconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerIconView.bottomAnchor.constraint(equalTo: showAllButton.topAnchor, constant: -20),
+            centerIconView.widthAnchor.constraint(equalToConstant: 70),
+            centerIconView.heightAnchor.constraint(equalToConstant: 70)
+        ])
+        
+        view.addSubview(closeButton)
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            closeButton.widthAnchor.constraint(equalToConstant: 32),
+            closeButton.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
     }
     
     @objc private func showAllLenses() {
         let multiLensVC = ZMMultiLensCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
         multiLensVC.modalPresentationStyle = .fullScreen
         present(multiLensVC, animated: true)
+    }
+    
+    @objc private func closeTapped() {
+        dismiss(animated: true)
     }
     
     private func applyLens(lens: Lens) {

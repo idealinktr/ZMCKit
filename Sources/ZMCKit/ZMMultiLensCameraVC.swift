@@ -2,7 +2,7 @@
 //  ZMMultiLensCameraVC.swift
 //  ZMCKit
 //
-//  Created by Claude AI on 7.10.2024.
+//  Created by Can Kocoglu on 7.10.2024.
 //
 
 import UIKit
@@ -74,6 +74,16 @@ public class ZMMultiLensCameraVC: UIViewController {
         return button
     }()
     
+    private let goToProductButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Ürüne Git", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.7)
+        button.layer.cornerRadius = 20
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        return button
+    }()
+    
     // MARK: - Initialization
     
     public init(snapAPIToken: String, partnerGroupId: String) {
@@ -123,14 +133,24 @@ public class ZMMultiLensCameraVC: UIViewController {
             selectedLensLabel.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.7)
         ])
         
-        // Setup collection view
+        // Setup collection view with center alignment
+        let collectionViewWidth: CGFloat = view.bounds.width * 0.7 // 70% of screen width
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            collectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth),
             collectionView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        // Setup go to product button
+        view.addSubview(goToProductButton)
+        goToProductButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            goToProductButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            goToProductButton.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor),
+            goToProductButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         // Setup close button
@@ -166,6 +186,7 @@ public class ZMMultiLensCameraVC: UIViewController {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         captureButton.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(captureVideo), for: .touchUpInside)
+        goToProductButton.addTarget(self, action: #selector(goToProductTapped), for: .touchUpInside)
     }
     
     private func setupCameraKit() {
@@ -218,22 +239,34 @@ public class ZMMultiLensCameraVC: UIViewController {
     }
     
     @objc private func capturePhoto() {
-//        // Use CameraKit's photo capture functionality
-//        let photoCaptureOutput = PhotoCaptureOutput()
-//        cameraKit.add(output: photoCaptureOutput)
+//        let output = PhotoCaptureOutput()
+//        cameraKit.add(output: output)
 //        
-//        photoCaptureOutput.capture { [weak self] image in
-//            if let image = image {
-//                // Handle captured photo
-//                print("Photo captured")
+//        let settings = PhotoCaptureSettings()
+//        output.capture(with: settings) { [weak self] result in
+//            switch result {
+//            case .success(let captureResult):
+//                if let image = captureResult.image {
+//                    print("Photo captured successfully")
+//                    // Handle the captured image
+//                    // For example, you could save it to photos:
+//                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//                }
+//            case .failure(let error):
+//                print("Failed to capture photo: \(error)")
 //            }
-//            self?.cameraKit.remove(output: photoCaptureOutput)
+//            self?.cameraKit.remove(output: output)
 //        }
     }
     
     @objc private func captureVideo() {
         // Implement video recording logic
         print("Video capture tapped")
+    }
+    
+    @objc private func goToProductTapped() {
+        // Handle product navigation
+        print("Go to product tapped")
     }
 }
 
