@@ -165,7 +165,7 @@ public class ZMMultiLensCameraVC: UIViewController {
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 DispatchQueue.main.async {
-                    self?.selectedLensLabel.text = "  \(lens.name)  "
+                    self?.selectedLensLabel.text = "  \(lens.name ?? "Untitled Lens")  "
                 }
             } else {
                 print("Failed to apply lens: \(lens.id)")
@@ -206,6 +206,15 @@ extension ZMMultiLensCameraVC: @preconcurrency LensRepositoryGroupObserver {
     public func repository(_ repository: LensRepository, didUpdateLenses lenses: [Lens], forGroupID groupID: String) {
         self.lenses = lenses
         
+        // Debug logging
+        for lens in lenses {
+            print("Lens: \(lens.name)")
+            print("Icon URL: \(String(describing: lens.iconUrl))")
+            print("Preview URL: \(String(describing: lens.preview.imageUrl))")
+            print("Snapcode URL: \(String(describing: lens.snapcodes.imageUrl))")
+            print("--------------------")
+        }
+        
         DispatchQueue.main.async {
             self.collectionView.reloadData()
             
@@ -227,10 +236,15 @@ private class LensCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .systemGray6
+        imageView.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         imageView.layer.cornerRadius = 35
         imageView.layer.borderWidth = 2
         imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        
+        // Add placeholder image or text
+        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
+        imageView.image = UIImage(systemName: "camera.filters", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        
         return imageView
     }()
     
@@ -241,6 +255,15 @@ private class LensCell: UICollectionViewCell {
                 UIColor.white.withAlphaComponent(0.5).cgColor
             imageView.layer.borderWidth = isSelected ? 3 : 2
         }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupUI() {
@@ -256,15 +279,28 @@ private class LensCell: UICollectionViewCell {
     }
     
     func configure(with lens: Lens) {
-        if let iconURL = lens.iconUrl {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: iconURL),
-                   let image = UIImage(data: data) {
-                    DispatchQueue.main.async { [weak self] in
+        // Try different image URLs in order of preference
+        let imageURL = lens.iconUrl ?? lens.preview.imageUrl ?? lens.snapcodes.imageUrl
+        
+        if let imageURL = imageURL {
+            print("Attempting to load image from: \(imageURL)")
+            
+            URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
+                if let error = error {
+                    print("Error loading image: \(error)")
+                    return
+                }
+                
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
                         self?.imageView.image = image
                     }
+                } else {
+                    print("Failed to create image from data for lens: \(lens.name ?? "mmas")")
                 }
-            }
+            }.resume()
+        } else {
+            print("No image URL available for lens: \(lens.name ?? "moo")")
         }
     }
 } 
