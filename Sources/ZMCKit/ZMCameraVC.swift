@@ -52,7 +52,7 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
                action: #selector(dismissCameraVC)
            )
             
-        present(navigationController, animated: true, completion: nil)
+       // present(navigationController, animated: true, completion: nil)
         
         //self.present(cameraViewController, animated: true, completion: nil)
     }
