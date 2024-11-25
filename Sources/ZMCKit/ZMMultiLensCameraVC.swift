@@ -56,6 +56,24 @@ public class ZMMultiLensCameraVC: UIViewController {
         return button
     }()
     
+    private let captureButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 35
+        button.layer.borderWidth = 4
+        button.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
+        return button
+    }()
+    
+    private let recordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "video.circle.fill"), for: .normal)
+        button.tintColor = .white
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        return button
+    }()
+    
     // MARK: - Initialization
     
     public init(snapAPIToken: String, partnerGroupId: String) {
@@ -125,7 +143,29 @@ public class ZMMultiLensCameraVC: UIViewController {
             closeButton.heightAnchor.constraint(equalToConstant: 32)
         ])
         
+        // Setup capture button
+        view.addSubview(captureButton)
+        captureButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            captureButton.bottomAnchor.constraint(equalTo: collectionView.topAnchor, constant: -20),
+            captureButton.widthAnchor.constraint(equalToConstant: 70),
+            captureButton.heightAnchor.constraint(equalToConstant: 70)
+        ])
+        
+        // Setup record button
+        view.addSubview(recordButton)
+        recordButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            recordButton.centerYAnchor.constraint(equalTo: captureButton.centerYAnchor),
+            recordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            recordButton.widthAnchor.constraint(equalToConstant: 50),
+            recordButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        captureButton.addTarget(self, action: #selector(capturePhoto), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(captureVideo), for: .touchUpInside)
     }
     
     private func setupCameraKit() {
@@ -175,6 +215,25 @@ public class ZMMultiLensCameraVC: UIViewController {
     
     @objc private func closeTapped() {
         dismiss(animated: true)
+    }
+    
+    @objc private func capturePhoto() {
+//        // Use CameraKit's photo capture functionality
+//        let photoCaptureOutput = PhotoCaptureOutput()
+//        cameraKit.add(output: photoCaptureOutput)
+//        
+//        photoCaptureOutput.capture { [weak self] image in
+//            if let image = image {
+//                // Handle captured photo
+//                print("Photo captured")
+//            }
+//            self?.cameraKit.remove(output: photoCaptureOutput)
+//        }
+    }
+    
+    @objc private func captureVideo() {
+        // Implement video recording logic
+        print("Video capture tapped")
     }
 }
 
@@ -251,9 +310,23 @@ private class LensCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             imageView.layer.borderColor = isSelected ? 
-                UIColor.white.cgColor : 
+                UIColor.systemBlue.cgColor : 
                 UIColor.white.withAlphaComponent(0.5).cgColor
-            imageView.layer.borderWidth = isSelected ? 3 : 2
+            imageView.layer.borderWidth = isSelected ? 4 : 2
+            imageView.backgroundColor = isSelected ? 
+                UIColor.systemBlue.withAlphaComponent(0.3) : 
+                UIColor.white.withAlphaComponent(0.2)
+            
+            // Add subtle scale animation
+            if isSelected {
+                UIView.animate(withDuration: 0.2) {
+                    self.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                }
+            } else {
+                UIView.animate(withDuration: 0.2) {
+                    self.transform = .identity
+                }
+            }
         }
     }
     
