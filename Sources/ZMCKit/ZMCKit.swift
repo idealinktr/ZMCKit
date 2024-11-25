@@ -27,4 +27,12 @@ public struct ZMCKit {
         let zmSingleCameraVC = ZMSingleCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, lensId: lensId, bundleIdentifier: Bundle.main.bundleIdentifier ?? "com.idealink.ziylanmedya.portakal")
         viewController.present(zmSingleCameraVC, animated: true, completion: nil)
     }
+    
+    public static func presentMultipleProducts(from viewController: UIViewController,
+                                                    snapAPIToken: String,
+                                                    partnerGroupId: String) {
+        let zmCameraVC = ZMCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
+         //zmCameraVC.modalPresentationStyle = .fullScreen
+         viewController.present(zmCameraVC, animated: true, completion: nil)
+    }
 }
