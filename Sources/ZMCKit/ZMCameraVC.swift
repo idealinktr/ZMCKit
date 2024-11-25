@@ -30,7 +30,7 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
           startExperience()
       }
     
-    private func startExperience() -> UIViewController {
+    private func startExperience() {
         let cameraController = CameraController(sessionConfig: SessionConfig(apiToken: snapAPIToken))
         
         cameraController.groupIDs = [SCCameraKitLensRepositoryBundledGroup, partnerGroupId]
@@ -44,7 +44,7 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
         
         let image = UIImage(systemName: "x.circle.fill")
         
-        _ = UINavigationController(rootViewController: cameraViewController)
+        let navigationController = UINavigationController(rootViewController: cameraViewController)
         cameraViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
                 image: image,
                style: .plain,
@@ -52,11 +52,11 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
                action: #selector(dismissCameraVC)
            )
         
-        return cameraViewController
-            
-       // present(navigationController, animated: true, completion: nil)
+       present(navigationController, animated: true, completion: nil)
+    }
+    
+    func clearLens() {
         
-        //self.present(cameraViewController, animated: true, completion: nil)
     }
     
     @objc func dismissCameraVC() {

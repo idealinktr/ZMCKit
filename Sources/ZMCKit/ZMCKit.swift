@@ -16,6 +16,7 @@ public struct ZMCKit {
                                                   snapAPIToken: String,
                                                   partnerGroupId: String) {
        let zmCameraVC = ZMCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
+        zmCameraVC.modalPresentationStyle = .fullScreen
         viewController.present(zmCameraVC, animated: true, completion: nil)
     }
     
