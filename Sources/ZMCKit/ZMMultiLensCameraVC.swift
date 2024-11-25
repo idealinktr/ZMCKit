@@ -67,7 +67,6 @@ public class ZMMultiLensCameraVC: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view = previewView
         setupCameraKit()
         fetchLenses()
     }
@@ -75,6 +74,16 @@ public class ZMMultiLensCameraVC: UIViewController {
     // MARK: - Setup
     
     private func setupUI() {
+        // Setup preview view
+        view.addSubview(previewView)
+        previewView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            previewView.topAnchor.constraint(equalTo: view.topAnchor),
+            previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
         // Setup collection view
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
