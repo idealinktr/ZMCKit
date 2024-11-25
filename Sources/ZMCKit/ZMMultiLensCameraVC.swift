@@ -131,7 +131,7 @@ public class ZMMultiLensCameraVC: UIViewController {
         goToProductButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             goToProductButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            goToProductButton.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor),
+            goToProductButton.bottomAnchor.constraint(equalTo: collectionView.topAnchor, constant: -20),
             goToProductButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         

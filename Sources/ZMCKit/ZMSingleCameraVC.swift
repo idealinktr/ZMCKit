@@ -75,7 +75,6 @@ class ZMSingleCameraVC: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view = previewView
         setupCameraKit()
         fetchLens()
         setupUI()
@@ -111,37 +110,34 @@ class ZMSingleCameraVC: UIViewController {
         view.addSubview(lensIconView)
         view.addSubview(lensNameLabel)
         view.addSubview(showAllButton)
+        view.addSubview(closeButton)
         
         lensIconView.translatesAutoresizingMaskIntoConstraints = false
         lensNameLabel.translatesAutoresizingMaskIntoConstraints = false
         showAllButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            lensNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            lensNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lensNameLabel.heightAnchor.constraint(equalToConstant: 32),
+            
             lensIconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             lensIconView.bottomAnchor.constraint(equalTo: showAllButton.topAnchor, constant: -20),
             lensIconView.widthAnchor.constraint(equalToConstant: 70),
             lensIconView.heightAnchor.constraint(equalToConstant: 70),
             
-            lensNameLabel.centerYAnchor.constraint(equalTo: lensIconView.centerYAnchor),
-            lensNameLabel.leadingAnchor.constraint(equalTo: lensIconView.trailingAnchor, constant: 12),
-            lensNameLabel.heightAnchor.constraint(equalToConstant: 32),
-            
             showAllButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             showAllButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            showAllButton.heightAnchor.constraint(equalToConstant: 40)
-        ])
-        
-        showAllButton.addTarget(self, action: #selector(showAllLenses), for: .touchUpInside)
-        
-        view.addSubview(closeButton)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+            showAllButton.heightAnchor.constraint(equalToConstant: 40),
+            
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             closeButton.widthAnchor.constraint(equalToConstant: 32),
             closeButton.heightAnchor.constraint(equalToConstant: 32)
         ])
         
+        showAllButton.addTarget(self, action: #selector(showAllLenses), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
     }
     
