@@ -21,6 +21,17 @@ public class ZMMultiLensCameraVC: UIViewController {
     private var currentLensIndex: Int = 0
     private var lenses: [Lens] = []
     
+    private let selectedLensLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        label.layer.cornerRadius = 12
+        label.clipsToBounds = true
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -84,6 +95,16 @@ public class ZMMultiLensCameraVC: UIViewController {
             previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        // Setup selected lens label
+        view.addSubview(selectedLensLabel)
+        selectedLensLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            selectedLensLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            selectedLensLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            selectedLensLabel.heightAnchor.constraint(equalToConstant: 32),
+            selectedLensLabel.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.7)
+        ])
+        
         // Setup collection view
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -140,9 +161,12 @@ public class ZMMultiLensCameraVC: UIViewController {
     }
     
     private func applyLens(lens: Lens) {
-        cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { success in
+        cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
                 print("Successfully applied lens: \(lens.id)")
+                DispatchQueue.main.async {
+                    self?.selectedLensLabel.text = "  \(lens.name)  "
+                }
             } else {
                 print("Failed to apply lens: \(lens.id)")
             }
@@ -168,7 +192,7 @@ extension ZMMultiLensCameraVC: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 80)
+        return CGSize(width: 70, height: 70)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -204,59 +228,40 @@ private class LensCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .systemGray6
-        imageView.layer.cornerRadius = 8
+        imageView.layer.cornerRadius = 35
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         return imageView
     }()
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 12)
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override var isSelected: Bool {
+        didSet {
+            imageView.layer.borderColor = isSelected ? 
+                UIColor.white.cgColor : 
+                UIColor.white.withAlphaComponent(0.5).cgColor
+            imageView.layer.borderWidth = isSelected ? 3 : 2
+        }
     }
     
     private func setupUI() {
         contentView.addSubview(imageView)
-        contentView.addSubview(titleLabel)
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     
     func configure(with lens: Lens) {
-        titleLabel.text = lens.name
-        
-        // Load lens preview image if available
-        if let previewURL = lens.preview.imageUrl {
-            // Use your preferred image loading method here
-            // For example, you could use SDWebImage or similar library
+        if let iconURL = lens.iconUrl {
             DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: previewURL),
+                if let data = try? Data(contentsOf: iconURL),
                    let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self.imageView.image = image
+                    DispatchQueue.main.async { [weak self] in
+                        self?.imageView.image = image
                     }
                 }
             }
