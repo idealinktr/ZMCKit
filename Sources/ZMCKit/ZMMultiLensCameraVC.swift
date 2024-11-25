@@ -13,6 +13,11 @@ public class ZMMultiLensCameraVC: UIViewController {
     private let snapAPIToken: String
     private let partnerGroupId: String
     private let lensIds: [String]
+    private var imageCache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 100 // Set a reasonable limit
+        return cache
+    }()
     
     public let captureSession = AVCaptureSession()
     public var cameraKit: CameraKitProtocol!
@@ -116,7 +121,7 @@ public class ZMMultiLensCameraVC: UIViewController {
         ])
         
         // Setup collection view with center alignment
-        let collectionViewWidth: CGFloat = view.bounds.width * 0.5 // 50% of screen width
+        let collectionViewWidth: CGFloat = view.bounds.width * 0.7 // Changed from 0.5 to 0.7
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -150,25 +155,28 @@ public class ZMMultiLensCameraVC: UIViewController {
     }
     
     private func setupCameraKit() {
-        self.cameraKit = Session(
-            sessionConfig: SessionConfig(apiToken: self.snapAPIToken),
-            lensesConfig: LensesConfig(
-                cacheConfig: CacheConfig(lensContentMaxSize: 150 * 1024 * 1024)
-            ),
-            errorHandler: nil
-        )
-        
-        cameraKit.add(output: previewView)
-        
-        let input = AVSessionInput(session: self.captureSession)
-        let arInput = ARSessionInput()
-        
-        previewView.automaticallyConfiguresTouchHandler = true
-        cameraKit.start(input: input, arInput: arInput)
-        
-        DispatchQueue.global(qos: .background).async {
-            input.position = .back
-            input.startRunning()
+        do {
+            self.cameraKit = Session(
+                sessionConfig: SessionConfig(apiToken: self.snapAPIToken),
+                lensesConfig: LensesConfig(
+                    cacheConfig: CacheConfig(lensContentMaxSize: 150 * 1024 * 1024)
+                ), errorHandler: nil
+            )
+            
+            cameraKit.add(output: previewView)
+            
+            let input = AVSessionInput(session: self.captureSession)
+            let arInput = ARSessionInput()
+            
+            previewView.automaticallyConfiguresTouchHandler = true
+            cameraKit.start(input: input, arInput: arInput)
+            
+            DispatchQueue.global(qos: .background).async { [weak self] in
+                input.position = .back
+                input.startRunning()
+            }
+        } catch {
+            print("Failed to setup CameraKit: \(error)")
         }
     }
     
@@ -202,6 +210,13 @@ public class ZMMultiLensCameraVC: UIViewController {
         // Handle product navigation
         print("Go to product tapped")
     }
+    
+    // Add memory management
+    deinit {
+        // Clean up resources
+        cameraKit.remove(output: previewView)
+        captureSession.stopRunning()
+    }
 }
 
 // MARK: - UICollectionView DataSource & Delegate
@@ -213,7 +228,7 @@ extension ZMMultiLensCameraVC: UICollectionViewDataSource, UICollectionViewDeleg
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LensCell", for: indexPath) as! LensCell
         let lens = lenses[indexPath.item]
-        cell.configure(with: lens)
+        cell.configure(with: lens, cache: imageCache)
         return cell
     }
     
@@ -274,6 +289,8 @@ private class LensCell: UICollectionViewCell {
         return imageView
     }()
     
+    private var imageCache: NSCache<NSString, UIImage>
+    
     override var isSelected: Bool {
         didSet {
             imageView.layer.borderColor = isSelected ? 
@@ -298,6 +315,7 @@ private class LensCell: UICollectionViewCell {
     }
     
     override init(frame: CGRect) {
+        self.imageCache = NSCache()
         super.init(frame: frame)
         setupUI()
     }
@@ -318,14 +336,21 @@ private class LensCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with lens: Lens) {
+    func configure(with lens: Lens, cache: NSCache<NSString, UIImage>) {
+        self.imageCache = cache
+        let cacheKey = lens.id // Use String instead of NSString
+        
+        // Check cache first
+        if let cachedImage = cache.object(forKey: cacheKey as NSString) {
+            imageView.image = cachedImage
+            return
+        }
+        
         // Try different image URLs in order of preference
         let imageURL = lens.iconUrl ?? lens.preview.imageUrl ?? lens.snapcodes.imageUrl
         
         if let imageURL = imageURL {
-            print("Attempting to load image from: \(imageURL)")
-            
-            URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
+            URLSession.shared.dataTask(with: imageURL) { [weak self, cacheKey] data, response, error in
                 if let error = error {
                     print("Error loading image: \(error)")
                     return
@@ -333,14 +358,12 @@ private class LensCell: UICollectionViewCell {
                 
                 if let data = data, let image = UIImage(data: data) {
                     DispatchQueue.main.async {
+                        // Convert String to NSString when accessing the cache
+                        self?.imageCache.setObject(image, forKey: cacheKey as NSString)
                         self?.imageView.image = image
                     }
-                } else {
-                    print("Failed to create image from data for lens: \(lens.name ?? "mmas")")
                 }
             }.resume()
-        } else {
-            print("No image URL available for lens: \(lens.name ?? "moo")")
         }
     }
 } 

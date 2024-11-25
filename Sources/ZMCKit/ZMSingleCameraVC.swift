@@ -26,9 +26,7 @@ class ZMSingleCameraVC: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = UIColor.white.withAlphaComponent(0.2)
-        imageView.layer.cornerRadius = 25
-//        imageView.layer.borderWidth = 2
-//        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        imageView.layer.cornerRadius = 35
         return imageView
     }()
     
@@ -59,6 +57,12 @@ class ZMSingleCameraVC: UIViewController {
         button.setImage(image, for: .normal)
         button.tintColor = .white
         return button
+    }()
+        
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        return indicator
     }()
         
     public init(snapAPIToken: String, partnerGroupId: String, lensId: String, bundleIdentifier: String) {
@@ -101,6 +105,7 @@ class ZMSingleCameraVC: UIViewController {
     }
     
     private func fetchLens() {
+        activityIndicator.startAnimating()
         cameraKit.lenses.repository.addObserver(self,
                                                 specificLensID: self.lensId,
                                                 inGroupID: self.partnerGroupId)
@@ -111,11 +116,13 @@ class ZMSingleCameraVC: UIViewController {
         view.addSubview(lensNameLabel)
         view.addSubview(showAllButton)
         view.addSubview(closeButton)
+        view.addSubview(activityIndicator)
         
         lensIconView.translatesAutoresizingMaskIntoConstraints = false
         lensNameLabel.translatesAutoresizingMaskIntoConstraints = false
         showAllButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             lensNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -134,7 +141,10 @@ class ZMSingleCameraVC: UIViewController {
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             closeButton.widthAnchor.constraint(equalToConstant: 32),
-            closeButton.heightAnchor.constraint(equalToConstant: 32)
+            closeButton.heightAnchor.constraint(equalToConstant: 32),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
         showAllButton.addTarget(self, action: #selector(showAllLenses), for: .touchUpInside)
@@ -153,8 +163,9 @@ class ZMSingleCameraVC: UIViewController {
     
     private func applyLens(lens: Lens) {
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
-            if success {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                if success {
                     self?.lensNameLabel.text = "  \(lens.name ?? "Untitled Lens")  "
                     if let iconURL = lens.iconUrl ?? lens.preview.imageUrl ?? lens.snapcodes.imageUrl {
                         URLSession.shared.dataTask(with: iconURL) { data, _, _ in
@@ -168,6 +179,11 @@ class ZMSingleCameraVC: UIViewController {
                 }
             }
         }
+    }
+    
+    deinit {
+        cameraKit.remove(output: previewView)
+        captureSession.stopRunning()
     }
 }
 
