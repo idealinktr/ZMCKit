@@ -53,17 +53,6 @@ class ZMSingleCameraVC: UIViewController {
         return button
     }()
     
-    private let centerIconView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.white.withAlphaComponent(0.2)
-        imageView.layer.cornerRadius = 35
-        imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        return imageView
-    }()
-    
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "xmark.circle.fill")
@@ -128,10 +117,10 @@ class ZMSingleCameraVC: UIViewController {
         showAllButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            lensIconView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            lensIconView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            lensIconView.widthAnchor.constraint(equalToConstant: 50),
-            lensIconView.heightAnchor.constraint(equalToConstant: 50),
+            lensIconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lensIconView.bottomAnchor.constraint(equalTo: showAllButton.topAnchor, constant: -20),
+            lensIconView.widthAnchor.constraint(equalToConstant: 70),
+            lensIconView.heightAnchor.constraint(equalToConstant: 70),
             
             lensNameLabel.centerYAnchor.constraint(equalTo: lensIconView.centerYAnchor),
             lensNameLabel.leadingAnchor.constraint(equalTo: lensIconView.trailingAnchor, constant: 12),
@@ -143,15 +132,6 @@ class ZMSingleCameraVC: UIViewController {
         ])
         
         showAllButton.addTarget(self, action: #selector(showAllLenses), for: .touchUpInside)
-        
-        view.addSubview(centerIconView)
-        centerIconView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            centerIconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            centerIconView.bottomAnchor.constraint(equalTo: showAllButton.topAnchor, constant: -20),
-            centerIconView.widthAnchor.constraint(equalToConstant: 70),
-            centerIconView.heightAnchor.constraint(equalToConstant: 70)
-        ])
         
         view.addSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
