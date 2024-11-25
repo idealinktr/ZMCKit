@@ -15,8 +15,8 @@ public struct ZMCKit {
     public static func presentGroupProducts(from viewController: UIViewController,
                                                   snapAPIToken: String,
                                                   partnerGroupId: String) {
-           let zMCameraVC = ZMCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
-           viewController.present(zMCameraVC, animated: true, completion: nil)
+       let zmCameraVC = ZMCameraVC(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId)
+        viewController.present(zmCameraVC, animated: true, completion: nil)
     }
     
     public static func presentSingleProduct (from viewController: UIViewController,

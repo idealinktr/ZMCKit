@@ -38,9 +38,27 @@ public class ZMCameraVC: UIViewController, @preconcurrency SnapchatDelegate {
         
         let cameraViewController = CameraViewController(cameraController: cameraController)
         cameraViewController.cameraView.cameraActionsView.isHidden = true
-        cameraViewController.cameraControllerRequestedCameraFlip(cameraController)
+        cameraViewController.cameraController.flipCamera()
         
-        self.present(cameraViewController, animated: true, completion: nil)
+        cameraViewController.modalPresentationStyle = .fullScreen
+        
+        let image = UIImage(systemName: "x.circle.fill")
+        
+        let navigationController = UINavigationController(rootViewController: cameraViewController)
+        cameraViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: image,
+               style: .plain,
+               target: self,
+               action: #selector(dismissCameraVC)
+           )
+            
+        present(navigationController, animated: true, completion: nil)
+        
+        //self.present(cameraViewController, animated: true, completion: nil)
+    }
+    
+    @objc func dismissCameraVC() {
+        dismiss(animated: true, completion: nil)
     }
     
     public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
