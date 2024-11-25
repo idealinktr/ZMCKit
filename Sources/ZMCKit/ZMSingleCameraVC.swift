@@ -77,11 +77,25 @@ class ZMSingleCameraVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        // Add preview view first
+        view.addSubview(previewView)
+        previewView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            previewView.topAnchor.constraint(equalTo: view.topAnchor),
+            previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            previewView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
         setupCameraKit()
         fetchLens()
         setupUI()
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     public func setupCameraKit() {
