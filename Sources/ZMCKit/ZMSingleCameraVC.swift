@@ -27,8 +27,8 @@ class ZMSingleCameraVC: UIViewController {
         imageView.clipsToBounds = true
         imageView.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         imageView.layer.cornerRadius = 25
-        imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+//        imageView.layer.borderWidth = 2
+//        imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         return imageView
     }()
     
