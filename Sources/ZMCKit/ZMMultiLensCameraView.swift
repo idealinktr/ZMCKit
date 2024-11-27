@@ -12,17 +12,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return cache
     }()
     
-    private let selectedLensLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        label.layer.cornerRadius = 12
-        label.clipsToBounds = true
-        return label
-    }()
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -50,16 +39,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-        // Setup selected lens label
-        addSubview(selectedLensLabel)
-        selectedLensLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            selectedLensLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            selectedLensLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            selectedLensLabel.heightAnchor.constraint(equalToConstant: 32),
-            selectedLensLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.7)
-        ])
-        
         // Setup collection view with proper layout
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -92,9 +71,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
-                DispatchQueue.main.async {
-                    self?.selectedLensLabel.text = "  \(lens.name ?? "Untitled Lens")  "
-                }
             } else {
                 print("Failed to apply lens: \(lens.id)")
             }
