@@ -60,16 +60,27 @@ public class ZMMultiLensCameraView: ZMCameraView {
             selectedLensLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.7)
         ])
         
-        // Setup collection view
-        let collectionViewWidth: CGFloat = bounds.width * 0.7
+        // Setup collection view with proper layout
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            collectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth),
             collectionView.heightAnchor.constraint(equalToConstant: 100)
         ])
+        
+        // Make sure collection view is on top
+        bringSubviewToFront(collectionView)
+        
+        // Update collection view layout
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.itemSize = CGSize(width: 70, height: 70)
+            flowLayout.minimumInteritemSpacing = 10
+            flowLayout.minimumLineSpacing = 10
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            flowLayout.scrollDirection = .horizontal
+        }
     }
     
     private func setupLenses() {

@@ -12,7 +12,7 @@ class LensCell: UICollectionViewCell {
         imageView.layer.borderWidth = 2
         imageView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
         
-        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .medium)
         imageView.image = UIImage(systemName: "camera.filters", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         return imageView
