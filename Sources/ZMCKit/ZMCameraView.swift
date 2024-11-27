@@ -1,3 +1,11 @@
+//
+//  ZMCameraView.swift
+//  ZMCKit
+//
+//  Created by Can Kocoglu on 26.11.2024.
+//
+
+
 import UIKit
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
@@ -58,5 +66,15 @@ public class ZMCameraView: UIView {
     private func startCamera(_ input: AVSessionInput) async {
         input.position = .back
         input.startRunning()
+    }
+
+    public func cleanup() {
+        cameraKit.remove(output: previewView)
+        captureSession.stopRunning()
+    }
+
+    public override func removeFromSuperview() {
+        cleanup()
+        super.removeFromSuperview()
     }
 } 

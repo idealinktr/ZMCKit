@@ -1,3 +1,10 @@
+//
+//  ZMCKit.swift
+//  ZMCKit
+//
+//  Created by Can Kocoglu on 5.10.2024.
+//
+
 import Foundation
 import UIKit
 
@@ -47,6 +54,12 @@ public struct ZMCKit {
         )
     }
     
+    /// Creates a multi-product camera view.
+    /// - Parameters:
+    ///   - snapAPIToken: The Snapchat API token
+    ///   - partnerGroupId: The partner group ID
+    /// - Returns: A camera view that displays multiple lenses
+    /// - Note: Make sure to call `cleanup()` on the view when you're done with it to properly release resources
     @available(iOS 13.0, *)
     public static func createMultiProductView(
         snapAPIToken: String,

@@ -1,3 +1,11 @@
+//
+//  LensCell.swift
+//  ZMCKit
+//
+//  Created by Can Kocoglu on 27.11.2024.
+//
+
+
 import UIKit
 import SCSDKCameraKit
 

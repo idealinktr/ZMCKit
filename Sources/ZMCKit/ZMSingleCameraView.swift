@@ -1,3 +1,10 @@
+//
+//  ZMSingleCameraView.swift
+//  ZMCKit
+//
+//  Created by Can Kocoglu on 26.11.2024.
+//
+
 import UIKit
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
