@@ -38,7 +38,7 @@ public class ZMSingleCameraView: ZMCameraView {
 }
 
 @available(iOS 13.0, *)
-extension ZMSingleCameraView: @preconcurrency LensRepositorySpecificObserver {
+extension ZMSingleCameraView: LensRepositorySpecificObserver {
     public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {

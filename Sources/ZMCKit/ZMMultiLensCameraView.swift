@@ -111,7 +111,7 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
 
 // MARK: - LensRepositoryGroupObserver
 @available(iOS 13.0, *)
-extension ZMMultiLensCameraView: @preconcurrency LensRepositoryGroupObserver {
+extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
     public func repository(_ repository: any LensRepository, didUpdateLenses lenses: [any Lens], forGroupID groupID: String) {
         self.lenses = lenses as? [Lens] ?? []
         
