@@ -15,123 +15,103 @@ public class ZMCameraView: UIView {
     internal let snapAPIToken: String
     internal let partnerGroupId: String
     
-    public let captureSession = AVCaptureSession()
-    public var cameraKit: CameraKitProtocol!
+    private var cameraController: CustomizedCameraController!
+    private var cameraViewController: CustomizedCameraViewController!
     
-    public let previewView = PreviewView()
-    public let cameraView = CameraView()
-    
-    private var videoRecorder: Recorder?
-    private var isRecording = false
-    private var recordingURL: URL?
+    // Callback handlers for capture/recording
+    public var onPhotoCapture: ((UIImage?) -> Void)?
+    public var onVideoRecorded: ((URL?) -> Void)?
     
     public init(snapAPIToken: String, partnerGroupId: String, frame: CGRect = .zero) {
         self.snapAPIToken = snapAPIToken
         self.partnerGroupId = partnerGroupId
         super.init(frame: frame)
-        setupBaseCamera()
+        setupCamera()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    internal func setupBaseCamera() {
-        cameraKit = Session(
-            sessionConfig: SessionConfig(apiToken: snapAPIToken),
-            lensesConfig: LensesConfig(
-                cacheConfig: CacheConfig(lensContentMaxSize: 150 * 1024 * 1024)
-            ),
-            errorHandler: nil
+    internal func setupCamera() {
+        // Initialize camera controller with session config
+        cameraController = CustomizedCameraController(
+            sessionConfig: SessionConfig(apiToken: snapAPIToken)
         )
         
-        addSubview(previewView)
-        previewView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            previewView.topAnchor.constraint(equalTo: topAnchor),
-            previewView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            previewView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            previewView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        // Set group IDs for lenses
+        cameraController.groupIDs = [SCCameraKitLensRepositoryBundledGroup, partnerGroupId]
         
-        cameraKit.add(output: previewView)
+        // Create camera view controller with the controller
+        cameraViewController = CustomizedCameraViewController(
+            cameraController: cameraController,
+            debugStore: nil
+        )
         
-        let input = AVSessionInput(session: captureSession)
-        let arInput = ARSessionInput()
-        
-        previewView.automaticallyConfiguresTouchHandler = true
-        cameraKit.start(input: input, arInput: arInput)
-        
-        Task { @MainActor in
-            await startCamera(input)
+        // Add camera view controller as child
+        if let parentVC = findViewController() {
+            parentVC.addChild(cameraViewController)
+            addSubview(cameraViewController.view)
+            cameraViewController.view.frame = bounds
+            cameraViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            cameraViewController.didMove(toParent: parentVC)
         }
-    }
-
-    private func startCamera(_ input: AVSessionInput) async {
-        input.position = .back
-        input.startRunning()
-    }
-
-    public func startRecording() {
-        guard !isRecording else { return }
         
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let videoURL = documentsPath.appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
-        
-        do {
-            let recorder = try Recorder(
-                url: videoURL,
-                orientation: .portrait,
-                size: previewView.bounds.size
-            )
-            
-            cameraKit.add(output: recorder.output)
-            recorder.startRecording()
-            
-            self.videoRecorder = recorder
-            self.recordingURL = videoURL
-            self.isRecording = true
-            
-        } catch {
-            print("Failed to start recording: \(error)")
-        }
+        // Set delegates
+        cameraController.delegate = self
+        cameraController.snapchatDelegate = self
     }
     
-    public func stopRecording(completion: @escaping (URL?) -> Void) {
-        guard isRecording, let recorder = videoRecorder else {
-            completion(nil)
-            return
-        }
-        
-        recorder.finishRecording { [weak self] url, error in
-            guard let self = self else { return }
-            
-            if let output = self.videoRecorder?.output {
-                self.cameraKit.remove(output: output)
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
             }
-            
-            self.videoRecorder = nil
-            self.isRecording = false
-            
-            if let error = error {
-                print("Failed to finish recording: \(error)")
-                completion(nil)
-            } else {
-                completion(url)
-            }
+            responder = nextResponder
         }
+        return nil
     }
-
+    
     public func cleanup() {
-        if isRecording {
-            stopRecording { _ in }
-        }
-        cameraKit.remove(output: previewView)
-        captureSession.stopRunning()
+        cameraViewController.willMove(toParent: nil)
+        cameraViewController.view.removeFromSuperview()
+        cameraViewController.removeFromParent()
     }
-
+    
     public override func removeFromSuperview() {
         cleanup()
         super.removeFromSuperview()
+    }
+}
+
+// MARK: - CameraControllerDelegate
+@available(iOS 13.0, *)
+extension ZMCameraView: CameraControllerDelegate {
+    public func cameraController(_ controller: CameraController, didCapturePhoto photo: UIImage) {
+        onPhotoCapture?(photo)
+    }
+    
+    public func cameraController(_ controller: CameraController, didFinishRecordingVideo url: URL) {
+        onVideoRecorded?(url)
+    }
+    
+    public func cameraController(_ controller: CameraController, didFailWithError error: Error) {
+        print("Camera controller error: \(error)")
+    }
+}
+
+// MARK: - SnapchatDelegate
+@available(iOS 13.0, *)
+extension ZMCameraView: SnapchatDelegate {
+    public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
+        switch screen {
+        case .photo(let image):
+            onPhotoCapture?(image)
+        case .video(let url):
+            onVideoRecorded?(url)
+        default:
+            break
+        }
     }
 } 
