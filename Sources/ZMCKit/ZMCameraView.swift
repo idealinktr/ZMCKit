@@ -81,12 +81,11 @@ public class ZMCameraView: UIView {
         do {
             let recorder = try Recorder(
                 url: videoURL,
-                orientation: previewView.videoOrientation,
+                orientation: .portrait,
                 size: previewView.bounds.size
             )
             
             cameraKit.add(output: recorder.output)
-            
             recorder.startRecording()
             
             self.videoRecorder = recorder
