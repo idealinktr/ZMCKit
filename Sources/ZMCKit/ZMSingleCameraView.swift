@@ -30,8 +30,6 @@ public class ZMSingleCameraView: ZMCameraView {
     
     private var assetWriter: AVAssetWriter?
     private var assetWriterInput: AVAssetWriterInput?
-    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
-    private var displayLink: CADisplayLink?
     private var recordingURL: URL?
     
     private lazy var processingLabel: UILabel = {
@@ -174,78 +172,70 @@ public class ZMSingleCameraView: ZMCameraView {
             assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
             assetWriterInput?.expectsMediaDataInRealTime = true
             
-            let attributes: [String: Any] = [
-                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB),
-                kCVPixelBufferWidthKey as String: Int(previewView.bounds.width),
-                kCVPixelBufferHeightKey as String: Int(previewView.bounds.height)
-            ]
+            if let assetWriter = assetWriter, let assetWriterInput = assetWriterInput {
+                assetWriter.add(assetWriterInput)
+                assetWriter.startWriting()
+                assetWriter.startSession(atSourceTime: .zero)
+            }
             
-            pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
-                assetWriterInput: assetWriterInput!,
-                sourcePixelBufferAttributes: attributes
-            )
+            let recorder = RPScreenRecorder.shared()
+            recorder.isMicrophoneEnabled = false // Set to true if you want audio
             
-            assetWriter?.add(assetWriterInput!)
-            assetWriter?.startWriting()
-            assetWriter?.startSession(atSourceTime: .zero)
-            
-            displayLink = CADisplayLink(target: self, selector: #selector(captureFrame))
-            displayLink?.add(to: .main, forMode: .common)
-            isRecording = true
+            recorder.startCapture(handler: { [weak self] (sampleBuffer, bufferType, error) in
+                guard let self = self,
+                      error == nil,
+                      bufferType == .video,
+                      let input = self.assetWriterInput,
+                      input.isReadyForMoreMediaData else { return }
+                
+                input.append(sampleBuffer)
+                
+            }) { [weak self] error in
+                if let error = error {
+                    print("Failed to start recording: \(error)")
+                    self?.isRecording = false
+                    return
+                }
+                self?.isRecording = true
+            }
             
         } catch {
-            print("Failed to start recording: \(error)")
-        }
-    }
-    
-    private var frameCount: Int64 = 0
-    
-    @objc private func captureFrame() {
-        guard let input = assetWriterInput,
-              let adaptor = pixelBufferAdaptor,
-              input.isReadyForMoreMediaData else { return }
-        
-        let renderer = UIGraphicsImageRenderer(bounds: previewView.bounds)
-        let image = renderer.image { ctx in
-            previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
-        }
-        
-        if let pixelBuffer = image.pixelBuffer() {
-            let frameTime = CMTime(value: frameCount, timescale: 60)
-            adaptor.append(pixelBuffer, withPresentationTime: frameTime)
-            frameCount += 1
+            print("Failed to setup recording: \(error)")
         }
     }
     
     private func stopRecordingWithLens() {
         guard isRecording else { return }
-        
         isRecording = false
-        displayLink?.invalidate()
-        displayLink = nil
         
-        assetWriterInput?.markAsFinished()
+        showProcessing()
         
-        assetWriter?.finishWriting { [weak self] in
-            DispatchQueue.main.async {
+        RPScreenRecorder.shared().stopCapture { [weak self] error in
+            if let error = error {
+                print("Failed to stop recording: \(error)")
+                self?.hideProcessing()
+                return
+            }
+            
+            self?.assetWriterInput?.markAsFinished()
+            self?.assetWriter?.finishWriting { [weak self] in
                 guard let self = self,
                       let outputURL = self.recordingURL else { return }
                 
-                self.showProcessing()
-                
-                if let viewController = self.findViewController() {
-                    let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
-                    previewVC.modalPresentationStyle = .fullScreen
-                    viewController.present(previewVC, animated: true) {
-                        self.hideProcessing()
+                DispatchQueue.main.async {
+                    if let viewController = self.findViewController() {
+                        let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
+                        previewVC.modalPresentationStyle = .fullScreen
+                        viewController.present(previewVC, animated: true) {
+                            self.hideProcessing()
+                        }
                     }
                 }
                 
                 // Clean up
                 self.assetWriter = nil
                 self.assetWriterInput = nil
-                self.pixelBufferAdaptor = nil
-                self.frameCount = 0
+                self.recordingURL = nil
             }
         }
     }
