@@ -14,6 +14,7 @@ public class ZMSingleCameraView: ZMCameraView {
     private let lensId: String
     private let bundleIdentifier: String
     private var cameraViewController: CameraViewController!
+    let snapAPI = SCSDKSnapAPI()
     
     public init(snapAPIToken: String,
                 partnerGroupId: String,
@@ -30,17 +31,7 @@ public class ZMSingleCameraView: ZMCameraView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupLens() {
-        // Hide carousel since this is single lens view
-        cameraView.carouselView.isHidden = true
-        
-        // Make camera button visible and configure it
-        cameraView.cameraButton.isHidden = false
-        cameraView.cameraButton.isEnabled = true
-        
-        // Add camera button delegate to handle capture/record
-        cameraView.cameraButton.delegate = self
-        
+    private func setupLens() {        
         // Setup lens repository observer for specific lens
         cameraKit.lenses.repository.addObserver(self,
                                               specificLensID: self.lensId,
@@ -97,34 +88,28 @@ extension ZMSingleCameraView: SnapchatDelegate {
     public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
         switch screen {
         case .photo(let image):
-            delegate?.cameraDidCapture(image: image)
+            let photo = SCSDKSnapPhoto(image: image)
+            let content = SCSDKPhotoSnapContent(snapPhoto: photo)
+            sendSnapContent(content, viewController: viewController)
         case .video(let url):
-            delegate?.cameraDidFinishRecording(videoURL: url)
+            let video = SCSDKSnapVideo(videoUrl: url)
+            let content = SCSDKVideoSnapContent(snapVideo: video)
+            sendSnapContent(content, viewController: viewController)
         default:
             break
         }
     }
-}
-
-// MARK: - Camera Button Delegate
-@available(iOS 13.0, *)
-extension ZMSingleCameraView: CameraButtonDelegate {
-    public func cameraButtonDidTap(_ button: CameraButton) {
-        // Handle photo capture
-        cameraKit.output?.capturePhoto { [weak self] image in
-            self?.delegate?.cameraDidCapture(image: image)
-        }
-    }
     
-    public func cameraButtonDidBeginLongPress(_ button: CameraButton) {
-        // Start video recording
-        cameraKit.output?.startRecording()
-    }
-    
-    public func cameraButtonDidEndLongPress(_ button: CameraButton) {
-        // Stop video recording
-        cameraKit.output?.stopRecording { [weak self] url in
-            self?.delegate?.cameraDidFinishRecording(videoURL: url)
+    private func sendSnapContent(_ content: SCSDKSnapContent, viewController: UIViewController) {
+        viewController.view.isUserInteractionEnabled = false
+        snapAPI.startSending(content) { error in
+            DispatchQueue.main.async {
+                viewController.view.isUserInteractionEnabled = true
+            }
+            if let error = error {
+                print("Failed to send content to Snapchat with error: \(error.localizedDescription)")
+                return
+            }
         }
     }
 }

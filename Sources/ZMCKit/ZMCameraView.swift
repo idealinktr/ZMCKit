@@ -50,8 +50,13 @@ public class ZMCameraView: UIView {
         )
         
         addSubview(previewView)
+        addSubview(cameraView)
         previewView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            
+            cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            cameraView.bottomAnchor.constraint(equalTo: previewView.bottomAnchor, constant: -50),
+            
             previewView.topAnchor.constraint(equalTo: topAnchor),
             previewView.leadingAnchor.constraint(equalTo: leadingAnchor),
             previewView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -73,6 +78,7 @@ public class ZMCameraView: UIView {
 
     private func startCamera(_ input: AVSessionInput) async {
         input.position = .back
+        
         input.startRunning()
     }
 
