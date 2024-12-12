@@ -48,6 +48,7 @@ public class ZMCameraView: UIView {
             ),
             errorHandler: nil
         )
+        cameraView.cameraActionsView.isHidden = true
         
         addSubview(previewView)
         addSubview(cameraView)
