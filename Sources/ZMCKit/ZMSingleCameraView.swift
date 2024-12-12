@@ -110,14 +110,19 @@ public class ZMSingleCameraView: ZMCameraView {
                 self.cameraButton.backgroundColor = .red
                 self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }
-            startRecording()
+            
+            let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
+            movieOutput.startRecording(to: outputURL, recordingDelegate: self)
+            
         case .ended, .cancelled:
             // End recording animation
             UIView.animate(withDuration: 0.2) {
                 self.cameraButton.backgroundColor = .white
                 self.cameraButton.transform = .identity
             }
-            stopRecording()
+            movieOutput.stopRecording()
+            
         default:
             break
         }
@@ -296,78 +301,14 @@ extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
             return
         }
         
-        // Create a video writer
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let videoURL = documentsPath.appendingPathComponent("screen_recording_\(Date().timeIntervalSince1970).mp4")
-        
-        guard let videoWriter = try? AVAssetWriter(outputURL: videoURL, fileType: .mp4) else {
-            print("Failed to create video writer")
-            return
-        }
-        
-        // Configure video settings
-        let videoSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: previewView.bounds.width,
-            AVVideoHeightKey: previewView.bounds.height
-        ]
-        
-        let videoWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
-        videoWriter.add(videoWriterInput)
-        
-        // Start screen recording
-        let recorder = RPScreenRecorder.shared()
-        recorder.startCapture(handler: { [weak self] (sampleBuffer, bufferType, error) in
-            guard error == nil else {
-                print("Failed to capture: \(error!)")
-                return
-            }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
-            switch bufferType {
-            case .video:
-                if videoWriter.status == .unknown {
-                    videoWriter.startWriting()
-                    videoWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-                }
-                
-                if videoWriterInput.isReadyForMoreMediaData {
-                    videoWriterInput.append(sampleBuffer)
-                }
-            default:
-                break
-            }
-            
-        }) { [weak self] error in
-            if let error = error {
-                print("Failed to start capture: \(error)")
-                return
-            }
-            
-            // Stop recording after a delay (e.g., 5 seconds)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                recorder.stopCapture { error in
-                    if let error = error {
-                        print("Failed to stop capture: \(error)")
-                        return
-                    }
-                    
-                    videoWriterInput.markAsFinished()
-                    videoWriter.finishWriting {
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-                            
-                            // Show camera button again
-                            self.cameraButton.isHidden = false
-                            
-                            // Present preview
-                            if let viewController = self.findViewController() {
-                                let previewVC = ZMCapturePreviewViewController(videoURL: videoURL)
-                                previewVC.modalPresentationStyle = .fullScreen
-                                viewController.present(previewVC, animated: true)
-                            }
-                        }
-                    }
-                }
+            // Present preview
+            if let viewController = self.findViewController() {
+                let previewVC = ZMCapturePreviewViewController(videoURL: outputFileURL)
+                previewVC.modalPresentationStyle = .fullScreen
+                viewController.present(previewVC, animated: true)
             }
         }
     }
