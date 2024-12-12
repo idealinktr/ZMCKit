@@ -47,6 +47,14 @@ public class ZMCapturePreviewViewController: UIViewController {
         return button
     }()
     
+    private lazy var closeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     public init(image: UIImage? = nil, videoURL: URL? = nil) {
         self.capturedImage = image
         self.videoURL = videoURL
@@ -74,12 +82,14 @@ public class ZMCapturePreviewViewController: UIViewController {
         
         view.addSubview(mediaView)
         view.addSubview(buttonStack)
+        view.addSubview(closeButton)
         
         buttonStack.addArrangedSubview(shareButton)
         buttonStack.addArrangedSubview(downloadButton)
         
         mediaView.translatesAutoresizingMaskIntoConstraints = false
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             mediaView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -90,7 +100,12 @@ public class ZMCapturePreviewViewController: UIViewController {
             buttonStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             buttonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             buttonStack.widthAnchor.constraint(equalToConstant: 120),
-            buttonStack.heightAnchor.constraint(equalToConstant: 44)
+            buttonStack.heightAnchor.constraint(equalToConstant: 44),
+            
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     
@@ -122,5 +137,9 @@ public class ZMCapturePreviewViewController: UIViewController {
         } else {
             print("Media saved successfully")
         }
+    }
+    
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
 } 

@@ -106,14 +106,18 @@ public class ZMSingleCameraView: ZMCameraView {
     private func startRecording() {
         guard !isRecording else { return }
         
-        // Hide button before recording
-        cameraButton.isHidden = true
+        // Store button visibility state but keep it visible on screen
+        let wasButtonHidden = cameraButton.isHidden
+        cameraButton.isHidden = true  // Hide for recording
         
         let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
         
         movieOutput.startRecording(to: outputURL, recordingDelegate: self)
         isRecording = true
+        
+        // Restore button visibility for UI
+        cameraButton.isHidden = wasButtonHidden
     }
     
     private func stopRecording() {
@@ -172,13 +176,18 @@ extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
+            // Temporarily hide camera button for capture
+            let wasButtonHidden = self.cameraButton.isHidden
+            self.cameraButton.isHidden = true
+            
+            // Render the view hierarchy including lens effects but without camera button
             let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
             let image = renderer.image { ctx in
                 self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
             }
             
-            // Show camera button again
-            self.cameraButton.isHidden = false
+            // Restore button visibility
+            self.cameraButton.isHidden = wasButtonHidden
             
             // Present preview
             if let viewController = self.findViewController() {
