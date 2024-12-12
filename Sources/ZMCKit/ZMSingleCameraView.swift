@@ -62,7 +62,7 @@ public class ZMSingleCameraView: ZMCameraView {
             ])
             
             // Hide lens carousel
-            cameraViewController.cameraView.carouselView.isHidden = true
+            //cameraViewController.cameraView.carouselView.isHidden = true
             
             // Setup delegate for capture/record callbacks
             cameraViewController.cameraController.snapchatDelegate = self
