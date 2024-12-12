@@ -159,12 +159,20 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let imageData = photo.fileDataRepresentation(),
-              let image = UIImage(data: imageData) else {
-            print("Failed to capture photo")
-            return
+        // Instead of using the direct camera output, capture the preview view with lens effects
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // Create renderer with the preview view's bounds
+            let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
+            
+            // Render the view hierarchy including lens effects
+            let image = renderer.image { ctx in
+                self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
+            }
+            
+            self.delegate?.cameraDidCapture(image: image)
         }
-        delegate?.cameraDidCapture(image: image)
     }
 }
 
@@ -176,6 +184,70 @@ extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
             print("Failed to record video: \(error)")
             return
         }
-        delegate?.cameraDidFinishRecording(videoURL: outputFileURL)
+        
+        // Create a video writer
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let videoURL = documentsPath.appendingPathComponent("screen_recording_\(Date().timeIntervalSince1970).mp4")
+        
+        guard let videoWriter = try? AVAssetWriter(outputURL: videoURL, fileType: .mp4) else {
+            print("Failed to create video writer")
+            return
+        }
+        
+        // Configure video settings
+        let videoSettings: [String: Any] = [
+            AVVideoCodecKey: AVVideoCodecType.h264,
+            AVVideoWidthKey: previewView.bounds.width,
+            AVVideoHeightKey: previewView.bounds.height
+        ]
+        
+        let videoWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
+        videoWriter.add(videoWriterInput)
+        
+        // Start screen recording
+        let recorder = RPScreenRecorder.shared()
+        recorder.startCapture(handler: { [weak self] (sampleBuffer, bufferType, error) in
+            guard error == nil else {
+                print("Failed to capture: \(error!)")
+                return
+            }
+            
+            switch bufferType {
+            case .video:
+                if videoWriter.status == .unknown {
+                    videoWriter.startWriting()
+                    videoWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+                }
+                
+                if videoWriterInput.isReadyForMoreMediaData {
+                    videoWriterInput.append(sampleBuffer)
+                }
+            default:
+                break
+            }
+            
+        }) { [weak self] error in
+            if let error = error {
+                print("Failed to start capture: \(error)")
+                return
+            }
+            
+            // Stop recording after a delay (e.g., 5 seconds)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                recorder.stopCapture { error in
+                    if let error = error {
+                        print("Failed to stop capture: \(error)")
+                        return
+                    }
+                    
+                    videoWriterInput.markAsFinished()
+                    videoWriter.finishWriting {
+                        DispatchQueue.main.async {
+                            self?.delegate?.cameraDidFinishRecording(videoURL: videoURL)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
