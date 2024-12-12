@@ -28,7 +28,14 @@ public class ZMMultiLensCameraView: ZMCameraView {
     
     private func setupMultiLens() {
         // Create CameraViewController with partner group
-        cameraViewController = CameraViewController(repoGroups: [partnerGroupId])
+        // Configure session with API token
+            let sessionConfig = SessionConfig(apiToken: snapAPIToken)
+            
+            // Create CameraViewController with configuration
+            cameraViewController = CameraViewController(
+                repoGroups: [partnerGroupId],
+                sessionConfig: sessionConfig
+            )
         
         // Add as child view
         if let parentVC = findViewController() {
