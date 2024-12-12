@@ -9,13 +9,24 @@ import UIKit
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
 import AVFoundation
+import ReplayKit
 
 @available(iOS 13.0, *)
 public class ZMSingleCameraView: ZMCameraView {
     private let lensId: String
     private let bundleIdentifier: String
     private let photoOutput = AVCapturePhotoOutput()
-    private var videoOutput: AVCaptureMovieFileOutput?
+    private let movieOutput = AVCaptureMovieFileOutput()
+    private var isRecording = false
+    
+    private lazy var cameraButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 35
+        button.layer.borderWidth = 3
+        button.layer.borderColor = UIColor.gray.cgColor
+        return button
+    }()
     
     public init(snapAPIToken: String,
                 partnerGroupId: String,
@@ -26,7 +37,8 @@ public class ZMSingleCameraView: ZMCameraView {
         self.bundleIdentifier = bundleIdentifier
         super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupLens()
-        setupCapture()
+        setupCustomCameraButton()
+        setupCaptureOutputs()
     }
     
     required init?(coder: NSCoder) {
@@ -40,31 +52,87 @@ public class ZMSingleCameraView: ZMCameraView {
                                               inGroupID: self.partnerGroupId)
     }
     
-    private func setupCapture() {
-        guard captureSession.canAddOutput(photoOutput) else { return }
-        captureSession.addOutput(photoOutput)
-        
-        let videoOutput = AVCaptureMovieFileOutput()
-        if captureSession.canAddOutput(videoOutput) {
-            captureSession.addOutput(videoOutput)
-            self.videoOutput = videoOutput
+    private func setupCaptureOutputs() {
+        if captureSession.canAddOutput(photoOutput) {
+            captureSession.addOutput(photoOutput)
         }
-        
-        // Setup camera button
-        cameraView.cameraButton.isHidden = false
-        cameraView.cameraButton.delegate = self
+        if captureSession.canAddOutput(movieOutput) {
+            captureSession.addOutput(movieOutput)
+        }
     }
     
-    private func createVideoURL() -> URL {
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        return documentsPath.appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
+    private func setupCustomCameraButton() {
+        // Hide default camera button
+        cameraView.cameraButton.isHidden = true
+        
+        // Add custom button
+        addSubview(cameraButton)
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            cameraButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            cameraButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
+            cameraButton.widthAnchor.constraint(equalToConstant: 70),
+            cameraButton.heightAnchor.constraint(equalToConstant: 70)
+        ])
+        
+        // Add tap gesture
+        cameraButton.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+        
+        // Add long press gesture
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPress.minimumPressDuration = 0.5
+        cameraButton.addGestureRecognizer(longPress)
+    }
+    
+    @objc private func handleTap() {
+        let settings = AVCapturePhotoSettings()
+        photoOutput.capturePhoto(with: settings, delegate: self)
+    }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            startRecording()
+        case .ended, .cancelled:
+            stopRecording()
+        default:
+            break
+        }
+    }
+    
+    private func startRecording() {
+        guard !isRecording else { return }
+        
+        let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
+        
+        movieOutput.startRecording(to: outputURL, recordingDelegate: self)
+        isRecording = true
+        
+        // Update UI
+        UIView.animate(withDuration: 0.3) {
+            self.cameraButton.backgroundColor = .red
+        }
+    }
+    
+    private func stopRecording() {
+        guard isRecording else { return }
+        
+        movieOutput.stopRecording()
+        isRecording = false
+        
+        // Update UI
+        UIView.animate(withDuration: 0.3) {
+            self.cameraButton.backgroundColor = .white
+        }
     }
     
     override public func cleanup() {
-        if let videoOutput = videoOutput {
-            captureSession.removeOutput(videoOutput)
+        if isRecording {
+            stopRecording()
         }
         captureSession.removeOutput(photoOutput)
+        captureSession.removeOutput(movieOutput)
         super.cleanup()
     }
 }
