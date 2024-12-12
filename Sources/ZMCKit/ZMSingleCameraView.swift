@@ -85,6 +85,9 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     @objc private func handleTap() {
+        // Hide button before capture
+        cameraButton.isHidden = true
+        
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
@@ -103,16 +106,14 @@ public class ZMSingleCameraView: ZMCameraView {
     private func startRecording() {
         guard !isRecording else { return }
         
+        // Hide button before recording
+        cameraButton.isHidden = true
+        
         let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
         
         movieOutput.startRecording(to: outputURL, recordingDelegate: self)
         isRecording = true
-        
-        // Update UI
-        UIView.animate(withDuration: 0.3) {
-            self.cameraButton.backgroundColor = .red
-        }
     }
     
     private func stopRecording() {
@@ -121,10 +122,8 @@ public class ZMSingleCameraView: ZMCameraView {
         movieOutput.stopRecording()
         isRecording = false
         
-        // Update UI
-        UIView.animate(withDuration: 0.3) {
-            self.cameraButton.backgroundColor = .white
-        }
+        // Show button after recording stops
+        cameraButton.isHidden = false
     }
     
     override public func cleanup() {
@@ -134,6 +133,17 @@ public class ZMSingleCameraView: ZMCameraView {
         captureSession.removeOutput(photoOutput)
         captureSession.removeOutput(movieOutput)
         super.cleanup()
+    }
+    
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+            responder = nextResponder
+        }
+        return nil
     }
 }
 
@@ -159,19 +169,23 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        // Instead of using the direct camera output, capture the preview view with lens effects
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Create renderer with the preview view's bounds
             let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
-            
-            // Render the view hierarchy including lens effects
             let image = renderer.image { ctx in
                 self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
             }
             
-            self.delegate?.cameraDidCapture(image: image)
+            // Show camera button again
+            self.cameraButton.isHidden = false
+            
+            // Present preview
+            if let viewController = self.findViewController() {
+                let previewVC = ZMCapturePreviewViewController(image: image)
+                previewVC.modalPresentationStyle = .fullScreen
+                viewController.present(previewVC, animated: true)
+            }
         }
     }
 }
@@ -242,8 +256,18 @@ extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
                     
                     videoWriterInput.markAsFinished()
                     videoWriter.finishWriting {
-                        DispatchQueue.main.async {
-                            self?.delegate?.cameraDidFinishRecording(videoURL: videoURL)
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            
+                            // Show camera button again
+                            self.cameraButton.isHidden = false
+                            
+                            // Present preview
+                            if let viewController = self.findViewController() {
+                                let previewVC = ZMCapturePreviewViewController(videoURL: videoURL)
+                                previewVC.modalPresentationStyle = .fullScreen
+                                viewController.present(previewVC, animated: true)
+                            }
                         }
                     }
                 }
