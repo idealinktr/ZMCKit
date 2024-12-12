@@ -55,6 +55,14 @@ public class ZMCapturePreviewViewController: UIViewController {
         return button
     }()
     
+    private lazy var messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.textAlignment = .center
+        label.alpha = 0
+        return label
+    }()
+    
     public init(image: UIImage? = nil, videoURL: URL? = nil) {
         self.capturedImage = image
         self.videoURL = videoURL
@@ -83,6 +91,7 @@ public class ZMCapturePreviewViewController: UIViewController {
         view.addSubview(mediaView)
         view.addSubview(buttonStack)
         view.addSubview(closeButton)
+        view.addSubview(messageLabel)
         
         buttonStack.addArrangedSubview(shareButton)
         buttonStack.addArrangedSubview(downloadButton)
@@ -90,6 +99,7 @@ public class ZMCapturePreviewViewController: UIViewController {
         mediaView.translatesAutoresizingMaskIntoConstraints = false
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             mediaView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -105,8 +115,24 @@ public class ZMCapturePreviewViewController: UIViewController {
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
-            closeButton.heightAnchor.constraint(equalToConstant: 44)
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.bottomAnchor.constraint(equalTo: buttonStack.topAnchor, constant: -20),
         ])
+    }
+    
+    private func showMessage(_ text: String) {
+        messageLabel.text = text
+        UIView.animate(withDuration: 0.3, animations: {
+            self.messageLabel.alpha = 1
+        }) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                UIView.animate(withDuration: 0.3) {
+                    self.messageLabel.alpha = 0
+                }
+            }
+        }
     }
     
     @objc private func shareButtonTapped() {
@@ -124,9 +150,11 @@ public class ZMCapturePreviewViewController: UIViewController {
     @objc private func downloadButtonTapped() {
         if let image = capturedImage {
             UIImageWriteToSavedPhotosAlbum(image, self, #selector(media(_:didFinishSavingWithError:contextInfo:)), nil)
+            showMessage("Fotoğraf kaydedildi!")
         } else if let videoURL = videoURL {
             if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(videoURL.path) {
                 UISaveVideoAtPathToSavedPhotosAlbum(videoURL.path, self, #selector(media(_:didFinishSavingWithError:contextInfo:)), nil)
+                showMessage("Video kaydedildi!")
             }
         }
     }

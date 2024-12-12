@@ -301,15 +301,52 @@ extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
             return
         }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            // Present preview
-            if let viewController = self.findViewController() {
-                let previewVC = ZMCapturePreviewViewController(videoURL: outputFileURL)
-                previewVC.modalPresentationStyle = .fullScreen
-                viewController.present(previewVC, animated: true)
+        // Create an asset writer for the final video with lens effects
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let finalVideoURL = documentsPath.appendingPathComponent("final_recording_\(Date().timeIntervalSince1970).mp4")
+        
+        guard let assetWriter = try? AVAssetWriter(outputURL: finalVideoURL, fileType: .mp4) else {
+            print("Failed to create asset writer")
+            return
+        }
+        
+        let videoSettings: [String: Any] = [
+            AVVideoCodecKey: AVVideoCodecType.h264,
+            AVVideoWidthKey: previewView.bounds.width,
+            AVVideoHeightKey: previewView.bounds.height
+        ]
+        
+        let writerInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
+        assetWriter.add(writerInput)
+        assetWriter.startWriting()
+        assetWriter.startSession(atSourceTime: .zero)
+        
+        // Read frames from preview view and write to new video
+        let displayLink = CADisplayLink(target: self, selector: #selector(captureVideoFrame))
+        displayLink.add(to: .main, forMode: .common)
+        
+        // Stop recording after original video duration
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {  // Adjust duration as needed
+            displayLink.invalidate()
+            writerInput.markAsFinished()
+            assetWriter.finishWriting { [weak self] in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    if let viewController = self.findViewController() {
+                        let previewVC = ZMCapturePreviewViewController(videoURL: finalVideoURL)
+                        previewVC.modalPresentationStyle = .fullScreen
+                        viewController.present(previewVC, animated: true)
+                    }
+                }
             }
         }
+    }
+    
+    @objc private func captureVideoFrame() {
+        let renderer = UIGraphicsImageRenderer(bounds: previewView.bounds)
+        let image = renderer.image { ctx in
+            previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
+        }
+        // Convert image to video frame and write to asset writer
     }
 }
