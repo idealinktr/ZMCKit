@@ -87,31 +87,6 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
     }
 }
 
-// MARK: - Camera Button Delegate
-@available(iOS 13.0, *)
-extension ZMSingleCameraView: CameraButtonDelegate {
-    public func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        let settings = AVCapturePhotoSettings()
-        photoOutput.capturePhoto(with: settings, delegate: self)
-    }
-    
-    public func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        cameraButton.startRecordingAnimation()
-        let outputURL = createVideoURL()
-        videoOutput?.startRecording(to: outputURL, recordingDelegate: self)
-    }
-    
-    public func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        cameraButton.stopRecordingAnimation()
-        videoOutput?.stopRecording()
-    }
-    
-    public func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        cameraButton.stopRecordingAnimation()
-        videoOutput?.stopRecording()
-    }
-}
-
 // MARK: - Photo Capture Delegate
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {

@@ -96,3 +96,24 @@ public class ZMCameraView: UIView {
         super.removeFromSuperview()
     }
 } 
+
+// MARK: - Camera Button Delegate
+@available(iOS 13.0, *)
+extension ZMCameraView: CameraButtonDelegate {
+    public func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        print("debug 1")
+    }
+    
+    public func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        print("debug 2")
+    }
+    
+    public func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        print("debug 3")
+    }
+    
+    public func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        print("debug 4")
+    }
+    
+}
