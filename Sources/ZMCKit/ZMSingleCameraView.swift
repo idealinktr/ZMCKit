@@ -32,6 +32,15 @@ public class ZMSingleCameraView: ZMCameraView {
     private var assetWriterInput: AVAssetWriterInput?
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
     
+    private lazy var processingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Lütfen Bekleyiniz..."
+        label.textColor = .white
+        label.textAlignment = .center
+        label.alpha = 0
+        return label
+    }()
+    
     public init(snapAPIToken: String,
                 partnerGroupId: String,
                 lensId: String,
@@ -86,6 +95,26 @@ public class ZMSingleCameraView: ZMCameraView {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         longPress.minimumPressDuration = 0.5
         cameraButton.addGestureRecognizer(longPress)
+        
+        // Add processing label
+        addSubview(processingLabel)
+        processingLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+    
+    private func showProcessing() {
+        UIView.animate(withDuration: 0.3) {
+            self.processingLabel.alpha = 1
+        }
+    }
+    
+    private func hideProcessing() {
+        UIView.animate(withDuration: 0.3) {
+            self.processingLabel.alpha = 0
+        }
     }
     
     @objc private func handleTap() {
@@ -98,6 +127,7 @@ public class ZMSingleCameraView: ZMCameraView {
             }
         }
         
+        showProcessing()
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
@@ -279,14 +309,13 @@ extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
                 self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
             }
             
-            // Show camera button
-            self.cameraButton.isHidden = false
-            
             // Present preview
             if let viewController = self.findViewController() {
                 let previewVC = ZMCapturePreviewViewController(image: image)
                 previewVC.modalPresentationStyle = .fullScreen
-                viewController.present(previewVC, animated: true)
+                viewController.present(previewVC, animated: true) {
+                    self.hideProcessing()
+                }
             }
         }
     }
@@ -301,52 +330,19 @@ extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
             return
         }
         
-        // Create an asset writer for the final video with lens effects
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let finalVideoURL = documentsPath.appendingPathComponent("final_recording_\(Date().timeIntervalSince1970).mp4")
-        
-        guard let assetWriter = try? AVAssetWriter(outputURL: finalVideoURL, fileType: .mp4) else {
-            print("Failed to create asset writer")
-            return
-        }
-        
-        let videoSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: previewView.bounds.width,
-            AVVideoHeightKey: previewView.bounds.height
-        ]
-        
-        let writerInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
-        assetWriter.add(writerInput)
-        assetWriter.startWriting()
-        assetWriter.startSession(atSourceTime: .zero)
-        
-        // Read frames from preview view and write to new video
-        let displayLink = CADisplayLink(target: self, selector: #selector(captureVideoFrame))
-        displayLink.add(to: .main, forMode: .common)
-        
-        // Stop recording after original video duration
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {  // Adjust duration as needed
-            displayLink.invalidate()
-            writerInput.markAsFinished()
-            assetWriter.finishWriting { [weak self] in
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
-                    if let viewController = self.findViewController() {
-                        let previewVC = ZMCapturePreviewViewController(videoURL: finalVideoURL)
-                        previewVC.modalPresentationStyle = .fullScreen
-                        viewController.present(previewVC, animated: true)
-                    }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.showProcessing()
+            
+            // Present preview
+            if let viewController = self.findViewController() {
+                let previewVC = ZMCapturePreviewViewController(videoURL: outputFileURL)
+                previewVC.modalPresentationStyle = .fullScreen
+                viewController.present(previewVC, animated: true) {
+                    self.hideProcessing()
                 }
             }
         }
-    }
-    
-    @objc private func captureVideoFrame() {
-        let renderer = UIGraphicsImageRenderer(bounds: previewView.bounds)
-        let image = renderer.image { ctx in
-            previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
-        }
-        // Convert image to video frame and write to asset writer
     }
 }
