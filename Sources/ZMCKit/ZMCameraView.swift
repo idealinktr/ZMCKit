@@ -52,10 +52,13 @@ public class ZMCameraView: UIView {
         addSubview(previewView)
         addSubview(cameraView)
         previewView.translatesAutoresizingMaskIntoConstraints = false
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             
+            cameraView.heightAnchor.constraint(equalToConstant: 50),
+            cameraView.widthAnchor.constraint(equalToConstant: 50),
             cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            cameraView.bottomAnchor.constraint(equalTo: previewView.bottomAnchor, constant: -50),
+            cameraView.bottomAnchor.constraint(equalTo: previewView.bottomAnchor),
             
             previewView.topAnchor.constraint(equalTo: topAnchor),
             previewView.leadingAnchor.constraint(equalTo: leadingAnchor),
