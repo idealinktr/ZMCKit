@@ -8,13 +8,14 @@
 import UIKit
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
+import AVFoundation
 
 @available(iOS 13.0, *)
 public class ZMSingleCameraView: ZMCameraView {
     private let lensId: String
     private let bundleIdentifier: String
-    private var cameraViewController: CameraViewController!
-    private let snapAPI = SCSDKSnapAPI()
+    private let photoOutput = AVCapturePhotoOutput()
+    private var videoOutput: AVCaptureMovieFileOutput?
     
     public init(snapAPIToken: String,
                 partnerGroupId: String,
@@ -25,71 +26,49 @@ public class ZMSingleCameraView: ZMCameraView {
         self.bundleIdentifier = bundleIdentifier
         super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupLens()
+        setupCapture()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupLens() {        
-        // Setup lens repository observer for specific lens
+    private func setupLens() {
+        cameraView.carouselView.isHidden = true
         cameraKit.lenses.repository.addObserver(self,
                                               specificLensID: self.lensId,
                                               inGroupID: self.partnerGroupId)
-        
-        // Add camera view controller for capture/record UI
-        if let parentVC = findViewController() {
-            cameraViewController = CameraViewController(
-                cameraKit: cameraKit,
-                captureSession: captureSession,
-                repoGroups: [partnerGroupId]
-            )
-            
-            parentVC.addChild(cameraViewController)
-            addSubview(cameraViewController.view)
-            cameraViewController.view.frame = bounds
-            cameraViewController.didMove(toParent: parentVC)
-            
-            // Setup autolayout
-            cameraViewController.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                cameraViewController.view.topAnchor.constraint(equalTo: topAnchor),
-                cameraViewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-                cameraViewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
-                cameraViewController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ])
-            
-            // Setup delegate for capture/record callbacks
-            cameraViewController.cameraController.snapchatDelegate = self
-        }
     }
     
-    private func findViewController() -> UIViewController? {
-        var responder: UIResponder? = self
-        while let nextResponder = responder?.next {
-            if let viewController = nextResponder as? UIViewController {
-                return viewController
-            }
-            responder = nextResponder
+    private func setupCapture() {
+        guard captureSession.canAddOutput(photoOutput) else { return }
+        captureSession.addOutput(photoOutput)
+        
+        let videoOutput = AVCaptureMovieFileOutput()
+        if captureSession.canAddOutput(videoOutput) {
+            captureSession.addOutput(videoOutput)
+            self.videoOutput = videoOutput
         }
-        return nil
+        
+        // Setup camera button
+        cameraView.cameraButton.isHidden = false
+        cameraView.cameraButton.delegate = self
+    }
+    
+    private func createVideoURL() -> URL {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return documentsPath.appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
     }
     
     override public func cleanup() {
-        // Remove lens observer
-        cameraKit.lenses.repository.removeObserver(self,
-                                                 specificLensID: lensId,
-                                                 inGroupID: partnerGroupId)
-        
-        // Cleanup view controller
-        cameraViewController?.willMove(toParent: nil)
-        cameraViewController?.view.removeFromSuperview()
-        cameraViewController?.removeFromParent()
+        if let videoOutput = videoOutput {
+            captureSession.removeOutput(videoOutput)
+        }
+        captureSession.removeOutput(photoOutput)
         super.cleanup()
     }
 }
 
-// MARK: - Lens Repository Observer
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: LensRepositorySpecificObserver {
     public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
@@ -108,35 +87,52 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
     }
 }
 
-// MARK: - Snapchat Delegate for Capture/Record
+// MARK: - Camera Button Delegate
 @available(iOS 13.0, *)
-extension ZMSingleCameraView: SnapchatDelegate {
-    public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
-        switch screen {
-        case .profile, .lens(_):
-            // not supported yet in creative kit (1.4.2), should be added in next version
-            break
-        case .photo(let image):
-            let photo = SCSDKSnapPhoto(image: image)
-            let content = SCSDKPhotoSnapContent(snapPhoto: photo)
-            sendSnapContent(content, viewController: viewController)
-        case .video(let url):
-            let video = SCSDKSnapVideo(videoUrl: url)
-            let content = SCSDKVideoSnapContent(snapVideo: video)
-            sendSnapContent(content, viewController: viewController)
-        }
+extension ZMSingleCameraView: CameraButtonDelegate {
+    public func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        let settings = AVCapturePhotoSettings()
+        photoOutput.capturePhoto(with: settings, delegate: self)
     }
     
-    private func sendSnapContent(_ content: SCSDKSnapContent, viewController: UIViewController) {
-        viewController.view.isUserInteractionEnabled = false
-        snapAPI.startSending(content) { error in
-            DispatchQueue.main.async {
-                viewController.view.isUserInteractionEnabled = true
-            }
-            if let error = error {
-                print("Failed to send content to Snapchat with error: \(error.localizedDescription)")
-                return
-            }
+    public func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        cameraButton.startRecordingAnimation()
+        let outputURL = createVideoURL()
+        videoOutput?.startRecording(to: outputURL, recordingDelegate: self)
+    }
+    
+    public func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        cameraButton.stopRecordingAnimation()
+        videoOutput?.stopRecording()
+    }
+    
+    public func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
+        cameraButton.stopRecordingAnimation()
+        videoOutput?.stopRecording()
+    }
+}
+
+// MARK: - Photo Capture Delegate
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let imageData = photo.fileDataRepresentation(),
+              let image = UIImage(data: imageData) else {
+            print("Failed to capture photo")
+            return
         }
+        delegate?.cameraDidCapture(image: image)
+    }
+}
+
+// MARK: - Video Recording Delegate
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
+        if let error = error {
+            print("Failed to record video: \(error)")
+            return
+        }
+        delegate?.cameraDidFinishRecording(videoURL: outputFileURL)
     }
 }
