@@ -31,15 +31,24 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     private func setupLens() {
+        // Hide carousel since this is single lens view
+        cameraView.carouselView.isHidden = true
+        cameraView.cameraButton.isHidden = false
+        
+        
+        // Setup lens repository observer for specific lens
+        cameraKit.lenses.repository.addObserver(self,
+                                              specificLensID: self.lensId,
+                                              inGroupID: self.partnerGroupId)
+        
+        // Add camera view controller for capture/record UI
         if let parentVC = findViewController() {
-            // Create camera view controller with configuration
-            let sessionConfig = SessionConfig(apiToken: snapAPIToken)
             cameraViewController = CameraViewController(
-                repoGroups: [partnerGroupId],
-                sessionConfig: sessionConfig
+                cameraKit: cameraKit,
+                captureSession: captureSession,
+                repoGroups: [partnerGroupId]
             )
             
-            // Add as child view controller
             parentVC.addChild(cameraViewController)
             addSubview(cameraViewController.view)
             cameraViewController.view.frame = bounds
@@ -54,15 +63,8 @@ public class ZMSingleCameraView: ZMCameraView {
                 cameraViewController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
             
-            // Setup delegates
+            // Setup delegate for capture/record callbacks
             cameraViewController.cameraController.snapchatDelegate = self
-            
-            // Setup lens observer for specific lens
-            cameraViewController.cameraController.cameraKit.lenses.repository.addObserver(
-                self,
-                specificLensID: self.lensId,
-                inGroupID: self.partnerGroupId
-            )
         }
     }
     
