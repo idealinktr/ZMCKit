@@ -28,6 +28,10 @@ public class ZMSingleCameraView: ZMCameraView {
         return button
     }()
     
+    private var assetWriter: AVAssetWriter?
+    private var assetWriterInput: AVAssetWriterInput?
+    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    
     public init(snapAPIToken: String,
                 partnerGroupId: String,
                 lensId: String,
@@ -85,8 +89,14 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     @objc private func handleTap() {
-        // Hide button before capture
-        cameraButton.isHidden = true
+        // Add tap animation
+        UIView.animate(withDuration: 0.1, animations: {
+            self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.cameraButton.transform = .identity
+            }
+        }
         
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
@@ -95,8 +105,18 @@ public class ZMSingleCameraView: ZMCameraView {
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
         case .began:
+            // Start recording animation
+            UIView.animate(withDuration: 0.2) {
+                self.cameraButton.backgroundColor = .red
+                self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            }
             startRecording()
         case .ended, .cancelled:
+            // End recording animation
+            UIView.animate(withDuration: 0.2) {
+                self.cameraButton.backgroundColor = .white
+                self.cameraButton.transform = .identity
+            }
             stopRecording()
         default:
             break
@@ -106,28 +126,100 @@ public class ZMSingleCameraView: ZMCameraView {
     private func startRecording() {
         guard !isRecording else { return }
         
-        // Store button visibility state but keep it visible on screen
-        let wasButtonHidden = cameraButton.isHidden
-        cameraButton.isHidden = true  // Hide for recording
-        
         let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
         
-        movieOutput.startRecording(to: outputURL, recordingDelegate: self)
-        isRecording = true
+        do {
+            assetWriter = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
+            
+            let videoSettings: [String: Any] = [
+                AVVideoCodecKey: AVVideoCodecType.h264,
+                AVVideoWidthKey: previewView.bounds.width,
+                AVVideoHeightKey: previewView.bounds.height
+            ]
+            
+            assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
+            assetWriterInput?.expectsMediaDataInRealTime = true
+            
+            // Create pixel buffer adaptor
+            let sourcePixelBufferAttributes: [String: Any] = [
+                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32ARGB,
+                kCVPixelBufferWidthKey as String: previewView.bounds.width,
+                kCVPixelBufferHeightKey as String: previewView.bounds.height
+            ]
+            
+            pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
+                assetWriterInput: assetWriterInput!,
+                sourcePixelBufferAttributes: sourcePixelBufferAttributes
+            )
+            
+            if let assetWriter = assetWriter, let assetWriterInput = assetWriterInput {
+                assetWriter.add(assetWriterInput)
+                assetWriter.startWriting()
+                assetWriter.startSession(atSourceTime: CMTime.zero)
+                isRecording = true
+                
+                // Start capturing frames
+                captureFrames()
+            }
+        } catch {
+            print("Failed to create asset writer: \(error)")
+        }
+    }
+    
+    private var frameCount: Int64 = 0
+    private var displayLink: CADisplayLink?
+    
+    private func captureFrames() {
+        displayLink = CADisplayLink(target: self, selector: #selector(captureFrame))
+        displayLink?.add(to: .main, forMode: .common)
+    }
+    
+    @objc private func captureFrame() {
+        guard isRecording,
+              let adaptor = pixelBufferAdaptor,
+              let assetWriterInput = assetWriterInput,
+              assetWriterInput.isReadyForMoreMediaData else { return }
         
-        // Restore button visibility for UI
-        cameraButton.isHidden = wasButtonHidden
+        let renderer = UIGraphicsImageRenderer(bounds: previewView.bounds)
+        let image = renderer.image { ctx in
+            previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
+        }
+        
+        if let pixelBuffer = image.pixelBuffer() {
+            // Use frame count for timing (assuming 60fps)
+            let frameTime = CMTime(value: frameCount, timescale: 60)
+            adaptor.append(pixelBuffer, withPresentationTime: frameTime)
+            frameCount += 1
+        }
     }
     
     private func stopRecording() {
         guard isRecording else { return }
         
-        movieOutput.stopRecording()
         isRecording = false
+        displayLink?.invalidate()
+        displayLink = nil
+        frameCount = 0
         
-        // Show button after recording stops
-        cameraButton.isHidden = false
+        assetWriterInput?.markAsFinished()
+        
+        assetWriter?.finishWriting { [weak self] in
+            DispatchQueue.main.async {
+                if let outputURL = self?.assetWriter?.outputURL {
+                    if let viewController = self?.findViewController() {
+                        let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
+                        previewVC.modalPresentationStyle = .fullScreen
+                        viewController.present(previewVC, animated: true)
+                    }
+                }
+                
+                // Clean up
+                self?.assetWriter = nil
+                self?.assetWriterInput = nil
+                self?.pixelBufferAdaptor = nil
+            }
+        }
     }
     
     override public func cleanup() {
@@ -176,18 +268,14 @@ extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            // Temporarily hide camera button for capture
-            let wasButtonHidden = self.cameraButton.isHidden
-            self.cameraButton.isHidden = true
-            
             // Render the view hierarchy including lens effects but without camera button
             let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
             let image = renderer.image { ctx in
                 self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
             }
             
-            // Restore button visibility
-            self.cameraButton.isHidden = wasButtonHidden
+            // Show camera button
+            self.cameraButton.isHidden = false
             
             // Present preview
             if let viewController = self.findViewController() {
