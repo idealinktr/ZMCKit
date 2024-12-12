@@ -14,7 +14,7 @@ public class ZMSingleCameraView: ZMCameraView {
     private let lensId: String
     private let bundleIdentifier: String
     private var cameraViewController: CameraViewController!
-    let snapAPI = SCSDKSnapAPI()
+    private let snapAPI = SCSDKSnapAPI()
     
     public init(snapAPIToken: String,
                 partnerGroupId: String,
@@ -36,6 +36,32 @@ public class ZMSingleCameraView: ZMCameraView {
         cameraKit.lenses.repository.addObserver(self,
                                               specificLensID: self.lensId,
                                               inGroupID: self.partnerGroupId)
+        
+        // Add camera view controller for capture/record UI
+        if let parentVC = findViewController() {
+            cameraViewController = CameraViewController(
+                cameraKit: cameraKit,
+                captureSession: captureSession,
+                repoGroups: [partnerGroupId]
+            )
+            
+            parentVC.addChild(cameraViewController)
+            addSubview(cameraViewController.view)
+            cameraViewController.view.frame = bounds
+            cameraViewController.didMove(toParent: parentVC)
+            
+            // Setup autolayout
+            cameraViewController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                cameraViewController.view.topAnchor.constraint(equalTo: topAnchor),
+                cameraViewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
+                cameraViewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
+                cameraViewController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+            
+            // Setup delegate for capture/record callbacks
+            cameraViewController.cameraController.snapchatDelegate = self
+        }
     }
     
     private func findViewController() -> UIViewController? {
@@ -87,6 +113,9 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
 extension ZMSingleCameraView: SnapchatDelegate {
     public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
         switch screen {
+        case .profile, .lens(_):
+            // not supported yet in creative kit (1.4.2), should be added in next version
+            break
         case .photo(let image):
             let photo = SCSDKSnapPhoto(image: image)
             let content = SCSDKPhotoSnapContent(snapPhoto: photo)
@@ -95,8 +124,6 @@ extension ZMSingleCameraView: SnapchatDelegate {
             let video = SCSDKSnapVideo(videoUrl: url)
             let content = SCSDKVideoSnapContent(snapVideo: video)
             sendSnapContent(content, viewController: viewController)
-        default:
-            break
         }
     }
     
