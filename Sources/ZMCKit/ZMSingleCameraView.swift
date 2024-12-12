@@ -31,6 +31,8 @@ public class ZMSingleCameraView: ZMCameraView {
     private var assetWriter: AVAssetWriter?
     private var assetWriterInput: AVAssetWriterInput?
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    private var displayLink: CADisplayLink?
+    private var recordingURL: URL?
     
     private lazy var processingLabel: UILabel = {
         let label = UILabel()
@@ -140,10 +142,7 @@ public class ZMSingleCameraView: ZMCameraView {
                 self.cameraButton.backgroundColor = .red
                 self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }
-            
-            let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
-            movieOutput.startRecording(to: outputURL, recordingDelegate: self)
+            startRecordingWithLens()
             
         case .ended, .cancelled:
             // End recording animation
@@ -151,18 +150,17 @@ public class ZMSingleCameraView: ZMCameraView {
                 self.cameraButton.backgroundColor = .white
                 self.cameraButton.transform = .identity
             }
-            movieOutput.stopRecording()
+            stopRecordingWithLens()
             
         default:
             break
         }
     }
     
-    private func startRecording() {
-        guard !isRecording else { return }
-        
+    private func startRecordingWithLens() {
         let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
+        recordingURL = outputURL
         
         do {
             assetWriter = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
@@ -176,45 +174,36 @@ public class ZMSingleCameraView: ZMCameraView {
             assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
             assetWriterInput?.expectsMediaDataInRealTime = true
             
-            // Create pixel buffer adaptor
-            let sourcePixelBufferAttributes: [String: Any] = [
-                kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32ARGB,
-                kCVPixelBufferWidthKey as String: previewView.bounds.width,
-                kCVPixelBufferHeightKey as String: previewView.bounds.height
+            let attributes: [String: Any] = [
+                kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32ARGB),
+                kCVPixelBufferWidthKey as String: Int(previewView.bounds.width),
+                kCVPixelBufferHeightKey as String: Int(previewView.bounds.height)
             ]
             
             pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(
                 assetWriterInput: assetWriterInput!,
-                sourcePixelBufferAttributes: sourcePixelBufferAttributes
+                sourcePixelBufferAttributes: attributes
             )
             
-            if let assetWriter = assetWriter, let assetWriterInput = assetWriterInput {
-                assetWriter.add(assetWriterInput)
-                assetWriter.startWriting()
-                assetWriter.startSession(atSourceTime: CMTime.zero)
-                isRecording = true
-                
-                // Start capturing frames
-                captureFrames()
-            }
+            assetWriter?.add(assetWriterInput!)
+            assetWriter?.startWriting()
+            assetWriter?.startSession(atSourceTime: .zero)
+            
+            displayLink = CADisplayLink(target: self, selector: #selector(captureFrame))
+            displayLink?.add(to: .main, forMode: .common)
+            isRecording = true
+            
         } catch {
-            print("Failed to create asset writer: \(error)")
+            print("Failed to start recording: \(error)")
         }
     }
     
     private var frameCount: Int64 = 0
-    private var displayLink: CADisplayLink?
-    
-    private func captureFrames() {
-        displayLink = CADisplayLink(target: self, selector: #selector(captureFrame))
-        displayLink?.add(to: .main, forMode: .common)
-    }
     
     @objc private func captureFrame() {
-        guard isRecording,
+        guard let input = assetWriterInput,
               let adaptor = pixelBufferAdaptor,
-              let assetWriterInput = assetWriterInput,
-              assetWriterInput.isReadyForMoreMediaData else { return }
+              input.isReadyForMoreMediaData else { return }
         
         let renderer = UIGraphicsImageRenderer(bounds: previewView.bounds)
         let image = renderer.image { ctx in
@@ -222,44 +211,48 @@ public class ZMSingleCameraView: ZMCameraView {
         }
         
         if let pixelBuffer = image.pixelBuffer() {
-            // Use frame count for timing (assuming 60fps)
             let frameTime = CMTime(value: frameCount, timescale: 60)
             adaptor.append(pixelBuffer, withPresentationTime: frameTime)
             frameCount += 1
         }
     }
     
-    private func stopRecording() {
+    private func stopRecordingWithLens() {
         guard isRecording else { return }
         
         isRecording = false
         displayLink?.invalidate()
         displayLink = nil
-        frameCount = 0
         
         assetWriterInput?.markAsFinished()
         
         assetWriter?.finishWriting { [weak self] in
             DispatchQueue.main.async {
-                if let outputURL = self?.assetWriter?.outputURL {
-                    if let viewController = self?.findViewController() {
-                        let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
-                        previewVC.modalPresentationStyle = .fullScreen
-                        viewController.present(previewVC, animated: true)
+                guard let self = self,
+                      let outputURL = self.recordingURL else { return }
+                
+                self.showProcessing()
+                
+                if let viewController = self.findViewController() {
+                    let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
+                    previewVC.modalPresentationStyle = .fullScreen
+                    viewController.present(previewVC, animated: true) {
+                        self.hideProcessing()
                     }
                 }
                 
                 // Clean up
-                self?.assetWriter = nil
-                self?.assetWriterInput = nil
-                self?.pixelBufferAdaptor = nil
+                self.assetWriter = nil
+                self.assetWriterInput = nil
+                self.pixelBufferAdaptor = nil
+                self.frameCount = 0
             }
         }
     }
     
     override public func cleanup() {
         if isRecording {
-            stopRecording()
+            stopRecordingWithLens()
         }
         captureSession.removeOutput(photoOutput)
         captureSession.removeOutput(movieOutput)
