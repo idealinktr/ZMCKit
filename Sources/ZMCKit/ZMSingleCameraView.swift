@@ -31,18 +31,22 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     private func setupLens() {
-        // Create CameraViewController with single lens
-        // Configure session with API token
-            let sessionConfig = SessionConfig(apiToken: snapAPIToken)
-            
-            // Create CameraViewController with configuration
-            cameraViewController = CameraViewController(
-                repoGroups: [lensId],
-                sessionConfig: sessionConfig
-            )
+        // Hide carousel since this is single lens view
+        cameraView.carouselView.isHidden = true
         
-        // Add as child view
+        // Setup lens repository observer
+        cameraKit.lenses.repository.addObserver(self,
+                                              specificLensID: self.lensId,
+                                              inGroupID: self.partnerGroupId)
+        
+        // Add camera view controller for capture/record UI
         if let parentVC = findViewController() {
+            cameraViewController = CameraViewController(
+                cameraKit: cameraKit,
+                captureSession: captureSession,
+                repoGroups: [partnerGroupId]
+            )
+            
             parentVC.addChild(cameraViewController)
             addSubview(cameraViewController.view)
             cameraViewController.view.frame = bounds
@@ -56,16 +60,15 @@ public class ZMSingleCameraView: ZMCameraView {
                 cameraViewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
                 cameraViewController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
             ])
+            
+            // Hide lens carousel
+            cameraViewController.cameraView.carouselView.isHidden = true
+            
+            // Setup delegate for capture/record callbacks
+            cameraViewController.cameraController.snapchatDelegate = self
         }
-        
-        // Hide carousel since this is single lens view
-        cameraViewController.cameraView.carouselView.isHidden = true
-        
-        // Setup delegates
-        cameraViewController.cameraController.snapchatDelegate = self
     }
     
-    // Helper method to find parent view controller
     private func findViewController() -> UIViewController? {
         var responder: UIResponder? = self
         while let nextResponder = responder?.next {
@@ -76,9 +79,39 @@ public class ZMSingleCameraView: ZMCameraView {
         }
         return nil
     }
+    
+    override public func cleanup() {
+        // Remove lens observer with specific lens ID and group ID
+        cameraKit.lenses.repository.removeObserver(self,
+                                                 specificLensID: lensId,
+                                                 inGroupID: partnerGroupId)
+        cameraViewController?.willMove(toParent: nil)
+        cameraViewController?.view.removeFromSuperview()
+        cameraViewController?.removeFromParent()
+        super.cleanup()
+    }
 }
 
-// Add SnapchatDelegate to handle camera events
+// MARK: - Lens Repository Observer
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: LensRepositorySpecificObserver {
+    public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
+        cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
+            if success {
+                print("Successfully applied lens: \(lens.id)")
+                ZMCKit.updateCurrentLensId(lens.id)
+            } else {
+                print("Failed to apply lens: \(lens.id)")
+            }
+        }
+    }
+    
+    public func repository(_ repository: any LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: (any Error)?) {
+        print("Did fail to update lens")
+    }
+}
+
+// MARK: - Snapchat Delegate for Capture/Record
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: SnapchatDelegate {
     public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
