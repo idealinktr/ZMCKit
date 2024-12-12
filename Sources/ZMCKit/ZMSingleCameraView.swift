@@ -31,18 +31,22 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     private func setupLens() {
-        // Create camera view controller
+        // Hide carousel since this is single lens view
+        cameraView.carouselView.isHidden = true
+        
+        // Setup lens repository observer for specific lens
+        cameraKit.lenses.repository.addObserver(self,
+                                              specificLensID: self.lensId,
+                                              inGroupID: self.partnerGroupId)
+        
+        // Add camera view controller for capture/record UI
         if let parentVC = findViewController() {
-            // Initialize camera controller with session config
-            let sessionConfig = SessionConfig(apiToken: snapAPIToken)
-            
-            // Create camera view controller
             cameraViewController = CameraViewController(
-                repoGroups: [partnerGroupId],
-                sessionConfig: sessionConfig
+                cameraKit: cameraKit,
+                captureSession: captureSession,
+                repoGroups: [partnerGroupId]
             )
             
-            // Add as child view controller
             parentVC.addChild(cameraViewController)
             addSubview(cameraViewController.view)
             cameraViewController.view.frame = bounds
@@ -59,13 +63,6 @@ public class ZMSingleCameraView: ZMCameraView {
             
             // Setup delegate for capture/record callbacks
             cameraViewController.cameraController.snapchatDelegate = self
-            
-            // Setup lens repository observer
-            cameraViewController.cameraController.cameraKit.lenses.repository.addObserver(
-                self,
-                specificLensID: self.lensId,
-                inGroupID: self.partnerGroupId
-            )
         }
     }
     
@@ -82,11 +79,9 @@ public class ZMSingleCameraView: ZMCameraView {
     
     override public func cleanup() {
         // Remove lens observer
-        cameraViewController?.cameraController.cameraKit.lenses.repository.removeObserver(
-            self,
-            specificLensID: lensId,
-            inGroupID: partnerGroupId
-        )
+        cameraKit.lenses.repository.removeObserver(self,
+                                                 specificLensID: lensId,
+                                                 inGroupID: partnerGroupId)
         
         // Cleanup view controller
         cameraViewController?.willMove(toParent: nil)
@@ -100,10 +95,7 @@ public class ZMSingleCameraView: ZMCameraView {
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: LensRepositorySpecificObserver {
     public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
-        cameraViewController?.cameraController.cameraKit.lenses.processor?.apply(
-            lens: lens,
-            launchData: nil
-        ) { [weak self] success in
+        cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
