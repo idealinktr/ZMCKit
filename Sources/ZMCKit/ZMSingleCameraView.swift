@@ -32,7 +32,14 @@ public class ZMSingleCameraView: ZMCameraView {
     
     private func setupLens() {
         // Create CameraViewController with single lens
-        cameraViewController = CameraViewController(repoGroups: [lensId])
+        // Configure session with API token
+            let sessionConfig = SessionConfig(apiToken: snapAPIToken)
+            
+            // Create CameraViewController with configuration
+            cameraViewController = CameraViewController(
+                repoGroups: [lensId],
+                sessionConfig: sessionConfig
+            )
         
         // Add as child view
         if let parentVC = findViewController() {
