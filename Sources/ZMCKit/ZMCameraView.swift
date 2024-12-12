@@ -68,6 +68,7 @@ public class ZMCameraView: UIView {
         ])
         
         cameraKit.add(output: previewView)
+        cameraView.cameraButton.delegate = self
         
         let input = AVSessionInput(session: captureSession)
         let arInput = ARSessionInput()
