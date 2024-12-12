@@ -33,39 +33,18 @@ public class ZMSingleCameraView: ZMCameraView {
     private func setupLens() {
         // Hide carousel since this is single lens view
         cameraView.carouselView.isHidden = true
-        cameraView.cameraButton.isHidden = false
         
+        // Make camera button visible and configure it
+        cameraView.cameraButton.isHidden = false
+        cameraView.cameraButton.isEnabled = true
+        
+        // Add camera button delegate to handle capture/record
+        cameraView.cameraButton.delegate = self
         
         // Setup lens repository observer for specific lens
         cameraKit.lenses.repository.addObserver(self,
                                               specificLensID: self.lensId,
                                               inGroupID: self.partnerGroupId)
-        
-        // Add camera view controller for capture/record UI
-        if let parentVC = findViewController() {
-            cameraViewController = CameraViewController(
-                cameraKit: cameraKit,
-                captureSession: captureSession,
-                repoGroups: [partnerGroupId]
-            )
-            
-            parentVC.addChild(cameraViewController)
-            addSubview(cameraViewController.view)
-            cameraViewController.view.frame = bounds
-            cameraViewController.didMove(toParent: parentVC)
-            
-            // Setup autolayout
-            cameraViewController.view.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                cameraViewController.view.topAnchor.constraint(equalTo: topAnchor),
-                cameraViewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-                cameraViewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
-                cameraViewController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
-            ])
-            
-            // Setup delegate for capture/record callbacks
-            cameraViewController.cameraController.snapchatDelegate = self
-        }
     }
     
     private func findViewController() -> UIViewController? {
@@ -123,6 +102,29 @@ extension ZMSingleCameraView: SnapchatDelegate {
             delegate?.cameraDidFinishRecording(videoURL: url)
         default:
             break
+        }
+    }
+}
+
+// MARK: - Camera Button Delegate
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: CameraButtonDelegate {
+    public func cameraButtonDidTap(_ button: CameraButton) {
+        // Handle photo capture
+        cameraKit.output?.capturePhoto { [weak self] image in
+            self?.delegate?.cameraDidCapture(image: image)
+        }
+    }
+    
+    public func cameraButtonDidBeginLongPress(_ button: CameraButton) {
+        // Start video recording
+        cameraKit.output?.startRecording()
+    }
+    
+    public func cameraButtonDidEndLongPress(_ button: CameraButton) {
+        // Stop video recording
+        cameraKit.output?.stopRecording { [weak self] url in
+            self?.delegate?.cameraDidFinishRecording(videoURL: url)
         }
     }
 }
