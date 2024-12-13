@@ -65,13 +65,16 @@ public class ZMMultiLensCameraView: ZMCameraView {
         addSubview(collectionView)
         addSubview(processingLabel)
         
+        // Make sure collection view is on top
+        bringSubviewToFront(collectionView)
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50), // Adjusted bottom margin
             collectionView.heightAnchor.constraint(equalToConstant: 100),
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -81,7 +84,18 @@ public class ZMMultiLensCameraView: ZMCameraView {
         // Update collection view layout
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.itemSize = CGSize(width: 70, height: 70)
+            flowLayout.minimumInteritemSpacing = 10
+            flowLayout.minimumLineSpacing = 10
+            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         }
+        
+        // Add debug background color to check visibility
+        collectionView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        bringSubviewToFront(collectionView)
     }
     
     private func setupLenses() {
@@ -135,25 +149,34 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LensCell", for: indexPath) as! LensCell
         let lens = lenses[indexPath.item]
         cell.configure(with: lens, cache: imageCache)
-        
-        // Add tap gesture to cell for capture
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped(_:)))
-        cell.addGestureRecognizer(tapGesture)
-        
         return cell
     }
     
-    @objc private func cellTapped(_ gesture: UITapGestureRecognizer) {
-        guard let cell = gesture.view as? LensCell,
-              let indexPath = collectionView.indexPath(for: cell) else { return }
-        
-        // First apply the lens
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         currentLensIndex = indexPath.item
-        applyLens(lens: lenses[currentLensIndex])
+        let lens = lenses[currentLensIndex]
+        applyLens(lens: lens)
         
-        // Then capture photo after a short delay to ensure lens is applied
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.capturePhoto()
+        // Animate the selected cell
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            UIView.animate(withDuration: 0.1, animations: {
+                cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            }) { _ in
+                UIView.animate(withDuration: 0.1) {
+                    cell.transform = .identity
+                }
+            }
+        }
+    }
+    
+    // Add long press gesture for capture
+    public func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        // Capture photo when cell is held
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            if let cell = collectionView.cellForItem(at: indexPath),
+               cell.isHighlighted {
+                self?.capturePhoto()
+            }
         }
     }
 }
