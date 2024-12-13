@@ -65,32 +65,27 @@ public class ZMMultiLensCameraView: ZMCameraView {
         addSubview(collectionView)
         addSubview(processingLabel)
         
-        // Make sure collection view is on top
-        bringSubviewToFront(collectionView)
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50), // Adjusted bottom margin
-            collectionView.heightAnchor.constraint(equalToConstant: 100),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100),
+            collectionView.heightAnchor.constraint(equalToConstant: 80),
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
-        // Update collection view layout
-        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.itemSize = CGSize(width: 70, height: 70)
-            flowLayout.minimumInteritemSpacing = 10
-            flowLayout.minimumLineSpacing = 10
-            flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        }
+        // Make sure collection view is visible
+        collectionView.backgroundColor = .clear
+        bringSubviewToFront(collectionView)
         
-        // Add debug background color to check visibility
-        collectionView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        // Reload collection view after a short delay to ensure lenses are loaded
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.collectionView.reloadData()
+        }
     }
     
     public override func layoutSubviews() {
