@@ -46,6 +46,16 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return collectionView
     }()
     
+    private lazy var captureButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 35
+        button.layer.borderWidth = 3
+        button.layer.borderColor = UIColor.gray.cgColor
+        button.addTarget(self, action: #selector(handleCapture), for: .touchUpInside)
+        return button
+    }()
+    
     public override init(snapAPIToken: String, partnerGroupId: String, frame: CGRect = .zero) {
         super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupUI()
@@ -61,31 +71,34 @@ public class ZMMultiLensCameraView: ZMCameraView {
         // Hide default camera button
         cameraView.cameraButton.isHidden = true
         
-        // Setup collection view
+        // Setup views
         addSubview(collectionView)
+        addSubview(captureButton)
         addSubview(processingLabel)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        captureButton.translatesAutoresizingMaskIntoConstraints = false
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100),
+            // Capture button constraints
+            captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            captureButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            captureButton.widthAnchor.constraint(equalToConstant: 70),
+            captureButton.heightAnchor.constraint(equalToConstant: 70),
+            
+            // Collection view constraints
+            collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: captureButton.topAnchor, constant: -20),
             collectionView.heightAnchor.constraint(equalToConstant: 80),
+            collectionView.widthAnchor.constraint(equalToConstant: 300), // Adjust based on your needs
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
-        // Make sure collection view is visible
+        // Make collection view background clear
         collectionView.backgroundColor = .clear
-        bringSubviewToFront(collectionView)
-        
-        // Reload collection view after a short delay to ensure lenses are loaded
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.collectionView.reloadData()
-        }
     }
     
     public override func layoutSubviews() {
@@ -131,6 +144,17 @@ public class ZMMultiLensCameraView: ZMCameraView {
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
+    
+    @objc private func handleCapture() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.captureButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.captureButton.transform = .identity
+            }
+        }
+        capturePhoto()
+    }
 }
 
 // MARK: - UICollectionView DataSource & Delegate
@@ -151,28 +175,6 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
         currentLensIndex = indexPath.item
         let lens = lenses[currentLensIndex]
         applyLens(lens: lens)
-        
-        // Animate the selected cell
-        if let cell = collectionView.cellForItem(at: indexPath) {
-            UIView.animate(withDuration: 0.1, animations: {
-                cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            }) { _ in
-                UIView.animate(withDuration: 0.1) {
-                    cell.transform = .identity
-                }
-            }
-        }
-    }
-    
-    // Add long press gesture for capture
-    public func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        // Capture photo when cell is held
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            if let cell = collectionView.cellForItem(at: indexPath),
-               cell.isHighlighted {
-                self?.capturePhoto()
-            }
-        }
     }
 }
 

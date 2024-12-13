@@ -13,11 +13,12 @@ import SCSDKCameraKit
 public class LensCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 35
         iv.layer.borderWidth = 2
         iv.layer.borderColor = UIColor.white.cgColor
+        iv.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         return iv
     }()
     
@@ -48,9 +49,11 @@ public class LensCell: UICollectionViewCell {
             return
         }
         
-        // Load icon using preview URL
-        if let previewURL = lens.preview.imageUrl {
-            URLSession.shared.dataTask(with: previewURL) { [weak self] data, response, error in
+        // Try different URLs in order of preference
+        let imageURL = lens.iconUrl ?? lens.preview.imageUrl ?? lens.snapcodes.imageUrl
+        
+        if let imageURL = imageURL {
+            URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
                 if let error = error {
                     print("Failed to load lens icon: \(error)")
                     return
@@ -64,7 +67,7 @@ public class LensCell: UICollectionViewCell {
                 }
             }.resume()
         } else {
-            // Set a default image if no preview URL is available
+            // Set a default image if no URL is available
             let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .medium)
             imageView.image = UIImage(systemName: "camera.filters", withConfiguration: config)?
                 .withTintColor(.white, renderingMode: .alwaysOriginal)
