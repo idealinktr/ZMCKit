@@ -58,19 +58,11 @@ public class ZMCameraView: UIView {
             ),
             errorHandler: nil
         )
-        cameraView.cameraActionsView.isHidden = true
         
         addSubview(previewView)
-            //addSubview(cameraView)
         previewView.translatesAutoresizingMaskIntoConstraints = false
-        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            
-//            cameraView.heightAnchor.constraint(equalToConstant: 50),
-//            cameraView.widthAnchor.constraint(equalToConstant: 50),
-//            cameraView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            cameraView.bottomAnchor.constraint(equalTo: previewView.bottomAnchor),
-            
             previewView.topAnchor.constraint(equalTo: topAnchor),
             previewView.leadingAnchor.constraint(equalTo: leadingAnchor),
             previewView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -78,7 +70,6 @@ public class ZMCameraView: UIView {
         ])
         
         cameraKit.add(output: previewView)
-        cameraView.cameraButton.delegate = self
         
         let input = AVSessionInput(session: captureSession)
         let arInput = ARSessionInput()
@@ -100,6 +91,7 @@ public class ZMCameraView: UIView {
     public func cleanup() {
         cameraKit.remove(output: previewView)
         captureSession.stopRunning()
+        cameraKit = nil
     }
 
     public override func removeFromSuperview() {
