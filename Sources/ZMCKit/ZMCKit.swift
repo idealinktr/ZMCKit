@@ -52,7 +52,7 @@ public struct ZMCKit {
         partnerGroupId: String,
         lensId: String,
         bundleIdentifier: String = Bundle.main.bundleIdentifier ?? ""
-    ) -> UIView {
+    ) -> ZMSingleCameraView {
         #if targetEnvironment(simulator)
         return SimulatorCameraView()
         #else
@@ -75,7 +75,7 @@ public struct ZMCKit {
     public static func createMultiProductView(
         snapAPIToken: String,
         partnerGroupId: String
-    ) -> UIView {
+    ) -> ZMMultiLensCameraView {
         #if targetEnvironment(simulator)
         return SimulatorCameraView()
         #else
