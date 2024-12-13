@@ -45,8 +45,7 @@ public struct ZMCKit {
         partnerGroupId: String,
         lensId: String,
         bundleIdentifier: String = Bundle.main.bundleIdentifier ?? ""
-    ) -> UIView {
-        print("single clicked")
+    ) -> ZMSingleCameraView {
         return ZMSingleCameraView(
             snapAPIToken: snapAPIToken,
             partnerGroupId: partnerGroupId,
@@ -65,8 +64,7 @@ public struct ZMCKit {
     public static func createMultiProductView(
         snapAPIToken: String,
         partnerGroupId: String
-    ) -> UIView {
-        print("multi clicked")
+    ) -> ZMMultiLensCameraView {
         return ZMMultiLensCameraView(
             snapAPIToken: snapAPIToken,
             partnerGroupId: partnerGroupId
