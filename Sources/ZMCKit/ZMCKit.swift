@@ -8,10 +8,12 @@
 import Foundation
 import UIKit
 
+#if !targetEnvironment(simulator)
 @_exported import SCSDKCameraKitReferenceUI
 @_exported import SCSDKCameraKit
 @_exported import SCSDKCoreKit
 @_exported import SCSDKCreativeKit
+#endif
 
 enum ZMCKitError: Error {
     case invalidPreviewView
