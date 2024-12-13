@@ -15,7 +15,9 @@ public class LensCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
+        iv.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
         iv.layer.cornerRadius = 35
+        iv.layer.masksToBounds = true
         iv.layer.borderWidth = 3
         iv.layer.borderColor = UIColor.white.cgColor
         iv.backgroundColor = UIColor.black.withAlphaComponent(0.2)
@@ -25,6 +27,8 @@ public class LensCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        self.layer.cornerRadius = 35
+        self.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
