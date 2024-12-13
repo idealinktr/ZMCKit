@@ -6,8 +6,10 @@
 //
 
 import UIKit
+#if !targetEnvironment(simulator)
 @preconcurrency import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
+#endif
 
 @available(iOS 13.0, *)
 public class ZMMultiLensCameraView: ZMCameraView {
@@ -68,12 +70,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-        // Hide default camera UI
         cameraView.cameraButton.isHidden = true
         cameraView.cameraActionsView.isHidden = true
         cameraView.carouselView.isHidden = true
         
-        // Setup views
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
@@ -83,13 +83,11 @@ public class ZMMultiLensCameraView: ZMCameraView {
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Capture button constraints
             captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             captureButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
             captureButton.widthAnchor.constraint(equalToConstant: 70),
             captureButton.heightAnchor.constraint(equalToConstant: 70),
             
-            // Collection view constraints - make it wider
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             collectionView.bottomAnchor.constraint(equalTo: captureButton.topAnchor, constant: -20),
@@ -111,7 +109,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
     private func setupLenses() {
         cameraKit.lenses.repository.addObserver(self, groupID: self.partnerGroupId)
         
-        // Force a reload of collection view
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -182,21 +179,6 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
         currentLensIndex = indexPath.item
         let lens = lenses[currentLensIndex]
         applyLens(lens: lens)
-    }
-}
-
-// Add SnapchatDelegate to handle camera events
-@available(iOS 13.0, *)
-extension ZMMultiLensCameraView: SnapchatDelegate {
-    public func cameraKitViewController(_ viewController: UIViewController, openSnapchat screen: SnapchatScreen) {
-        switch screen {
-        case .photo(let image):
-            delegate?.cameraDidCapture(image: image)
-        case .video(let url):
-            delegate?.cameraDidFinishRecording(videoURL: url)
-        default:
-            break
-        }
     }
 }
 

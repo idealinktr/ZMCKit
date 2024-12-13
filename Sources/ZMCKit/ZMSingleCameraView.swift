@@ -9,7 +9,6 @@ import UIKit
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
 import AVFoundation
-import ReplayKit
 
 @available(iOS 13.0, *)
 public class ZMSingleCameraView: ZMCameraView {

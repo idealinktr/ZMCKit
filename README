@@ -1,140 +1,28 @@
 # ZMCKit
 
-ZMCKit is a Swift package that provides an easy-to-use interface for integrating Snapchat's Camera Kit into iOS applications. It simplifies the process of implementing AR lenses and camera features from Snapchat.
-
-## Requirements
-
-- iOS 13.0+
-- Swift 6.0+
-- Xcode 14.0+
-
-## Installation
-
-### Swift Package Manager
-
-Add ZMCKit to your project through Swift Package Manager in Xcode:
-
-1. File > Swift Packages > Add Package Dependency
-2. Add the repository URL: `[https://github.com/idealinktr/ZMCKit]`
-3. Select the version you want to use
+ZMCKit is a Swift package that provides an easy-to-use interface for integrating Snapchat's Camera Kit into iOS applications. It supports both single lens and multi-lens camera experiences.
 
 ## Features
 
 - Single lens camera view
 - Multi-lens camera view with carousel
-- Lens switching capability
-- Automatic resource cleanup
-- Lens state management
-- Camera preview handling
-- Image caching for lens thumbnails
+- Custom capture button
+- Built-in image preview
+- Customizable capture handling
+- Simulator support (build-only)
+- iOS 13.0+ support
 
-## Usage
+## Requirements
 
-### Initialization
+- iOS 13.0+
+- Swift 5.9+
+- Xcode 15.0+
+- Valid Snapchat Camera Kit API Token
+- Physical device for running (simulator supported for build only)
 
-First, initialize ZMCKit in your app:
+## Installation
 
-```swift
-import ZMCKit
+### Swift Package Manager
 
-ZMCKit.initialize()
-```
+Add the following dependency to your `Package.swift` file:
 
-### Single Lens Implementation
-
-To implement a single lens camera view:
-
-```swift
-let singleLensView = ZMCKit.createSingleProductView(
-    snapAPIToken: "YOUR_SNAP_API_TOKEN",
-    partnerGroupId: "YOUR_GROUP_ID",
-    lensId: "YOUR_LENS_ID"
-)
-view.addSubview(singleLensView)
-```
-
-### Multi-Lens Implementation
-
-To implement a camera view with multiple lenses:
-
-```swift
-let multiLensView = ZMCKit.createMultiProductView(
-    snapAPIToken: "YOUR_SNAP_API_TOKEN",
-    partnerGroupId: "YOUR__GROUP_ID"
-)
-view.addSubview(multiLensView)
-```
-
-### Tracking Lens Changes
-
-Monitor which lens is currently active:
-
-```swift
-ZMCKit.onLensChange { lensId in
-    if let lensId = lensId {
-        print("Current lens ID: \(lensId)")
-    }
-}
-```
-
-### Cleanup
-
-Make sure to clean up resources when you're done:
-
-```swift
-// If you have direct access to the camera view
-cameraView.cleanup()
-
-// Or when removing from superview
-cameraView.removeFromSuperview() // This automatically calls cleanup
-```
-
-## Advanced Features
-
-### Current Lens ID
-
-Access the currently active lens ID at any time:
-
-```swift
-if let currentLensId = ZMCKit.currentLensId {
-    print("Active lens: \(currentLensId)")
-}
-```
-
-### Custom Initialization
-
-For more control over the initialization process:
-
-```swift
-let customFrame = CGRect(x: 0, y: 0, width: 300, height: 400)
-let singleLensView = ZMSingleCameraView(
-    snapAPIToken: "YOUR_SNAP_API_TOKEN",
-    partnerGroupId: "YOUR__GROUP_ID",
-    lensId: "YOUR_LENS_ID",
-    bundleIdentifier: "com.your.app",
-    frame: customFrame
-)
-```
-
-## Best Practices
-
-1. Always call `cleanup()` or remove the view from its superview when you're done with the camera view
-2. Handle lens change callbacks appropriately to maintain state in your app
-3. Consider memory management when caching lens images
-4. Ensure proper error handling for lens loading failures
-
-## Error Handling
-
-ZMCKit provides error feedback through console logs. Monitor these messages for:
-- Lens application success/failure
-- Image loading errors
-- Repository update failures
-
-## Notes
-
-- The package requires proper Snapchat API credentials
-- Ensure you have the necessary permissions in your app's Info.plist for camera usage
-- The minimum supported iOS version is 13.0
-- All camera views are built on UIKit
-
-```

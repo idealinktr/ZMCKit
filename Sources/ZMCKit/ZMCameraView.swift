@@ -7,13 +7,13 @@
 
 
 import UIKit
+#if !targetEnvironment(simulator)
 import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
+#endif
 
 public protocol ZMCameraDelegate: AnyObject {
     func cameraDidCapture(image: UIImage?)
-    func cameraDidFinishRecording(videoURL: URL?)
-    func cameraDidCancel()
     
     func willShowPreview(image: UIImage?) // New method
     func shouldShowDefaultPreview() -> Bool // New method

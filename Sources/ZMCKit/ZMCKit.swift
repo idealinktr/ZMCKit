@@ -39,19 +39,30 @@ public struct ZMCKit {
         print("ZMCKit initialized")
     }
     
+    /// Creates a single-product camera view.
+    /// - Parameters:
+    ///   - snapAPIToken: The Snapchat API token
+    ///   - partnerGroupId: The partner group ID
+    ///   - lensId: The lens ID of a specific lens (product)
+    /// - Returns: A camera view that displays single lense
+    /// - Note: Make sure to call `cleanup()` on the view when you're done with it to properly release resources
     @available(iOS 13.0, *)
     public static func createSingleProductView(
         snapAPIToken: String,
         partnerGroupId: String,
         lensId: String,
         bundleIdentifier: String = Bundle.main.bundleIdentifier ?? ""
-    ) -> ZMSingleCameraView {
+    ) -> UIView {
+        #if targetEnvironment(simulator)
+        return SimulatorCameraView()
+        #else
         return ZMSingleCameraView(
             snapAPIToken: snapAPIToken,
             partnerGroupId: partnerGroupId,
             lensId: lensId,
             bundleIdentifier: bundleIdentifier
         )
+        #endif
     }
     
     /// Creates a multi-product camera view.
@@ -64,10 +75,14 @@ public struct ZMCKit {
     public static func createMultiProductView(
         snapAPIToken: String,
         partnerGroupId: String
-    ) -> ZMMultiLensCameraView {
+    ) -> UIView {
+        #if targetEnvironment(simulator)
+        return SimulatorCameraView()
+        #else
         return ZMMultiLensCameraView(
             snapAPIToken: snapAPIToken,
             partnerGroupId: partnerGroupId
         )
+        #endif
     }
 }
