@@ -2,7 +2,7 @@
 import UIKit
 
 @available(iOS 13.0, *)
-public class SimulatorCameraView: UIView {
+public class SimulatorCameraView: UIView, ZMSingleCameraView, ZMMultiLensCameraView {
     public weak var delegate: ZMCameraDelegate?
     
     private let messageLabel: UILabel = {

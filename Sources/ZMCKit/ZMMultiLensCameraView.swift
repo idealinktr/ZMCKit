@@ -13,9 +13,12 @@ import SCSDKCameraKitReferenceUI
 
 @available(iOS 13.0, *)
 public class ZMMultiLensCameraView: ZMCameraView {
+    #if !targetEnvironment(simulator)
     private var lenses: [Lens] = []
-    private var currentLensIndex: Int = 0
     private let photoOutput = AVCapturePhotoOutput()
+    #endif
+    
+    private var currentLensIndex: Int = 0
     
     private var imageCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
