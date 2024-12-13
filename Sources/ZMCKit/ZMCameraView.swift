@@ -15,7 +15,6 @@ public protocol ZMCameraDelegate: AnyObject {
     func cameraDidFinishRecording(videoURL: URL?)
     func cameraDidCancel()
     
-    // Add default implementation so these are optional
     func willShowPreview(image: UIImage?) // New method
     func shouldShowDefaultPreview() -> Bool // New method
 }
@@ -91,7 +90,7 @@ public class ZMCameraView: UIView {
     public func cleanup() {
         cameraKit.remove(output: previewView)
         captureSession.stopRunning()
-        cameraKit = nil
+        //cameraKit = nil
     }
 
     public override func removeFromSuperview() {
@@ -110,25 +109,4 @@ public class ZMCameraView: UIView {
         }
         return nil
     }
-} 
-
-// MARK: - Camera Button Delegate
-@available(iOS 13.0, *)
-extension ZMCameraView: CameraButtonDelegate {
-    public func cameraButtonTapped(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        print("debug 1")
-    }
-    
-    public func cameraButtonHoldBegan(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        print("debug 2")
-    }
-    
-    public func cameraButtonHoldCancelled(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        print("debug 3")
-    }
-    
-    public func cameraButtonHoldEnded(_ cameraButton: SCSDKCameraKitReferenceUI.CameraButton) {
-        print("debug 4")
-    }
-    
 }
