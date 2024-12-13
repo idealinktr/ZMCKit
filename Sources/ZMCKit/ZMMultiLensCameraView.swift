@@ -68,10 +68,12 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
+        // Hide default camera UI
         cameraView.cameraButton.isHidden = true
         cameraView.cameraActionsView.isHidden = true
         cameraView.carouselView.isHidden = true
         
+        // Setup views
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
@@ -81,21 +83,24 @@ public class ZMMultiLensCameraView: ZMCameraView {
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            // Capture button constraints
             captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             captureButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
             captureButton.widthAnchor.constraint(equalToConstant: 70),
             captureButton.heightAnchor.constraint(equalToConstant: 70),
             
-            collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            // Collection view constraints - make it wider
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             collectionView.bottomAnchor.constraint(equalTo: captureButton.topAnchor, constant: -20),
             collectionView.heightAnchor.constraint(equalToConstant: 80),
-            collectionView.widthAnchor.constraint(equalToConstant: 300),
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
         collectionView.backgroundColor = .clear
+        bringSubviewToFront(collectionView)
     }
     
     public override func layoutSubviews() {
@@ -105,6 +110,11 @@ public class ZMMultiLensCameraView: ZMCameraView {
     
     private func setupLenses() {
         cameraKit.lenses.repository.addObserver(self, groupID: self.partnerGroupId)
+        
+        // Force a reload of collection view
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
     private func setupCaptureOutputs() {
@@ -196,14 +206,12 @@ extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
     public func repository(_ repository: any LensRepository, didUpdateLenses lenses: [any Lens], forGroupID groupID: String) {
         self.lenses = lenses as? [Lens] ?? []
         
-        // Apply first lens if available
-        if let firstLens = self.lenses.first {
-            cameraKit.lenses.processor?.apply(lens: firstLens, launchData: nil) { success in
-                if success {
-                    print("Successfully applied lens: \(firstLens.id)")
-                } else {
-                    print("Failed to apply lens: \(firstLens.id)")
-                }
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            
+            // Apply first lens if available
+            if let firstLens = self.lenses.first {
+                self.applyLens(lens: firstLens)
             }
         }
     }
