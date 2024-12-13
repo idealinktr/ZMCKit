@@ -68,15 +68,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-        // Hide all default camera UI
         cameraView.cameraButton.isHidden = true
         cameraView.cameraActionsView.isHidden = true
-        cameraView.carouselView.isHidden = true // Make sure carousel is hidden too
+        cameraView.carouselView.isHidden = true
         
-        // Remove the button from view hierarchy completely
-        cameraView.cameraButton.removeFromSuperview()
-        
-        // Setup views
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
@@ -86,23 +81,20 @@ public class ZMMultiLensCameraView: ZMCameraView {
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Capture button constraints
             captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             captureButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
             captureButton.widthAnchor.constraint(equalToConstant: 70),
             captureButton.heightAnchor.constraint(equalToConstant: 70),
             
-            // Collection view constraints
             collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
             collectionView.bottomAnchor.constraint(equalTo: captureButton.topAnchor, constant: -20),
             collectionView.heightAnchor.constraint(equalToConstant: 80),
-            collectionView.widthAnchor.constraint(equalToConstant: 300), // Adjust based on your needs
+            collectionView.widthAnchor.constraint(equalToConstant: 300),
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
-        // Make collection view background clear
         collectionView.backgroundColor = .clear
     }
     
