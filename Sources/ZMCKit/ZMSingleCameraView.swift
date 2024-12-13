@@ -13,11 +13,10 @@ import ReplayKit
 
 @available(iOS 13.0, *)
 public class ZMSingleCameraView: ZMCameraView {
+    
     private let lensId: String
     private let bundleIdentifier: String
     private let photoOutput = AVCapturePhotoOutput()
-    private let movieOutput = AVCaptureMovieFileOutput()
-    private var isRecording = false
     
     private lazy var cameraButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
@@ -27,10 +26,6 @@ public class ZMSingleCameraView: ZMCameraView {
         button.layer.borderColor = UIColor.gray.cgColor
         return button
     }()
-    
-    private var assetWriter: AVAssetWriter?
-    private var assetWriterInput: AVAssetWriterInput?
-    private var recordingURL: URL?
     
     private lazy var processingLabel: UILabel = {
         let label = UILabel()
@@ -69,16 +64,11 @@ public class ZMSingleCameraView: ZMCameraView {
         if captureSession.canAddOutput(photoOutput) {
             captureSession.addOutput(photoOutput)
         }
-        if captureSession.canAddOutput(movieOutput) {
-            captureSession.addOutput(movieOutput)
-        }
     }
     
     private func setupCustomCameraButton() {
-        // Hide default camera button
         cameraView.cameraButton.isHidden = true
         
-        // Add custom button
         addSubview(cameraButton)
         cameraButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -88,15 +78,8 @@ public class ZMSingleCameraView: ZMCameraView {
             cameraButton.heightAnchor.constraint(equalToConstant: 70)
         ])
         
-        // Add tap gesture
         cameraButton.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
         
-        // Add long press gesture
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        longPress.minimumPressDuration = 0.5
-        cameraButton.addGestureRecognizer(longPress)
-        
-        // Add processing label
         addSubview(processingLabel)
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -118,7 +101,6 @@ public class ZMSingleCameraView: ZMCameraView {
     }
     
     @objc private func handleTap() {
-        // Add tap animation
         UIView.animate(withDuration: 0.1, animations: {
             self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }) { _ in
@@ -131,136 +113,41 @@ public class ZMSingleCameraView: ZMCameraView {
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
-    
-    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
-        switch gesture.state {
-        case .began:
-            // Start recording animation
-            UIView.animate(withDuration: 0.2) {
-                self.cameraButton.backgroundColor = .red
-                self.cameraButton.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            }
-            startRecordingWithLens()
+}
+
+// MARK: - Photo Capture Delegate
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
-        case .ended, .cancelled:
-            // End recording animation
-            UIView.animate(withDuration: 0.2) {
-                self.cameraButton.backgroundColor = .white
-                self.cameraButton.transform = .identity
-            }
-            stopRecordingWithLens()
-            
-        default:
-            break
-        }
-    }
-    
-    private func startRecordingWithLens() {
-        let outputURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("recording_\(Date().timeIntervalSince1970).mp4")
-        recordingURL = outputURL
-        
-        do {
-            assetWriter = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
-            
-            let videoSettings: [String: Any] = [
-                AVVideoCodecKey: AVVideoCodecType.h264,
-                AVVideoWidthKey: previewView.bounds.width,
-                AVVideoHeightKey: previewView.bounds.height
-            ]
-            
-            assetWriterInput = AVAssetWriterInput(mediaType: .video, outputSettings: videoSettings)
-            assetWriterInput?.expectsMediaDataInRealTime = true
-            
-            if let assetWriter = assetWriter, let assetWriterInput = assetWriterInput {
-                assetWriter.add(assetWriterInput)
-                assetWriter.startWriting()
-                assetWriter.startSession(atSourceTime: .zero)
+            let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
+            let image = renderer.image { ctx in
+                self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
             }
             
-            let recorder = RPScreenRecorder.shared()
-            recorder.isMicrophoneEnabled = false // Set to true if you want audio
+            // Notify delegate about the captured image
+            self.delegate?.cameraDidCapture(image: image)
+            self.delegate?.willShowPreview(image: image)
             
-            recorder.startCapture(handler: { [weak self] (sampleBuffer, bufferType, error) in
-                guard let self = self,
-                      error == nil,
-                      bufferType == .video,
-                      let input = self.assetWriterInput,
-                      input.isReadyForMoreMediaData else { return }
-                
-                input.append(sampleBuffer)
-                
-            }) { [weak self] error in
-                if let error = error {
-                    print("Failed to start recording: \(error)")
-                    self?.isRecording = false
-                    return
-                }
-                self?.isRecording = true
-            }
-            
-        } catch {
-            print("Failed to setup recording: \(error)")
-        }
-    }
-    
-    private func stopRecordingWithLens() {
-        guard isRecording else { return }
-        isRecording = false
-        
-        showProcessing()
-        
-        RPScreenRecorder.shared().stopCapture { [weak self] error in
-            if let error = error {
-                print("Failed to stop recording: \(error)")
-                self?.hideProcessing()
-                return
-            }
-            
-            self?.assetWriterInput?.markAsFinished()
-            self?.assetWriter?.finishWriting { [weak self] in
-                guard let self = self,
-                      let outputURL = self.recordingURL else { return }
-                
-                DispatchQueue.main.async {
-                    if let viewController = self.findViewController() {
-                        let previewVC = ZMCapturePreviewViewController(videoURL: outputURL)
-                        previewVC.modalPresentationStyle = .fullScreen
-                        viewController.present(previewVC, animated: true) {
-                            self.hideProcessing()
-                        }
+            // Check if we should show default preview
+            if self.delegate?.shouldShowDefaultPreview() ?? true {
+                if let viewController = self.findViewController() {
+                    let previewVC = ZMCapturePreviewViewController(image: image)
+                    previewVC.modalPresentationStyle = .fullScreen
+                    viewController.present(previewVC, animated: true) {
+                        self.hideProcessing()
                     }
                 }
-                
-                // Clean up
-                self.assetWriter = nil
-                self.assetWriterInput = nil
-                self.recordingURL = nil
+            } else {
+                self.hideProcessing()
             }
         }
-    }
-    
-    override public func cleanup() {
-        if isRecording {
-            stopRecordingWithLens()
-        }
-        captureSession.removeOutput(photoOutput)
-        captureSession.removeOutput(movieOutput)
-        super.cleanup()
-    }
-    
-    private func findViewController() -> UIViewController? {
-        var responder: UIResponder? = self
-        while let nextResponder = responder?.next {
-            if let viewController = nextResponder as? UIViewController {
-                return viewController
-            }
-            responder = nextResponder
-        }
-        return nil
     }
 }
 
+// MARK: - Lens Repository Observer
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: LensRepositorySpecificObserver {
     public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
@@ -274,58 +161,7 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
         }
     }
     
-    public func repository(_ repository: any LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: (any Error)?) {
-        print("Did fail to update lens")
-    }
-}
-
-// MARK: - Photo Capture Delegate
-@available(iOS 13.0, *)
-extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            // Render the view hierarchy including lens effects but without camera button
-            let renderer = UIGraphicsImageRenderer(bounds: self.previewView.bounds)
-            let image = renderer.image { ctx in
-                self.previewView.drawHierarchy(in: self.previewView.bounds, afterScreenUpdates: true)
-            }
-            
-            // Present preview
-            if let viewController = self.findViewController() {
-                let previewVC = ZMCapturePreviewViewController(image: image)
-                previewVC.modalPresentationStyle = .fullScreen
-                viewController.present(previewVC, animated: true) {
-                    self.hideProcessing()
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Video Recording Delegate
-@available(iOS 13.0, *)
-extension ZMSingleCameraView: AVCaptureFileOutputRecordingDelegate {
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        if let error = error {
-            print("Failed to record video: \(error)")
-            return
-        }
-        
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.showProcessing()
-            
-            // Present preview
-            if let viewController = self.findViewController() {
-                let previewVC = ZMCapturePreviewViewController(videoURL: outputFileURL)
-                previewVC.modalPresentationStyle = .fullScreen
-                viewController.present(previewVC, animated: true) {
-                    self.hideProcessing()
-                }
-            }
-        }
+    public func repository(_ repository: any LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: Error?) {
+        print("Failed to update lens: \(error?.localizedDescription ?? "")")
     }
 }

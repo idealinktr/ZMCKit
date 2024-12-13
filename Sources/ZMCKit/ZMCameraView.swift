@@ -14,6 +14,16 @@ public protocol ZMCameraDelegate: AnyObject {
     func cameraDidCapture(image: UIImage?)
     func cameraDidFinishRecording(videoURL: URL?)
     func cameraDidCancel()
+    
+    // Add default implementation so these are optional
+    func willShowPreview(image: UIImage?) // New method
+    func shouldShowDefaultPreview() -> Bool // New method
+}
+
+// Default implementations
+public extension ZMCameraDelegate {
+    func willShowPreview(image: UIImage?) {}
+    func shouldShowDefaultPreview() -> Bool { return true }
 }
 
 @available(iOS 13.0, *)
@@ -95,6 +105,18 @@ public class ZMCameraView: UIView {
     public override func removeFromSuperview() {
         cleanup()
         super.removeFromSuperview()
+    }
+
+    // Helper method to find parent view controller
+    internal func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+            responder = nextResponder
+        }
+        return nil
     }
 } 
 
