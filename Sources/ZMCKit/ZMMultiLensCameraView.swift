@@ -68,8 +68,9 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-        // Hide default camera button
+        // Hide both default camera buttons
         cameraView.cameraButton.isHidden = true
+        cameraView.cameraActionsView.isHidden = true // This hides the empty button
         
         // Setup views
         addSubview(collectionView)

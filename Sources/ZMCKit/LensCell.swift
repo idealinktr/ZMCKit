@@ -16,9 +16,9 @@ public class LensCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 35
-        iv.layer.borderWidth = 2
+        iv.layer.borderWidth = 3
         iv.layer.borderColor = UIColor.white.cgColor
-        iv.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        iv.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         return iv
     }()
     
@@ -77,7 +77,7 @@ public class LensCell: UICollectionViewCell {
     public override var isSelected: Bool {
         didSet {
             imageView.layer.borderColor = isSelected ? 
-                UIColor.systemBlue.cgColor : 
+                UIColor(red: 255/255, green: 103/255, blue: 29/255, alpha: 1.0).cgColor : 
                 UIColor.white.cgColor
             
             UIView.animate(withDuration: 0.2) {
