@@ -15,25 +15,14 @@ public class LensCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        
-        let size: CGFloat = 70
-        iv.frame = CGRect(x: 0, y: 0, width: size, height: size)
-        iv.layer.cornerRadius = size / 2
-        iv.layer.masksToBounds = true
-        
         iv.layer.borderWidth = 3
         iv.layer.borderColor = UIColor.white.cgColor
-        
-        iv.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         return iv
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        
-        self.clipsToBounds = true
-        self.layer.cornerRadius = 35
     }
     
     required init?(coder: NSCoder) {
@@ -44,15 +33,17 @@ public class LensCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        // Make it square first
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 70),
-            imageView.heightAnchor.constraint(equalToConstant: 70)
+            imageView.widthAnchor.constraint(equalToConstant: 60), // Slightly smaller
+            imageView.heightAnchor.constraint(equalToConstant: 60)
         ])
         
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 35
+        // Then make it circular
+        imageView.layer.cornerRadius = 30 // Half of width/height
+        imageView.layer.masksToBounds = true
     }
     
     func configure(with lens: Lens, cache: NSCache<NSString, UIImage>) {
