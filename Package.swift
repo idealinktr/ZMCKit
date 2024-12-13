@@ -39,4 +39,4 @@ let package = Package(
             path: "XCFrameworks/SCSDKCreativeKit.xcframework"
         )
     ]
-) 
+)
