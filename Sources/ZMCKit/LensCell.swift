@@ -15,11 +15,15 @@ public class LensCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
-        iv.layer.cornerRadius = 35
+        
+        let size: CGFloat = 70
+        iv.frame = CGRect(x: 0, y: 0, width: size, height: size)
+        iv.layer.cornerRadius = size / 2
         iv.layer.masksToBounds = true
+        
         iv.layer.borderWidth = 3
         iv.layer.borderColor = UIColor.white.cgColor
+        
         iv.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         return iv
     }()
@@ -27,8 +31,9 @@ public class LensCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        self.layer.cornerRadius = 35
+        
         self.clipsToBounds = true
+        self.layer.cornerRadius = 35
     }
     
     required init?(coder: NSCoder) {
@@ -38,12 +43,16 @@ public class LensCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 70),
+            imageView.heightAnchor.constraint(equalToConstant: 70)
         ])
+        
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 35
     }
     
     func configure(with lens: Lens, cache: NSCache<NSString, UIImage>) {
