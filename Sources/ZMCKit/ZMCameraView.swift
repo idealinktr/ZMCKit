@@ -15,11 +15,10 @@ import SCSDKCameraKitReferenceUI
 public protocol ZMCameraDelegate: AnyObject {
     func cameraDidCapture(image: UIImage?)
     
-    func willShowPreview(image: UIImage?) // New method
-    func shouldShowDefaultPreview() -> Bool // New method
+    func willShowPreview(image: UIImage?)
+    func shouldShowDefaultPreview() -> Bool
 }
 
-// Default implementations
 public extension ZMCameraDelegate {
     func willShowPreview(image: UIImage?) {}
     func shouldShowDefaultPreview() -> Bool { return true }
@@ -90,7 +89,6 @@ public class ZMCameraView: UIView {
     public func cleanup() {
         cameraKit.remove(output: previewView)
         captureSession.stopRunning()
-        //cameraKit = nil
     }
 
     public override func removeFromSuperview() {
@@ -98,7 +96,6 @@ public class ZMCameraView: UIView {
         super.removeFromSuperview()
     }
 
-    // Helper method to find parent view controller
     internal func findViewController() -> UIViewController? {
         var responder: UIResponder? = self
         while let nextResponder = responder?.next {
