@@ -7,7 +7,7 @@
 
 import UIKit
 #if !targetEnvironment(simulator)
-@preconcurrency import SCSDKCameraKit
+import SCSDKCameraKit
 import SCSDKCameraKitReferenceUI
 #endif
 
