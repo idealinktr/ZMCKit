@@ -188,8 +188,8 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
 // MARK: - Lens Repository Observer
 @available(iOS 13.0, *)
 extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
-    public func repository(_ repository: any LensRepository, didUpdateLenses lenses: [any Lens], forGroupID groupID: String) {
-        self.lenses = lenses as? [Lens] ?? []
+    public func repository(_ repository: LensRepository, didUpdateLenses lenses: [Lens], forGroupID groupID: String) {
+        self.lenses = lenses
         
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -201,7 +201,7 @@ extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
         }
     }
     
-    public func repository(_ repository: any LensRepository, didFailToUpdateLensesForGroupID groupID: String, error: Error?) {
+    public func repository(_ repository: LensRepository, didFailToUpdateLensesForGroupID groupID: String, error: Error?) {
         print("Failed to update lenses for group: \(error?.localizedDescription ?? "")")
     }
 }

@@ -149,7 +149,7 @@ extension ZMSingleCameraView: AVCapturePhotoCaptureDelegate {
 // MARK: - Lens Repository Observer
 @available(iOS 13.0, *)
 extension ZMSingleCameraView: LensRepositorySpecificObserver {
-    public func repository(_ repository: any LensRepository, didUpdate lens: any Lens, forGroupID groupID: String) {
+    public func repository(_ repository: LensRepository, didUpdate lens: Lens, forGroupID groupID: String) {
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
                 print("Successfully applied lens: \(lens.id)")
@@ -160,7 +160,7 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
         }
     }
     
-    public func repository(_ repository: any LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: Error?) {
+    public func repository(_ repository: LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: Error?) {
         print("Failed to update lens: \(error?.localizedDescription ?? "")")
     }
 }
