@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "ZMCKit",
-            type: .dynamic,
+            type: .static,  // Change back to static (default)
             targets: ["ZMCKit"]),
     ],
     dependencies: [],
@@ -44,4 +44,4 @@ let package = Package(
             path: "XCFrameworks/SCSDKCreativeKit.xcframework"
         )
     ]
-) 
+)
