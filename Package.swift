@@ -9,6 +9,7 @@ let package = Package(
     products: [
         .library(
             name: "ZMCKit",
+            type: .dynamic,
             targets: ["ZMCKit"]),
     ],
     dependencies: [],
@@ -20,6 +21,10 @@ let package = Package(
                 "SCSDKCameraKitReferenceUI",
                 "SCSDKCoreKit",
                 "SCSDKCreativeKit"
+            ],
+            linkerSettings: [
+                .linkedFramework("AVFoundation"),
+                .linkedFramework("UIKit")
             ]
         ),
         .binaryTarget(
@@ -39,4 +44,4 @@ let package = Package(
             path: "XCFrameworks/SCSDKCreativeKit.xcframework"
         )
     ]
-)
+) 
