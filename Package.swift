@@ -9,8 +9,20 @@ let package = Package(
     products: [
         .library(
             name: "ZMCKit",
-            type: .static,  // Change back to static (default)
             targets: ["ZMCKit"]),
+        // Expose the Camera Kit frameworks as products
+        .library(
+            name: "SCSDKCameraKit",
+            targets: ["SCSDKCameraKit"]),
+        .library(
+            name: "SCSDKCameraKitReferenceUI",
+            targets: ["SCSDKCameraKitReferenceUI"]),
+        .library(
+            name: "SCSDKCoreKit",
+            targets: ["SCSDKCoreKit"]),
+        .library(
+            name: "SCSDKCreativeKit",
+            targets: ["SCSDKCreativeKit"])
     ],
     dependencies: [],
     targets: [
