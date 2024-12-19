@@ -9,7 +9,6 @@
 import UIKit
 #if !targetEnvironment(simulator)
 import SCSDKCameraKit
-import SCSDKCameraKitReferenceUI
 #endif
 
 public protocol ZMCameraDelegate: AnyObject {
@@ -33,7 +32,6 @@ public class ZMCameraView: UIView {
     public let captureSession = AVCaptureSession()
     public var cameraKit: CameraKitProtocol!
     public let previewView = PreviewView()
-    public let cameraView = CameraView()
     #endif
     
     public weak var delegate: ZMCameraDelegate?

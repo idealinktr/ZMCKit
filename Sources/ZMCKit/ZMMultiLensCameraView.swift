@@ -8,7 +8,6 @@
 import UIKit
 #if !targetEnvironment(simulator)
 import SCSDKCameraKit
-import SCSDKCameraKitReferenceUI
 #endif
 
 @available(iOS 13.0, *)
@@ -73,10 +72,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-        cameraView.cameraButton.isHidden = true
-        cameraView.cameraActionsView.isHidden = true
-        cameraView.carouselView.isHidden = true
-        
+//        cameraView.cameraButton.isHidden = true
+//        cameraView.cameraActionsView.isHidden = true
+//        cameraView.carouselView.isHidden = true
+//        
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
