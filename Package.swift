@@ -7,22 +7,10 @@ let package = Package(
         .iOS(.v12)
     ],
     products: [
+        // Only expose ZMCKit as a product
         .library(
             name: "ZMCKit",
-            targets: ["ZMCKit"]),
-        // Expose the Camera Kit frameworks as products
-        .library(
-            name: "SCSDKCameraKit",
-            targets: ["SCSDKCameraKit"]),
-        .library(
-            name: "SCSDKCameraKitReferenceUI",
-            targets: ["SCSDKCameraKitReferenceUI"]),
-        .library(
-            name: "SCSDKCoreKit",
-            targets: ["SCSDKCoreKit"]),
-        .library(
-            name: "SCSDKCreativeKit",
-            targets: ["SCSDKCreativeKit"])
+            targets: ["ZMCKit"])
     ],
     dependencies: [],
     targets: [
@@ -39,6 +27,7 @@ let package = Package(
                 .linkedFramework("UIKit")
             ]
         ),
+        // Keep these as binary targets but don't expose them as products
         .binaryTarget(
             name: "SCSDKCameraKit",
             path: "XCFrameworks/SCSDKCameraKit.xcframework"
