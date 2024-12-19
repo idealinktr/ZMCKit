@@ -7,10 +7,10 @@ let package = Package(
         .iOS(.v12)
     ],
     products: [
-        // Only expose ZMCKit as a product
         .library(
             name: "ZMCKit",
-            targets: ["ZMCKit"])
+            type: .dynamic,
+            targets: ["ZMCKit"]),
     ],
     dependencies: [],
     targets: [
@@ -21,13 +21,8 @@ let package = Package(
                 "SCSDKCameraKitReferenceUI",
                 "SCSDKCoreKit",
                 "SCSDKCreativeKit"
-            ],
-            linkerSettings: [
-                .linkedFramework("AVFoundation"),
-                .linkedFramework("UIKit")
             ]
         ),
-        // Keep these as binary targets but don't expose them as products
         .binaryTarget(
             name: "SCSDKCameraKit",
             path: "XCFrameworks/SCSDKCameraKit.xcframework"
