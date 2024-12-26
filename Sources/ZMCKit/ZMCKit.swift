@@ -36,8 +36,18 @@ public struct ZMCKit {
         lensChangeCallback?(lensId)
     }
     
-    public static func initialize() {
-        print("ZMCKit initialized")
+    public static func initialize(completion: @escaping (Bool) -> Void) {
+        CameraPermissionHandler.checkCameraPermission { status in
+            switch status {
+            case .authorized:
+                print("ZMCKit initialized")
+                completion(true)
+            case .denied, .restricted:
+                completion(false)
+            case .notDetermined:        
+                break
+            }
+        }
     }
     
     /// Creates a single-product camera view.
