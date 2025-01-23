@@ -45,7 +45,7 @@ public class ZMSingleCameraView: ZMCameraView {
         super.init(snapAPIToken: snapAPIToken,
                    partnerGroupId: partnerGroupId,
                    cameraPosition: cameraPosition,
-                   frame: frame)
+                   frame: frame) 
         setupLens()
         setupCustomCameraButton()
         setupCaptureOutputs()
