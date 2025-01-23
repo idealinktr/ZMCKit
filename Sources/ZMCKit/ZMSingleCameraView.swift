@@ -38,6 +38,7 @@ public class ZMSingleCameraView: ZMCameraView {
                 partnerGroupId: String,
                 lensId: String,
                 bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "",
+                cameraPosition: ZMCameraPosition = .back,
                 frame: CGRect = .zero) {
         self.lensId = lensId
         self.bundleIdentifier = bundleIdentifier
@@ -45,7 +46,6 @@ public class ZMSingleCameraView: ZMCameraView {
                    partnerGroupId: partnerGroupId,
                    cameraPosition: cameraPosition,
                    frame: frame) 
-        super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupLens()
         setupCustomCameraButton()
         setupCaptureOutputs()

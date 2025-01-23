@@ -60,8 +60,14 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return button
     }()
     
-    public override init(snapAPIToken: String, partnerGroupId: String, frame: CGRect = .zero) {
-        super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
+    public override init(snapAPIToken: String,
+                         partnerGroupId: String,
+                         cameraPosition: ZMCameraPosition = .back,
+                         frame: CGRect = .zero) {
+        super.init(snapAPIToken: snapAPIToken,
+                          partnerGroupId: partnerGroupId,
+                          cameraPosition: cameraPosition,
+                          frame: frame)
         setupUI()
         setupLenses()
         setupCaptureOutputs()
