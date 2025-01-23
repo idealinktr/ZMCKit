@@ -27,8 +27,7 @@ public extension ZMCameraDelegate {
 public class ZMCameraView: UIView {
     internal let snapAPIToken: String
     internal let partnerGroupId: String
-    internal let cameraPosition: ZMCameraPosition
-
+    
     #if !targetEnvironment(simulator)
     public let captureSession = AVCaptureSession()
     public var cameraKit: CameraKitProtocol!
@@ -37,13 +36,9 @@ public class ZMCameraView: UIView {
     
     public weak var delegate: ZMCameraDelegate?
     
-    public init(snapAPIToken: String,
-                partnerGroupId: String,
-                cameraPosition: ZMCameraPosition = .back,
-                frame: CGRect = .zero) {
+    public init(snapAPIToken: String, partnerGroupId: String, frame: CGRect = .zero) {
         self.snapAPIToken = snapAPIToken
         self.partnerGroupId = partnerGroupId
-        self.cameraPosition = cameraPosition
         super.init(frame: frame)
         #if !targetEnvironment(simulator)
         setupBaseCamera()
@@ -88,7 +83,8 @@ public class ZMCameraView: UIView {
     }
     
     private func startCamera(_ input: AVSessionInput) async {
-        input.position = cameraPosition.avPosition
+        input.position = .back
+        
         input.startRunning()
     }
     

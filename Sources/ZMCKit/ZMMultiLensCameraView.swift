@@ -60,14 +60,8 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return button
     }()
     
-    public override init(snapAPIToken: String,
-                         partnerGroupId: String,
-                         cameraPosition: ZMCameraPosition = .back,
-                         frame: CGRect = .zero) {
-        super.init(snapAPIToken: snapAPIToken,
-                   partnerGroupId: partnerGroupId,
-                   cameraPosition: cameraPosition,
-                   frame: frame)
+    public override init(snapAPIToken: String, partnerGroupId: String, frame: CGRect = .zero) {
+        super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupUI()
         setupLenses()
         setupCaptureOutputs()
@@ -78,10 +72,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupUI() {
-//        cameraView.cameraButton.isHidden = true
-//        cameraView.cameraActionsView.isHidden = true
-//        cameraView.carouselView.isHidden = true
-//        
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
@@ -207,8 +197,8 @@ extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
     }
     
     public func repository(_ repository: LensRepository, didFailToUpdateLensesForGroupID groupID: String, error: Error?) {
-        print("Failed to update lenses for group: \(error?.localizedDescription ?? "")")
-    }
+            print("Failed to update lenses for group: \(error?.localizedDescription ?? "")")
+        }
 }
 
 // MARK: - Photo Capture Delegate

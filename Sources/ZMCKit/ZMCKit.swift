@@ -62,14 +62,12 @@ public struct ZMCKit {
         snapAPIToken: String,
         partnerGroupId: String,
         lensId: String,
-        cameraPosition: ZMCameraPosition = .back,
         bundleIdentifier: String = Bundle.main.bundleIdentifier ?? ""
     ) -> ZMSingleCameraView {
         return ZMSingleCameraView(
             snapAPIToken: snapAPIToken,
             partnerGroupId: partnerGroupId,
             lensId: lensId,
-            cameraPosition: cameraPosition,
             bundleIdentifier: bundleIdentifier
         )
     }
@@ -83,13 +81,11 @@ public struct ZMCKit {
     @available(iOS 13.0, *)
     public static func createMultiProductView(
         snapAPIToken: String,
-        partnerGroupId: String,
-        cameraPosition: ZMCameraPosition = .back
+        partnerGroupId: String
     ) -> ZMMultiLensCameraView {
         return ZMMultiLensCameraView(
             snapAPIToken: snapAPIToken,
-            partnerGroupId: partnerGroupId,
-            cameraPosition: cameraPosition
+            partnerGroupId: partnerGroupId
         )
     }
 }

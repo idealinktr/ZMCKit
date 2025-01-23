@@ -37,15 +37,11 @@ public class ZMSingleCameraView: ZMCameraView {
     public init(snapAPIToken: String,
                 partnerGroupId: String,
                 lensId: String,
-                cameraPosition: ZMCameraPosition = .back,
                 bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "",
                 frame: CGRect = .zero) {
         self.lensId = lensId
         self.bundleIdentifier = bundleIdentifier
-        super.init(snapAPIToken: snapAPIToken,
-                   partnerGroupId: partnerGroupId,
-                   cameraPosition: cameraPosition,
-                   frame: frame)
+        super.init(snapAPIToken: snapAPIToken, partnerGroupId: partnerGroupId, frame: frame)
         setupLens()
         setupCustomCameraButton()
         setupCaptureOutputs()
@@ -68,9 +64,7 @@ public class ZMSingleCameraView: ZMCameraView {
         }
     }
     
-    private func setupCustomCameraButton() {
-       // cameraView.cameraButton.isHidden = true
-        
+    private func setupCustomCameraButton() {        
         addSubview(cameraButton)
         cameraButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -164,6 +158,7 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
     }
     
     public func repository(_ repository: LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: Error?) {
+
         print("Failed to update lens: \(error?.localizedDescription ?? "")")
     }
 }
