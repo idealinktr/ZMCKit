@@ -1,0 +1,6 @@
+framework module SCSDKCameraKitReferenceUI {
+  umbrella header "SCSDKCameraKitReferenceUI.h"
+  export *
+
+  module * { export * }
+}
