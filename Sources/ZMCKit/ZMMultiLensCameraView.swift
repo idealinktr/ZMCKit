@@ -6,16 +6,12 @@
 //
 
 import UIKit
-#if !targetEnvironment(simulator)
 import SCSDKCameraKit
-#endif
 
 @available(iOS 13.0, *)
 public class ZMMultiLensCameraView: ZMCameraView {
-    #if !targetEnvironment(simulator)
     private var lenses: [Lens] = []
     private let photoOutput = AVCapturePhotoOutput()
-    #endif
     
     private var currentLensIndex: Int = 0
     

@@ -7,9 +7,7 @@
 
 
 import UIKit
-#if !targetEnvironment(simulator)
 import SCSDKCameraKit
-#endif
 
 public protocol ZMCameraDelegate: AnyObject {
     func cameraDidCapture(image: UIImage?)
@@ -29,11 +27,9 @@ public class ZMCameraView: UIView {
     internal let partnerGroupId: String
     internal let cameraPosition: ZMCameraPosition
     
-    #if !targetEnvironment(simulator)
     public let captureSession = AVCaptureSession()
     public var cameraKit: CameraKitProtocol!
     public let previewView = PreviewView()
-    #endif
     
     public weak var delegate: ZMCameraDelegate?
     
@@ -45,16 +41,13 @@ public class ZMCameraView: UIView {
         self.partnerGroupId = partnerGroupId
         self.cameraPosition = cameraPosition
         super.init(frame: frame)
-        #if !targetEnvironment(simulator)
         setupBaseCamera()
-        #endif
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    #if !targetEnvironment(simulator)
     internal func setupBaseCamera() {
         cameraKit = Session(
             sessionConfig: SessionConfig(apiToken: snapAPIToken),
@@ -96,15 +89,6 @@ public class ZMCameraView: UIView {
         cameraKit.remove(output: previewView)
         captureSession.stopRunning()
     }
-    #else
-    internal func setupBaseCamera() {
-        // No-op for simulator
-    }
-    
-    public func cleanup() {
-        // No-op for simulator
-    }
-    #endif
 
     public override func removeFromSuperview() {
         cleanup()
