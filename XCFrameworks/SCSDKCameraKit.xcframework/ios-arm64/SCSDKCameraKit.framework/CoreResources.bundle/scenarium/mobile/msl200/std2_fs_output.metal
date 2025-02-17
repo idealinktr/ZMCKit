@@ -105,7 +105,7 @@ result=sc_readFragData0(sc_sysIn,sc_sysOut,sc_set0,sc_set1);
 }
 #else
 {
-float2 param=sc_GetViewScreenCoords(sc_sysIn,sc_set0,sc_set1);
+float2 param=sc_GetViewScreenUV(sc_sysIn,sc_set0,sc_set1);
 result=sc_ScreenTextureSampleView(param,sc_sysIn,sc_set0,sc_set1);
 }
 #endif

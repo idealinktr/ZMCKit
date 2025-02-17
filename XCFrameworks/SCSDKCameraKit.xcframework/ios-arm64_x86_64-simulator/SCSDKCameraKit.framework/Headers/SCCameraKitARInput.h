@@ -2,12 +2,7 @@
 //  CameraKit
 
 #import <SCSDKCameraKit/SCCameraKitInput.h>
-
-@class ARSession;
-@class ARAnchor;
-@class ARConfiguration;
-@protocol ARSessionDelegate;
-typedef NS_OPTIONS(NSUInteger, ARSessionRunOptions);
+#import <ARKit/ARSession.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

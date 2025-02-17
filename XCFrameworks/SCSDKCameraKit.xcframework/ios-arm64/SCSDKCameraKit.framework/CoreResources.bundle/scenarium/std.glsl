@@ -139,6 +139,7 @@ uniform mat3 sc_NormalMatrix;
 uniform mat3 sc_NormalMatrixInverse;
 
 uniform vec4 sc_WindowToViewportTransform; // for a viewport given by (x, y, width, height) this uniform will be (1/width, 1/height, -x/width, -y/height)
+uniform vec4 sc_CurrentRenderTargetDims; // for a given render target with dimensions (width, height) this uniform will be (width, height, 1/width, 1/height)
 
 uniform vec3 sc_LocalAabbMin;
 uniform vec3 sc_LocalAabbMax;

@@ -25,7 +25,6 @@
 #undef sc_ChunkySplats
 #define sc_ChunkySplats 1
 #endif
-const vec2 g9_18[6]=vec2[](vec2(-1.0),vec2(1.0,-1.0),vec2(1.0),vec2(-1.0),vec2(1.0),vec2(-1.0,1.0));
 uniform vec4 dims;
 uniform vec4 blendColor;
 uniform highp sampler2D texChunkInfo;
@@ -34,7 +33,7 @@ uniform highp sampler2D texScaleYZ;
 uniform highp sampler2D texRotation;
 uniform highp sampler2D texColor;
 attribute vec2 uv;
-flat varying vec4 varColor;
+varying vec4 varColor;
 varying vec2 varTexCoord;
 vec3 inCenter;
 vec3 inScale;
@@ -104,44 +103,43 @@ if (l9_2.z<(-l9_3))
 return vec4(0.0,0.0,2.0,1.0);
 }
 varColor=inColor;
-vec3 l9_4=mix(varColor.xyz,blendColor.xyz,vec3(blendColor.w));
-varColor=vec4(l9_4.x,l9_4.y,l9_4.z,varColor.w);
 vec3 param_3;
 vec3 param_4;
 computeCov3d(mat3(sc_ModelMatrix[0].xyz,sc_ModelMatrix[1].xyz,sc_ModelMatrix[2].xyz)*quatToMat3(inRotation),inScale,param_3,param_4);
-vec3 l9_5=param_3;
-float l9_6=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][0].x/sc_WindowToViewportTransform.x;
-float l9_7=l9_1.z;
-float l9_8=l9_6/l9_7;
-float l9_9=l9_7*l9_7;
-int l9_10=sc_GetStereoViewIndex();
-mat3 l9_11=mat3(sc_ViewMatrixInverseArray[l9_10][0].xyz,sc_ViewMatrixInverseArray[l9_10][1].xyz,sc_ViewMatrixInverseArray[l9_10][2].xyz)*mat3(vec3(l9_8,0.0,(-(l9_6*l9_1.x))/l9_9),vec3(0.0,l9_8,(-(l9_6*l9_1.y))/l9_9),vec3(0.0));
-mat3 l9_12=(transpose(l9_11)*mat3(l9_5,vec3(l9_5.y,param_4.xy),vec3(l9_5.z,param_4.yz)))*l9_11;
-float l9_13=l9_12[0].x+0.30000001;
-float l9_14=l9_12[0].y;
-float l9_15=l9_12[1].y+0.30000001;
-float l9_16=0.5*(l9_13+l9_15);
-float l9_17=length(vec2((l9_13-l9_15)/2.0,l9_14));
-float l9_18=l9_16+l9_17;
-vec2 l9_19=normalize(vec2(l9_14,l9_18-l9_13));
-vec2 l9_20=l9_19*min(sqrt(2.0*l9_18),1024.0);
-vec2 l9_21=vec2(l9_19.y,-l9_19.x)*min(sqrt(2.0*max(l9_16-l9_17,0.1)),1024.0);
-bool l9_22=dot(l9_20,l9_20)<4.0;
-bool l9_23;
-if (l9_22)
+vec3 l9_4=param_3;
+float l9_5=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][0].x*sc_CurrentRenderTargetDims.x;
+float l9_6=l9_1.z;
+float l9_7=l9_5/l9_6;
+float l9_8=l9_6*l9_6;
+int l9_9=sc_GetStereoViewIndex();
+mat3 l9_10=mat3(sc_ViewMatrixInverseArray[l9_9][0].xyz,sc_ViewMatrixInverseArray[l9_9][1].xyz,sc_ViewMatrixInverseArray[l9_9][2].xyz)*mat3(vec3(l9_7,0.0,(-(l9_5*l9_1.x))/l9_8),vec3(0.0,l9_7,(-(l9_5*l9_1.y))/l9_8),vec3(0.0));
+mat3 l9_11=(transpose(l9_10)*mat3(l9_4,vec3(l9_4.y,param_4.xy),vec3(l9_4.z,param_4.yz)))*l9_10;
+float l9_12=l9_11[0].x+0.30000001;
+float l9_13=l9_11[0].y;
+float l9_14=l9_11[1].y+0.30000001;
+float l9_15=0.5*(l9_12+l9_14);
+float l9_16=length(vec2((l9_12-l9_14)/2.0,l9_13));
+float l9_17=l9_15+l9_16;
+vec2 l9_18=normalize(vec2(l9_13,l9_17-l9_12));
+vec2 l9_19=l9_18*min(sqrt(2.0*l9_17),1024.0);
+vec2 l9_20=vec2(l9_18.y,-l9_18.x)*min(sqrt(2.0*max(l9_15-l9_16,0.1)),1024.0);
+bool l9_21=dot(l9_19,l9_19)<4.0;
+bool l9_22;
+if (l9_21)
 {
-l9_23=dot(l9_21,l9_21)<4.0;
+l9_22=dot(l9_20,l9_20)<4.0;
 }
 else
 {
-l9_23=l9_22;
+l9_22=l9_21;
 }
-if (l9_23)
+if (l9_22)
 {
 return vec4(0.0,0.0,2.0,1.0);
 }
-varTexCoord=g9_18[gl_VertexID]*2.0;
-return l9_2+(vec4((((l9_20*g9_18[gl_VertexID].x)+(l9_21*g9_18[gl_VertexID].y))*sc_WindowToViewportTransform.xy)*2.0,0.0,0.0)*l9_3);
+vec2 l9_23=vec2(((ivec2(gl_VertexID)&ivec2(1,2))<<ivec2(1,0))-ivec2(1));
+varTexCoord=l9_23*2.0;
+return l9_2+(vec4((((l9_19*l9_23.x)+(l9_20*l9_23.y))*sc_CurrentRenderTargetDims.zw)*2.0,0.0,0.0)*l9_3);
 }
 void main()
 {
@@ -159,7 +157,7 @@ sc_SetClipPosition(l9_0);
 uniform vec4 blendColor;
 uniform vec4 dims;
 varying vec2 varTexCoord;
-flat varying vec4 varColor;
+varying vec4 varColor;
 void main()
 {
 sc_DiscardStereoFragment();

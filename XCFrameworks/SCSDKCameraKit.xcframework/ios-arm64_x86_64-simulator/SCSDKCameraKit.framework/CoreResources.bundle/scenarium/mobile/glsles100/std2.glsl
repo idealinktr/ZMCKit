@@ -532,6 +532,7 @@ uniform vec3 sc_LocalAabbMax;
 uniform vec3 sc_WorldAabbMin;
 uniform vec3 sc_WorldAabbMax;
 uniform vec4 sc_WindowToViewportTransform;
+uniform vec4 sc_CurrentRenderTargetDims;
 uniform sc_Camera_t sc_Camera;
 uniform float sc_ShadowDensity;
 uniform vec4 sc_ShadowColor;
@@ -1391,7 +1392,7 @@ vec3 color;
 uniform vec4 sc_EnvmapDiffuseDims;
 uniform vec4 sc_EnvmapSpecularDims;
 uniform vec4 sc_ScreenTextureDims;
-uniform vec4 sc_WindowToViewportTransform;
+uniform vec4 sc_CurrentRenderTargetDims;
 uniform mat4 sc_ProjectionMatrixArray[sc_NumStereoViews];
 uniform sc_PointLight_t sc_PointLights[(sc_PointLightsCount+1)];
 uniform sc_DirectionalLight_t sc_DirectionalLights[(sc_DirectionalLightsCount+1)];
@@ -1430,6 +1431,7 @@ uniform vec3 sc_LocalAabbMin;
 uniform vec3 sc_LocalAabbMax;
 uniform vec3 sc_WorldAabbMin;
 uniform vec3 sc_WorldAabbMax;
+uniform vec4 sc_WindowToViewportTransform;
 uniform sc_Camera_t sc_Camera;
 uniform float sc_ShadowDensity;
 uniform vec4 sc_ShadowColor;
@@ -1751,30 +1753,38 @@ vec4 sc_GetGlFragCoord()
 {
 return gl_FragCoord;
 }
-vec2 sc_GetGlobalScreenCoords()
-{
-return (sc_GetGlFragCoord().xy*sc_WindowToViewportTransform.xy)+sc_WindowToViewportTransform.zw;
-}
-vec2 sc_GetViewScreenCoords()
-{
-return sc_ScreenCoordsGlobalToView(sc_GetGlobalScreenCoords());
-}
-vec2 getScreenUV()
-{
-return sc_GetViewScreenCoords();
-}
 bool sc_GetGlFrontFacing()
 {
 return gl_FrontFacing;
 }
+vec2 sc_GetGlobalScreenUV()
+{
+return sc_GetGlFragCoord().xy*sc_CurrentRenderTargetDims.zw;
+}
+vec2 sc_GetViewScreenUV()
+{
+return sc_ScreenCoordsGlobalToView(sc_GetGlobalScreenUV());
+}
 float depthScreenToViewSpace(float depth)
 {
-vec2 projectionMatrixTerms=vec2(sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][3].z);
+vec4 projectionMatrixTerms=vec4(sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][3].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].w,0.0);
 return depthScreenToViewSpace(depth,projectionMatrixTerms);
 }
 float depthViewToScreenSpace(float depth)
 {
-vec2 projectionMatrixTerms=vec2(sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][3].z);
+vec4 projectionMatrixTerms=vec4(sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][3].z,sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].w,0.0);
 return depthViewToScreenSpace(depth,projectionMatrixTerms);
+}
+vec2 sc_GetGlobalScreenCoords()
+{
+return sc_GetGlobalScreenUV();
+}
+vec2 sc_GetViewScreenCoords()
+{
+return sc_GetViewScreenUV();
+}
+vec2 getScreenUV()
+{
+return sc_GetViewScreenUV();
 }
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

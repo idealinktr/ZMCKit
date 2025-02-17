@@ -22,8 +22,8 @@
 // Green - stencil 8 bit
 uniform highp sampler2D screenTexture;
 uniform mat3 screenTextureTransform;
-uniform highp vec2 currentProjectionMatrixTerms; // x - m22, y - m32
-uniform highp vec2 inputProjectionMatrixTerms; // x - m22, y - m32
+uniform highp vec4 currentProjectionMatrixTerms; // x - m22, y - m32
+uniform highp vec4 inputProjectionMatrixTerms; // x - m22, y - m32
 
 varying vec2 varTex0;
 

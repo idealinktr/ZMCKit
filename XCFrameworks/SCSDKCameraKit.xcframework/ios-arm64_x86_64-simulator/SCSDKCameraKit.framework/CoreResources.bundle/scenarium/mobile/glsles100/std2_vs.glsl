@@ -128,10 +128,10 @@ void sc_SkinVertex(inout sc_Vertex_t v)
 #if (sc_SkinBonesCount>0)
 {
 vec4 weights=sc_GetBoneWeights();
-int index0=sc_GetBoneIndex(0);
-int index1=sc_GetBoneIndex(1);
-int index2=sc_GetBoneIndex(2);
-int index3=sc_GetBoneIndex(3);
+int index0=int(boneData.x);
+int index1=int(boneData.y);
+int index2=int(boneData.z);
+int index3=int(boneData.w);
 vec3 l9_0=(((skinVertexPosition(index0,v.position)*weights.x)+(skinVertexPosition(index1,v.position)*weights.y))+(skinVertexPosition(index2,v.position)*weights.z))+(skinVertexPosition(index3,v.position)*weights.w);
 v.position=vec4(l9_0.x,l9_0.y,l9_0.z,v.position.w);
 mat3 normalMatrix0=sc_GetNormalMatrix(index0);
@@ -298,8 +298,11 @@ vec4 applyDepthAlgorithm(vec4 screenPosition)
 {
 #if (sc_DepthBufferMode==1)
 {
+if (sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].w!=0.0)
+{
 float fCoefficient=2.0/log2(sc_Camera.clipPlanes.y+1.0);
 screenPosition.z=((log2(max(sc_Camera.clipPlanes.x,1.0+screenPosition.w))*fCoefficient)-1.0)*screenPosition.w;
+}
 }
 #endif
 return screenPosition;

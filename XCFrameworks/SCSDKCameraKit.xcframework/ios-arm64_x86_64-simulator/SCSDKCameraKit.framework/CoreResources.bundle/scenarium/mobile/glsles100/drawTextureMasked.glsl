@@ -12,6 +12,7 @@
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
+#include <required2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 uniform vec4 inputTextureDims;
@@ -43,6 +44,7 @@ sc_ProcessVertex(sc_Vertex_t(l9_0.position,l9_0.normal,l9_0.tangent,vec2((inputT
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
+#include <required2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef inputTextureHasSwappedViews

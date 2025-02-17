@@ -12,7 +12,7 @@ using namespace metal;
 //SG_REFLECTION_BEGIN(100)
 //sampler sampler screenTextureSmpSC 2:1
 //texture texture2D screenTexture 2:0:2:1
-//ubo float UserUniforms 2:2:208 {
+//ubo float UserUniforms 2:2:224 {
 //float4 screenTextureSize 0
 //float4 screenTextureDims 16
 //float4 screenTextureView 32
@@ -20,9 +20,9 @@ using namespace metal;
 //float4 screenTextureUvMinMax 96
 //float4 screenTextureBorderColor 112
 //float2 screenTextureProjectionMatrixTerms 128
-//float2 currentProjectionMatrixTerms 136
-//float2 inputProjectionMatrixTerms 144
-//float3x3 meshTransform 160
+//float3x3 meshTransform 144
+//float4 currentProjectionMatrixTerms 192
+//float4 inputProjectionMatrixTerms 208
 //}
 //SG_REFLECTION_END
 
@@ -36,9 +36,9 @@ float3x3 screenTextureTransform;
 float4 screenTextureUvMinMax;
 float4 screenTextureBorderColor;
 float2 screenTextureProjectionMatrixTerms;
-float2 currentProjectionMatrixTerms;
-float2 inputProjectionMatrixTerms;
 float3x3 meshTransform;
+float4 currentProjectionMatrixTerms;
+float4 inputProjectionMatrixTerms;
 };
 #ifndef screenTextureHasSwappedViews
 #define screenTextureHasSwappedViews 0
@@ -139,9 +139,9 @@ float3x3 screenTextureTransform;
 float4 screenTextureUvMinMax;
 float4 screenTextureBorderColor;
 float2 screenTextureProjectionMatrixTerms;
-float2 currentProjectionMatrixTerms;
-float2 inputProjectionMatrixTerms;
 float3x3 meshTransform;
+float4 currentProjectionMatrixTerms;
+float4 inputProjectionMatrixTerms;
 };
 #ifndef screenTextureHasSwappedViews
 #define screenTextureHasSwappedViews 0
@@ -258,11 +258,11 @@ l9_4=l9_3;
 if (l9_4)
 {
 float param_12=depth;
-float2 param_13=(*sc_set2.UserUniforms).inputProjectionMatrixTerms;
+float4 param_13=(*sc_set2.UserUniforms).inputProjectionMatrixTerms;
 float l9_5=depthScreenToViewSpace(param_12,param_13);
 depth=l9_5;
 float param_14=depth;
-float2 param_15=(*sc_set2.UserUniforms).currentProjectionMatrixTerms;
+float4 param_15=(*sc_set2.UserUniforms).currentProjectionMatrixTerms;
 float l9_6=depthViewToScreenSpace(param_14,param_15);
 depth=l9_6;
 }

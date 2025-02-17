@@ -414,7 +414,9 @@ alphaSample_1=sc_OITAlpha0Sample_1;
 }
 else
 {
-if ((int(sc_OITMaxLayers8)!=0)&&(pass==1))
+#if (sc_OITMaxLayers8)
+{
+if (pass==1)
 {
 float2 param_25=sc_OITAlpha1GetDims2D((*sc_set2.UserUniforms));
 int param_26=sc_OITAlpha1Layout;
@@ -433,6 +435,8 @@ float4 l9_5=l9_4;
 float4 sc_OITAlpha1Sample=l9_4;
 alphaSample_1=sc_OITAlpha1Sample;
 }
+}
+#endif
 }
 float param_37=alphaSample_1.w;
 int param_38=pass;

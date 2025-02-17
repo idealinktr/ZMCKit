@@ -1553,20 +1553,14 @@ color.w*=4.0;
 #endif
 }
 #endif
-bool l9_36;
 #if (ALPHATEST)
 {
-l9_36=color.w==0.0;
-}
-#else
-{
-l9_36=(int(ALPHATEST)!=0);
-}
-#endif
-if (l9_36)
+if (color.w==0.0)
 {
 discard_fragment();
 }
+}
+#endif
 float4 param_48=color;
 sc_writeFragData0(param_48,sc_fragIn.sc_sysIn,sc_fragOut.sc_sysOut,sc_set0,sc_set1);
 return sc_fragOut;

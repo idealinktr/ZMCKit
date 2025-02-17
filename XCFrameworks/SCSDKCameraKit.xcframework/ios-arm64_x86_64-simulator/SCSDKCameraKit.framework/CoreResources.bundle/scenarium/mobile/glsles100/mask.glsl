@@ -6,9 +6,8 @@
 #if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
-#include <std2.glsl>
-#include <std2_fs.glsl>
 #include <std2_vs.glsl>
+#include <std2_fs.glsl>
 uniform vec4 maskTextureDims;
 uniform vec4 maskTextureSize;
 uniform vec4 maskTextureView;
@@ -25,9 +24,8 @@ sc_ProcessVertex(sc_LoadVertexAttributes());
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
-#include <std2.glsl>
-#include <std2_fs.glsl>
 #include <std2_vs.glsl>
+#include <std2_fs.glsl>
 #ifndef maskTextureHasSwappedViews
 #define maskTextureHasSwappedViews 0
 #elif maskTextureHasSwappedViews==1

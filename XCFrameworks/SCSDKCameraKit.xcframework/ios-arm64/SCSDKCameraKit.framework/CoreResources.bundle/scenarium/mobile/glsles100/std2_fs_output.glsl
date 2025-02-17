@@ -168,7 +168,7 @@ result=sc_readFragData0();
 }
 #else
 {
-result=sc_ScreenTextureSampleView(sc_GetViewScreenCoords());
+result=sc_ScreenTextureSampleView(sc_GetViewScreenUV());
 }
 #endif
 #if (((sc_IsEditor&&sc_GetFramebufferColorInvalidUsageMarker)&&(!sc_BlendMode_Software))&&(!sc_BlendMode_ColoredGlass))

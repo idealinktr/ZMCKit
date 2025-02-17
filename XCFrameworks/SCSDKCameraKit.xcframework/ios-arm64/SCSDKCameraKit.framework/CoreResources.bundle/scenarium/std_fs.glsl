@@ -27,13 +27,21 @@ uniform float _sc_framebufferFetchMarker;
 uniform float _sc_GetFramebufferColorInvalidUsageMarker;
 #endif
 
-vec2 sc_GetGlobalScreenCoords() {
-    return gl_FragCoord.xy * sc_WindowToViewportTransform.xy + sc_WindowToViewportTransform.zw;
+// Maps current fragment coords to the unit range [0, 1].
+// Note: should not be used directly from user shaders in the Instanced-Clipped mode.
+// See: sc_ScreenCoordsGlobalToView()
+vec2 sc_GetGlobalScreenUV() {
+    return gl_FragCoord.xy * sc_CurrentRenderTargetDims.zw;
 }
 
-vec2 sc_GetViewScreenCoords() {
-    return sc_ScreenCoordsGlobalToView(sc_GetGlobalScreenCoords());
+vec2 sc_GetViewScreenUV () {
+    return sc_ScreenCoordsGlobalToView(sc_GetGlobalScreenUV());
 }
+
+// NOTE: for backward compatibility with exported lenses.
+// See: sc_GetGlobalScreenUV(), sc_GetViewScreenUV()
+#define sc_GetGlobalScreenCoords sc_GetGlobalScreenUV
+#define sc_GetViewScreenCoords sc_GetViewScreenUV
 
 vec4 sc_GetFramebufferColor() {
     vec4 result;
@@ -55,7 +63,7 @@ vec4 sc_GetFramebufferColor() {
 
 #else
 
-    result = sc_ScreenTextureSampleView(sc_GetViewScreenCoords());
+    result = sc_ScreenTextureSampleView(sc_GetViewScreenUV());
 
 #endif
 
@@ -73,7 +81,7 @@ vec4 sc_GetFramebufferColor() {
 //  > getFramebufferColor
 //
 
-vec2 getScreenTextureUV() { return sc_GetViewScreenCoords(); }
+vec2 getScreenTextureUV() { return sc_GetViewScreenUV(); }
 vec4 getFramebufferColor() { return sc_GetFramebufferColor(); }
 
 vec4 sc_ApplyBlendModeModifications(vec4 color)

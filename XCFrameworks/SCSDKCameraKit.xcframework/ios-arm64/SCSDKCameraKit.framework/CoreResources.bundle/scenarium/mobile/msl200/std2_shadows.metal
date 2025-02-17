@@ -153,7 +153,7 @@ return result;
 }
 float3 evaluateRayTracedShadow(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
-float2 p=sc_GetGlobalScreenCoords(sc_sysIn,sc_set0,sc_set1);
+float2 p=sc_GetGlobalScreenUV(sc_sysIn,sc_set0,sc_set1);
 float2 param=p;
 float shadow=sc_RayTracedShadowTextureSampleView(param,sc_sysIn,sc_set0,sc_set1).x;
 return float3(shadow);

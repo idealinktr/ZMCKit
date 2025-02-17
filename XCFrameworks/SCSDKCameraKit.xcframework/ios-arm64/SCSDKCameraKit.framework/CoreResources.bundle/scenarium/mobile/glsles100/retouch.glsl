@@ -9,7 +9,6 @@
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
-#include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef SOFT_SKIN
@@ -83,7 +82,6 @@ sc_ProcessVertex(l9_0);
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
-#include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef lookupTextureHasSwappedViews

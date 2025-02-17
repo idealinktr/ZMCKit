@@ -465,7 +465,7 @@ layout(num_views = sc_NumStereoViews) in;
 
 #endif // #ifdef FRAGMENT_SHADER
 
-#if __VERSION__ > 100
+#if __VERSION__ >= 300
 #define SC_INTERPOLATION_FLAT flat
 #define SC_INTERPOLATION_CENTROID centroid
 #else

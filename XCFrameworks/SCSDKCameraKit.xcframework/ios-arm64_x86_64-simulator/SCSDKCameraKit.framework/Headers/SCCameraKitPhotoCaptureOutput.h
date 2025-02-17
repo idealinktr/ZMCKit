@@ -13,6 +13,13 @@ NS_SWIFT_NAME(PhotoCaptureOutput)
 /// An output that will capture photos. You should add this as an output for your CameraKit instance.
 @interface SCCameraKitPhotoCaptureOutput : NSObject <SCCameraKitOutput, SCCameraKitOutputRequiringPixelBuffer>
 
+/// Flip the captured photo horizontally
+/// @warning If your camera pipeline uses AVFoundation, you do not need to set this property.
+/// @note By default, this is NO. When set to NO, the capture will be mirrored on the front and not mirrored on the back camera.
+/// @note If set to YES, the capture will be mirrored on top of any mirroring done by AVFoundation:
+/// Capture is mirrored if either horizontallyMirrored is YES or device set to front camera is YES.
+@property (assign, nonatomic) BOOL horizontallyMirror;
+
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 

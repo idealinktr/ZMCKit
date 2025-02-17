@@ -123,32 +123,28 @@ void sc_SkinVertex(thread sc_Vertex_t& v,thread sc_SysIn& sc_sysIn,thread sc_Sys
 #if (sc_SkinBonesCount>0)
 {
 float4 weights=sc_GetBoneWeights(sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param=0;
-int index0=sc_GetBoneIndex(param,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_1=1;
-int index1=sc_GetBoneIndex(param_1,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_2=2;
-int index2=sc_GetBoneIndex(param_2,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_3=3;
-int index3=sc_GetBoneIndex(param_3,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_4=index0;
+int index0=int(sc_sysIn.sc_sysAttributes.boneData.x);
+int index1=int(sc_sysIn.sc_sysAttributes.boneData.y);
+int index2=int(sc_sysIn.sc_sysAttributes.boneData.z);
+int index3=int(sc_sysIn.sc_sysAttributes.boneData.w);
+int param=index0;
+float4 param_1=v.position;
+int param_2=index1;
+float4 param_3=v.position;
+int param_4=index2;
 float4 param_5=v.position;
-int param_6=index1;
+int param_6=index3;
 float4 param_7=v.position;
-int param_8=index2;
-float4 param_9=v.position;
-int param_10=index3;
-float4 param_11=v.position;
-float3 l9_0=(((skinVertexPosition(param_4,param_5,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.x)+(skinVertexPosition(param_6,param_7,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.y))+(skinVertexPosition(param_8,param_9,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.z))+(skinVertexPosition(param_10,param_11,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.w);
+float3 l9_0=(((skinVertexPosition(param,param_1,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.x)+(skinVertexPosition(param_2,param_3,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.y))+(skinVertexPosition(param_4,param_5,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.z))+(skinVertexPosition(param_6,param_7,sc_sysIn,sc_sysOut,sc_set0,sc_set1)*weights.w);
 v.position=float4(l9_0.x,l9_0.y,l9_0.z,v.position.w);
-int param_12=index0;
-float3x3 normalMatrix0=sc_GetNormalMatrix(param_12,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_13=index1;
-float3x3 normalMatrix1=sc_GetNormalMatrix(param_13,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_14=index2;
-float3x3 normalMatrix2=sc_GetNormalMatrix(param_14,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
-int param_15=index3;
-float3x3 normalMatrix3=sc_GetNormalMatrix(param_15,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
+int param_8=index0;
+float3x3 normalMatrix0=sc_GetNormalMatrix(param_8,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
+int param_9=index1;
+float3x3 normalMatrix1=sc_GetNormalMatrix(param_9,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
+int param_10=index2;
+float3x3 normalMatrix2=sc_GetNormalMatrix(param_10,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
+int param_11=index3;
+float3x3 normalMatrix3=sc_GetNormalMatrix(param_11,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
 #if (!STD_DISABLE_VERTEX_NORMAL)
 {
 v.normal=((((normalMatrix0*v.normal)*weights.x)+((normalMatrix1*v.normal)*weights.y))+((normalMatrix2*v.normal)*weights.z))+((normalMatrix3*v.normal)*weights.w);
@@ -356,8 +352,11 @@ float4 applyDepthAlgorithm(thread float4& screenPosition,thread sc_SysIn& sc_sys
 {
 #if (sc_DepthBufferMode==1)
 {
+if ((*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_sysOut,sc_set0,sc_set1)][2].w!=0.0)
+{
 float fCoefficient=2.0/log2((*sc_set0.LibraryUniforms).sc_Camera.clipPlanes.y+1.0);
 screenPosition.z=((log2(fast::max((*sc_set0.LibraryUniforms).sc_Camera.clipPlanes.x,1.0+screenPosition.w))*fCoefficient)-1.0)*screenPosition.w;
+}
 }
 #endif
 return screenPosition;

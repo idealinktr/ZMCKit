@@ -26,6 +26,9 @@ NS_SWIFT_NAME(LensProcessor)
 /// @note: Does NOT mute the device microphone, only prevents lenses from producing audio output.
 @property (readonly, nonatomic, assign) BOOL audioMuted;
 
+/// Specifies whether LensProcessor flips input video or image horizontally. NO by default
+@property (readonly, nonatomic, assign) BOOL inputHorizontalMirrored;
+
 /// Applies a specified lens.
 /// @param lens the lens to apply. This should be a lens provided by the repository.
 /// @param launchData launch data to pass to lens.
@@ -63,6 +66,10 @@ NS_SWIFT_NAME(LensProcessor)
 /// @param audioMuted whether audio should be muted or not.
 /// @param completion an optional completion block to be called when the mute/unmute has taken effect.
 - (void)setAudioMuted:(BOOL)audioMuted completion:(nullable void (^)(void))completion;
+
+/// Flip input horizontally before any Lens effects are applied. Do not use this method in combination with mirroring using AVFoundation
+/// @param inputMirrored whether image or video is flipped horizontally
+- (void)setInputHorizontallyMirrored:(BOOL)inputMirrored;
 
 /// Process image with lens effect using current camera session configuration
 /// @param image image to process with current lens

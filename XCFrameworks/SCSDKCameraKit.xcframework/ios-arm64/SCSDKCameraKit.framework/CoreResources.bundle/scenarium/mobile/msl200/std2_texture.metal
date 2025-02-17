@@ -570,28 +570,62 @@ float4 l9_0=sc_InternalTextureLevel(tex,smp,param,param_1);
 float4 l9_1=l9_0;
 return l9_0;
 }
-float depthScreenToViewSpace(thread float& depth,thread const float2& projectionMatrixTerms)
+float depthScreenToViewSpace(thread float& depth,thread const float4& projectionMatrixTerms)
 {
 float m22=projectionMatrixTerms.x;
 float m32=projectionMatrixTerms.y;
+bool isOrthographic=projectionMatrixTerms.z==0.0;
 depth=(depth*2.0)-1.0;
-return m32/((-depth)-m22);
-}
-float depthViewToScreenSpace(thread float& depth,thread const float2& projectionMatrixTerms)
-{
-float m22=projectionMatrixTerms.x;
-float m32=projectionMatrixTerms.y;
 float l9_0;
-if (depth!=0.0)
+if (isOrthographic)
 {
-l9_0=(-m22)-(m32/depth);
+l9_0=(depth-m32)/m22;
 }
 else
 {
-l9_0=0.0;
+l9_0=m32/((-depth)-m22);
+}
+return l9_0;
+}
+float depthViewToScreenSpace(thread float& depth,thread const float4& projectionMatrixTerms)
+{
+float m22=projectionMatrixTerms.x;
+float m32=projectionMatrixTerms.y;
+bool isOrthographic=projectionMatrixTerms.z==0.0;
+float l9_0;
+if (isOrthographic)
+{
+l9_0=(depth*m22)+m32;
+}
+else
+{
+float l9_1;
+if (depth!=0.0)
+{
+l9_1=(-m22)-(m32/depth);
+}
+else
+{
+l9_1=0.0;
+}
+l9_0=l9_1;
 }
 depth=l9_0;
 return (depth*0.5)+0.5;
+}
+float depthScreenToViewSpace(thread const float& depth,thread const float2& projectionMatrixTerms)
+{
+float param=depth;
+float4 param_1=float4(projectionMatrixTerms.x,projectionMatrixTerms.y,-1.0,0.0);
+float l9_0=depthScreenToViewSpace(param,param_1);
+return l9_0;
+}
+float depthViewToScreenSpace(thread const float& depth,thread const float2& projectionMatrixTerms)
+{
+float param=depth;
+float4 param_1=float4(projectionMatrixTerms.x,projectionMatrixTerms.y,-1.0,0.0);
+float l9_0=depthViewToScreenSpace(param,param_1);
+return l9_0;
 }
 float4 sampleTextureWithTransform(thread const texture2d<float> tex,thread const sampler smp,thread float2& uv,thread const bool& useUvTransform,thread const float3x3& uvTransform)
 {
@@ -1165,28 +1199,62 @@ l9_0=sc_InternalTextureBiasOrLevel(tex,smp,param_2,param_3);
 }
 return l9_0;
 }
-float depthScreenToViewSpace(thread float& depth,thread const float2& projectionMatrixTerms)
+float depthScreenToViewSpace(thread float& depth,thread const float4& projectionMatrixTerms)
 {
 float m22=projectionMatrixTerms.x;
 float m32=projectionMatrixTerms.y;
+bool isOrthographic=projectionMatrixTerms.z==0.0;
 depth=(depth*2.0)-1.0;
-return m32/((-depth)-m22);
-}
-float depthViewToScreenSpace(thread float& depth,thread const float2& projectionMatrixTerms)
-{
-float m22=projectionMatrixTerms.x;
-float m32=projectionMatrixTerms.y;
 float l9_0;
-if (depth!=0.0)
+if (isOrthographic)
 {
-l9_0=(-m22)-(m32/depth);
+l9_0=(depth-m32)/m22;
 }
 else
 {
-l9_0=0.0;
+l9_0=m32/((-depth)-m22);
+}
+return l9_0;
+}
+float depthViewToScreenSpace(thread float& depth,thread const float4& projectionMatrixTerms)
+{
+float m22=projectionMatrixTerms.x;
+float m32=projectionMatrixTerms.y;
+bool isOrthographic=projectionMatrixTerms.z==0.0;
+float l9_0;
+if (isOrthographic)
+{
+l9_0=(depth*m22)+m32;
+}
+else
+{
+float l9_1;
+if (depth!=0.0)
+{
+l9_1=(-m22)-(m32/depth);
+}
+else
+{
+l9_1=0.0;
+}
+l9_0=l9_1;
 }
 depth=l9_0;
 return (depth*0.5)+0.5;
+}
+float depthScreenToViewSpace(thread const float& depth,thread const float2& projectionMatrixTerms)
+{
+float param=depth;
+float4 param_1=float4(projectionMatrixTerms.x,projectionMatrixTerms.y,-1.0,0.0);
+float l9_0=depthScreenToViewSpace(param,param_1);
+return l9_0;
+}
+float depthViewToScreenSpace(thread const float& depth,thread const float2& projectionMatrixTerms)
+{
+float param=depth;
+float4 param_1=float4(projectionMatrixTerms.x,projectionMatrixTerms.y,-1.0,0.0);
+float l9_0=depthViewToScreenSpace(param,param_1);
+return l9_0;
 }
 float4 sampleTextureWithTransform(thread const texture2d<float> tex,thread const sampler smp,thread float2& uv,thread const bool& useUvTransform,thread const float3x3& uvTransform)
 {

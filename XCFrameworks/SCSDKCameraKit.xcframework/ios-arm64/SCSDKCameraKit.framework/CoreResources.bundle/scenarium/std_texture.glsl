@@ -346,21 +346,34 @@ NAME##SampleViewIndexBias(UV, INDEX, BIAS)
 // We hardcoded m23, so be careful if camera projection matrix will be changed in future
 
 // Convert depth value from screen-space space to view-space
-highp float depthScreenToViewSpace(highp float depth, highp vec2 projectionMatrixTerms) {
+highp float depthScreenToViewSpace(highp float depth, highp vec4 projectionMatrixTerms) {
     highp float m22 = projectionMatrixTerms.x;
     highp float m32 = projectionMatrixTerms.y;
+    bool isOrthographic = projectionMatrixTerms.z == 0.0;
+
     depth = depth * 2.0 - 1.0;
-    return m32 / (-depth - m22);
+    return isOrthographic ? ((depth - m32) / m22) : (m32 / (-depth - m22));
 }
 // Keep it for backward compatibility (legacy name)
 #define depthToGlobal depthScreenToViewSpace
 
+
 // Convert depth value from view-space space to screen-space
-highp float depthViewToScreenSpace(highp float depth, highp vec2 projectionMatrixTerms) {
+highp float depthViewToScreenSpace(highp float depth, highp vec4 projectionMatrixTerms) {
     highp float m22 = projectionMatrixTerms.x;
     highp float m32 = projectionMatrixTerms.y;
-    depth = depth != 0.0 ? (-m22 - m32 / depth) : 0.0;
+    bool isOrthographic = projectionMatrixTerms.z == 0.0;
+
+    depth = isOrthographic ? (depth * m22 + m32) : (depth != 0.0 ? (-m22 - m32 / depth) : 0.0);
     return depth * 0.5 + 0.5;
+}
+// Keep these conversion functions for backward compatibility with old non-unified shaders -----------------
+highp float depthScreenToViewSpace(highp float depth, highp vec2 projectionMatrixTerms) {
+    return depthScreenToViewSpace(depth, vec4(projectionMatrixTerms.x, projectionMatrixTerms.y, -1.0, 0.0));
+}
+
+highp float depthViewToScreenSpace(highp float depth, highp vec2 projectionMatrixTerms) {
+    return depthViewToScreenSpace(depth, vec4(projectionMatrixTerms.x, projectionMatrixTerms.y, -1.0, 0.0));
 }
 // Keep it for backward compatibility (legacy name)
 #define depthToLocal depthViewToScreenSpace

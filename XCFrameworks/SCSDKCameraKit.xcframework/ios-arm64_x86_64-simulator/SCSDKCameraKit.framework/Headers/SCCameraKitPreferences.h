@@ -5,6 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+NS_SWIFT_NAME(CameraKitPreferences)
 /// Protocol to interface with preferences stored by CameraKit
 /// This interface is intentionally opaque and should only be used to clear out stored preferences
 @protocol SCCameraKitPreferences <NSObject>

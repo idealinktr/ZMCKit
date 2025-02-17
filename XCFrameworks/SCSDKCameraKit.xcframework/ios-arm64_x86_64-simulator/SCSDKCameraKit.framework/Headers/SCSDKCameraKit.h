@@ -23,6 +23,7 @@
 #import <SCSDKCameraKit/SCCameraKitLens.h>
 #import <SCSDKCameraKit/SCCameraKitLensHintDelegate.h>
 #import <SCSDKCameraKit/SCCameraKitLensHintProvider.h>
+#import <SCSDKCameraKit/SCCameraKitLensHttpHandler.h>
 #import <SCSDKCameraKit/SCCameraKitLensLaunchData.h>
 #import <SCSDKCameraKit/SCCameraKitLensMediaPickerProvider.h>
 #import <SCSDKCameraKit/SCCameraKitLensPrefetcher.h>

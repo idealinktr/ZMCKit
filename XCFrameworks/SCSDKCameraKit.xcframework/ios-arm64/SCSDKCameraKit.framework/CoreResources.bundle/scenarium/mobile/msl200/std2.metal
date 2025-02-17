@@ -47,7 +47,7 @@ using namespace metal;
 //texture texture2D sc_StrandDataMapTexture 0:12:0:24
 //texture utexture2D z_hitIdAndBarycentric 0:13:0:25
 //texture texture2D z_rayDirections 0:14:0:26
-//ubo int LibraryUniforms 0:27:3136 {
+//ubo int LibraryUniforms 0:27:3152 {
 //sc_PointLight_t sc_PointLights 0:[]:80
 //bool sc_PointLights.falloffEnabled 0
 //float sc_PointLights.falloffEndDistance 4
@@ -106,6 +106,7 @@ using namespace metal;
 //float3 sc_WorldAabbMin
 //float3 sc_WorldAabbMax
 //float4 sc_WindowToViewportTransform
+//float4 sc_CurrentRenderTargetDims
 //sc_Camera_t sc_Camera
 //float3 sc_Camera.position 0
 //float sc_Camera.aspect 16
@@ -294,6 +295,7 @@ float3 sc_LocalAabbMax;
 float3 sc_WorldAabbMin;
 float3 sc_WorldAabbMax;
 float4 sc_WindowToViewportTransform;
+float4 sc_CurrentRenderTargetDims;
 sc_Camera_t sc_Camera;
 float sc_ShadowDensity;
 float4 sc_ShadowColor;
@@ -1758,6 +1760,7 @@ float3 sc_LocalAabbMax;
 float3 sc_WorldAabbMin;
 float3 sc_WorldAabbMax;
 float4 sc_WindowToViewportTransform;
+float4 sc_CurrentRenderTargetDims;
 sc_Camera_t sc_Camera;
 float sc_ShadowDensity;
 float4 sc_ShadowColor;
@@ -3129,37 +3132,45 @@ float4 sc_GetGlFragCoord(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_se
 {
 return sc_sysIn.gl_FragCoord;
 }
-float2 sc_GetGlobalScreenCoords(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
-{
-return (sc_GetGlFragCoord(sc_sysIn,sc_set0,sc_set1).xy*(*sc_set0.LibraryUniforms).sc_WindowToViewportTransform.xy)+(*sc_set0.LibraryUniforms).sc_WindowToViewportTransform.zw;
-}
-float2 sc_GetViewScreenCoords(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
-{
-float2 param=sc_GetGlobalScreenCoords(sc_sysIn,sc_set0,sc_set1);
-return sc_ScreenCoordsGlobalToView(param,sc_sysIn,sc_set0,sc_set1);
-}
-float2 getScreenUV(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
-{
-return sc_GetViewScreenCoords(sc_sysIn,sc_set0,sc_set1);
-}
 bool sc_GetGlFrontFacing(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
 return sc_sysIn.gl_FrontFacing;
 }
+float2 sc_GetGlobalScreenUV(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+return sc_GetGlFragCoord(sc_sysIn,sc_set0,sc_set1).xy*(*sc_set0.LibraryUniforms).sc_CurrentRenderTargetDims.zw;
+}
+float2 sc_GetViewScreenUV(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+float2 param=sc_GetGlobalScreenUV(sc_sysIn,sc_set0,sc_set1);
+return sc_ScreenCoordsGlobalToView(param,sc_sysIn,sc_set0,sc_set1);
+}
 float depthScreenToViewSpace(thread const float& depth,thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
-float2 projectionMatrixTerms=float2((*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][3].z);
+float4 projectionMatrixTerms=float4((*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][3].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].w,0.0);
 float param=depth;
-float2 param_1=projectionMatrixTerms;
+float4 param_1=projectionMatrixTerms;
 float l9_0=depthScreenToViewSpace(param,param_1);
 return l9_0;
 }
 float depthViewToScreenSpace(thread const float& depth,thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
-float2 projectionMatrixTerms=float2((*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][3].z);
+float4 projectionMatrixTerms=float4((*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][3].z,(*sc_set0.LibraryUniforms).sc_ProjectionMatrixArray[sc_GetStereoViewIndex(sc_sysIn,sc_set0,sc_set1)][2].w,0.0);
 float param=depth;
-float2 param_1=projectionMatrixTerms;
+float4 param_1=projectionMatrixTerms;
 float l9_0=depthViewToScreenSpace(param,param_1);
 return l9_0;
+}
+float2 sc_GetGlobalScreenCoords(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+return sc_GetGlobalScreenUV(sc_sysIn,sc_set0,sc_set1);
+}
+float2 sc_GetViewScreenCoords(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+return sc_GetViewScreenUV(sc_sysIn,sc_set0,sc_set1);
+}
+float2 getScreenUV(thread sc_SysIn& sc_sysIn,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+return sc_GetViewScreenUV(sc_sysIn,sc_set0,sc_set1);
 }
 } // FRAGMENT SHADER
