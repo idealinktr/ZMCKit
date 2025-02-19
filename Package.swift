@@ -18,21 +18,11 @@ let package = Package(
             name: "ZMCKit",
             dependencies: [
                 "SCSDKCameraKit",
-                "SCSDKCoreKit",
-                "SCSDKCreativeKit"
             ]
         ),
         .binaryTarget(
             name: "SCSDKCameraKit",
             path: "XCFrameworks/SCSDKCameraKit.xcframework"
-        ),
-        .binaryTarget(
-            name: "SCSDKCoreKit",
-            path: "XCFrameworks/SCSDKCoreKit.xcframework"
-        ),
-        .binaryTarget(
-            name: "SCSDKCreativeKit",
-            path: "XCFrameworks/SCSDKCreativeKit.xcframework"
         )
     ]
 )

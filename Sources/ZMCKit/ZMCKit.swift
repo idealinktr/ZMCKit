@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 
 @_exported import SCSDKCameraKit
-@_exported import SCSDKCoreKit
-@_exported import SCSDKCreativeKit
 
 enum ZMCKitError: Error {
     case invalidPreviewView
