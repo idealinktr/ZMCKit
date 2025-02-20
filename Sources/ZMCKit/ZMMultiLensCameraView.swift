@@ -56,6 +56,13 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return button
     }()
     
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     public override init(snapAPIToken: String,
                          partnerGroupId: String,
                          cameraPosition: ZMCameraPosition = .back,
@@ -67,6 +74,8 @@ public class ZMMultiLensCameraView: ZMCameraView {
         setupUI()
         setupLenses()
         setupCaptureOutputs()
+        
+        cameraKit.lenses.processor?.addObserver(self)
     }
     
     @MainActor required init?(coder: NSCoder) {
@@ -77,10 +86,12 @@ public class ZMMultiLensCameraView: ZMCameraView {
         addSubview(collectionView)
         addSubview(captureButton)
         addSubview(processingLabel)
+        addSubview(loadingIndicator)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         captureButton.translatesAutoresizingMaskIntoConstraints = false
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -94,7 +105,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
             collectionView.heightAnchor.constraint(equalToConstant: 80),
             
             processingLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
         collectionView.backgroundColor = .clear
@@ -121,12 +135,16 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func applyLens(lens: Lens) {
+        loadingIndicator.startAnimating()
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
             } else {
                 print("Failed to apply lens: \(lens.id)")
+                DispatchQueue.main.async {
+                    self?.loadingIndicator.stopAnimating()
+                }
             }
         }
     }
@@ -235,6 +253,26 @@ extension ZMMultiLensCameraView: AVCapturePhotoCaptureDelegate {
             } else {
                 self.hideProcessing()
             }
+        }
+    }
+}
+
+// MARK: - Lens Processor Observer
+@available(iOS 13.0, *)
+extension ZMMultiLensCameraView: ProcessorObserver {
+    @objc public func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
+        // Lens started applying
+    }
+    
+    @objc public func processorDidIdle(_ processor: LensProcessor) {
+        DispatchQueue.main.async { [weak self] in
+            self?.loadingIndicator.stopAnimating()
+        }
+    }
+    
+    @objc public func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
+        DispatchQueue.main.async { [weak self] in
+            self?.loadingIndicator.stopAnimating()
         }
     }
 }
