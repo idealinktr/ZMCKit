@@ -135,7 +135,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func applyLens(lens: Lens) {
-        loadingIndicator.startAnimating()
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
                 print("Successfully applied lens: \(lens.id)")
@@ -261,16 +260,21 @@ extension ZMMultiLensCameraView: AVCapturePhotoCaptureDelegate {
 @available(iOS 13.0, *)
 extension ZMMultiLensCameraView: ProcessorObserver {
     @objc public func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
-        // Lens started applying
+        // Show loading indicator when lens starts applying
+        DispatchQueue.main.async { [weak self] in
+            self?.loadingIndicator.startAnimating()
+        }
     }
     
     @objc public func processorDidIdle(_ processor: LensProcessor) {
+        // Hide loading indicator when lens is cleared/removed
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.stopAnimating()
         }
     }
     
     @objc public func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
+        // Hide loading indicator when first frame with applied lens is ready
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.stopAnimating()
         }
