@@ -9,6 +9,22 @@ import UIKit
 import SCSDKCameraKit
 
 @available(iOS 13.0, *)
+public protocol ZMLensStatusDelegate: AnyObject {
+    func lensDidStartApplying(lens: Lens)
+    func lensDidBecomeReady(lens: Lens)
+    func lensDidBecomeIdle()
+    func lensDidFail(lens: Lens?, error: Error?)
+}
+
+@available(iOS 13.0, *)
+public extension ZMLensStatusDelegate {
+    func lensDidStartApplying(lens: Lens) {}
+    func lensDidBecomeReady(lens: Lens) {}
+    func lensDidBecomeIdle() {}
+    func lensDidFail(lens: Lens?, error: Error?) {}
+}
+
+@available(iOS 13.0, *)
 public class ZMMultiLensCameraView: ZMCameraView {
     private var lenses: [Lens] = []
     private let photoOutput = AVCapturePhotoOutput()
@@ -63,6 +79,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
         return indicator
     }()
     
+    private let initialZoomFactor: CGFloat = 0.6
+    
+    public weak var lensStatusDelegate: ZMLensStatusDelegate?
+    
     public override init(snapAPIToken: String,
                          partnerGroupId: String,
                          cameraPosition: ZMCameraPosition = .back,
@@ -74,6 +94,7 @@ public class ZMMultiLensCameraView: ZMCameraView {
         setupUI()
         setupLenses()
         setupCaptureOutputs()
+        setInitialZoom()
         
         cameraKit.lenses.processor?.addObserver(self)
     }
@@ -134,6 +155,26 @@ public class ZMMultiLensCameraView: ZMCameraView {
         }
     }
     
+    private func setInitialZoom() {
+        guard let device = self.captureDevice else { return }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            let minZoom = device.minAvailableVideoZoomFactor
+            let maxZoom = device.maxAvailableVideoZoomFactor
+            
+            let zoomToUse = max(minZoom, min(initialZoomFactor, maxZoom))
+            
+            device.videoZoomFactor = zoomToUse
+            device.unlockForConfiguration()
+            
+            print("Set initial zoom factor to: \(zoomToUse)")
+        } catch {
+            print("Error setting initial zoom: \(error.localizedDescription)")
+        }
+    }
+    
     private func applyLens(lens: Lens) {
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             if success {
@@ -143,6 +184,7 @@ public class ZMMultiLensCameraView: ZMCameraView {
                 print("Failed to apply lens: \(lens.id)")
                 DispatchQueue.main.async {
                     self?.loadingIndicator.stopAnimating()
+                    self?.handleLensApplicationFailure(lens: lens, error: nil)
                 }
             }
         }
@@ -259,22 +301,28 @@ extension ZMMultiLensCameraView: AVCapturePhotoCaptureDelegate {
 // MARK: - Lens Processor Observer
 @available(iOS 13.0, *)
 extension ZMMultiLensCameraView: ProcessorObserver {
-    @objc public func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
-        // Show loading indicator when lens starts applying
+    @objc public override func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
+        super.processor(processor, didApplyLens: lens)
+        
+        // Show loading indicator (specific to ZMMultiLensCameraView)
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.startAnimating()
         }
     }
     
-    @objc public func processorDidIdle(_ processor: LensProcessor) {
-        // Hide loading indicator when lens is cleared/removed
+    @objc public override func processorDidIdle(_ processor: LensProcessor) {
+        super.processorDidIdle(processor)
+        
+        // Hide loading indicator (specific to ZMMultiLensCameraView)
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.stopAnimating()
         }
     }
     
-    @objc public func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
-        // Hide loading indicator when first frame with applied lens is ready
+    @objc public override func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
+        super.processor(processor, firstFrameDidBecomeReadyFor: lens)
+        
+        // Hide loading indicator (specific to ZMMultiLensCameraView)
         DispatchQueue.main.async { [weak self] in
             self?.loadingIndicator.stopAnimating()
         }

@@ -32,6 +32,7 @@ public class ZMCameraView: UIView {
     public let previewView = PreviewView()
     
     public weak var delegate: ZMCameraDelegate?
+    public weak var lensStatusDelegate: ZMLensStatusDelegate?
     
     public init(snapAPIToken: String,
                 partnerGroupId: String,
@@ -104,5 +105,29 @@ public class ZMCameraView: UIView {
             responder = nextResponder
         }
         return nil
+    }
+    
+    @objc public func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
+        DispatchQueue.main.async { [weak self] in
+            self?.lensStatusDelegate?.lensDidStartApplying(lens: lens)
+        }
+    }
+    
+    @objc public func processorDidIdle(_ processor: LensProcessor) {
+        DispatchQueue.main.async { [weak self] in
+            self?.lensStatusDelegate?.lensDidBecomeIdle()
+        }
+    }
+    
+    @objc public func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
+        DispatchQueue.main.async { [weak self] in
+            self?.lensStatusDelegate?.lensDidBecomeReady(lens: lens)
+        }
+    }
+    
+    internal func handleLensApplicationFailure(lens: Lens?, error: Error?) {
+        DispatchQueue.main.async { [weak self] in
+            self?.lensStatusDelegate?.lensDidFail(lens: lens, error: error)
+        }
     }
 }

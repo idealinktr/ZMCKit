@@ -166,3 +166,24 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
         print("Failed to update lens: \(error?.localizedDescription ?? "")")
     }
 }
+
+@available(iOS 13.0, *)
+extension ZMSingleCameraView: ProcessorObserver {
+    // Override the processor observer methods to add any specific behavior
+    // while still calling the parent class methods
+    
+    @objc public override func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
+        super.processor(processor, didApplyLens: lens)
+        // Add any ZMSingleCameraView specific behavior here
+    }
+    
+    @objc public override func processorDidIdle(_ processor: LensProcessor) {
+        super.processorDidIdle(processor)
+        // Add any ZMSingleCameraView specific behavior here
+    }
+    
+    @objc public override func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
+        super.processor(processor, firstFrameDidBecomeReadyFor: lens)
+        // Add any ZMSingleCameraView specific behavior here
+    }
+}
