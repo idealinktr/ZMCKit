@@ -81,7 +81,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
     
     private let initialZoomFactor: CGFloat = 0.6
     
-    public weak var lensStatusDelegate: ZMLensStatusDelegate?
     
     public override init(snapAPIToken: String,
                          partnerGroupId: String,
@@ -95,8 +94,6 @@ public class ZMMultiLensCameraView: ZMCameraView {
         setupLenses()
         setupCaptureOutputs()
         setInitialZoom()
-        
-        cameraKit.lenses.processor?.addObserver(self)
     }
     
     @MainActor required init?(coder: NSCoder) {
@@ -156,11 +153,24 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setInitialZoom() {
-        guard let device = self.captureDevice else { return }
+        // Set initial camera position based on the cameraPosition property
+        let position = cameraPosition
         
         do {
+            // Get the appropriate camera device based on position
+            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                     for: .video, 
+                                                     position: position == .front ? .front : .back) else {
+                print("Failed to get camera device")
+                return
+            }
+            
             try device.lockForConfiguration()
             
+            // Set a wider initial zoom factor (0.6x) for shoe lenses
+            let initialZoomFactor: CGFloat = 0.6
+            
+            // Ensure zoom factor is within device limits
             let minZoom = device.minAvailableVideoZoomFactor
             let maxZoom = device.maxAvailableVideoZoomFactor
             
@@ -175,16 +185,57 @@ public class ZMMultiLensCameraView: ZMCameraView {
         }
     }
     
+    private func adjustZoomForShoeLens(lens: Lens) {
+        // Check if this is a shoe lens based on lens ID or other criteria
+        // This is a placeholder - you should implement your own logic to identify shoe lenses
+        let isShoeLens = lens.id.lowercased().contains("shoe") || lens.name?.lowercased().contains("shoe") == true
+        
+        if isShoeLens {
+            do {
+                // Get the appropriate camera device based on position
+                guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                         for: .video, 
+                                                         position: cameraPosition == .front ? .front : .back) else {
+                    print("Failed to get camera device")
+                    return
+                }
+                
+                try device.lockForConfiguration()
+                
+                // Set a wider zoom factor (0.6x) for shoe lenses
+                let shoeZoomFactor: CGFloat = 0.6
+                
+                // Ensure zoom factor is within device limits
+                let minZoom = device.minAvailableVideoZoomFactor
+                let maxZoom = device.maxAvailableVideoZoomFactor
+                
+                let zoomToUse = max(minZoom, min(shoeZoomFactor, maxZoom))
+                
+                device.videoZoomFactor = zoomToUse
+                device.unlockForConfiguration()
+                
+                print("Set shoe lens zoom factor to: \(zoomToUse)")
+            } catch {
+                print("Error setting shoe lens zoom: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     private func applyLens(lens: Lens) {
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
+            guard let self = self else { return }
+            
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
+                
+                // Adjust zoom for shoe lenses
+                self.adjustZoomForShoeLens(lens: lens)
             } else {
                 print("Failed to apply lens: \(lens.id)")
                 DispatchQueue.main.async {
-                    self?.loadingIndicator.stopAnimating()
-                    self?.handleLensApplicationFailure(lens: lens, error: nil)
+                    self.loadingIndicator.stopAnimating()
+                    self.handleLensApplicationFailure(lens: lens, error: nil)
                 }
             }
         }
@@ -218,6 +269,7 @@ public class ZMMultiLensCameraView: ZMCameraView {
         }
         capturePhoto()
     }
+    
 }
 
 // MARK: - UICollectionView DataSource & Delegate
@@ -294,37 +346,6 @@ extension ZMMultiLensCameraView: AVCapturePhotoCaptureDelegate {
             } else {
                 self.hideProcessing()
             }
-        }
-    }
-}
-
-// MARK: - Lens Processor Observer
-@available(iOS 13.0, *)
-extension ZMMultiLensCameraView: ProcessorObserver {
-    @objc public override func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
-        super.processor(processor, didApplyLens: lens)
-        
-        // Show loading indicator (specific to ZMMultiLensCameraView)
-        DispatchQueue.main.async { [weak self] in
-            self?.loadingIndicator.startAnimating()
-        }
-    }
-    
-    @objc public override func processorDidIdle(_ processor: LensProcessor) {
-        super.processorDidIdle(processor)
-        
-        // Hide loading indicator (specific to ZMMultiLensCameraView)
-        DispatchQueue.main.async { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-        }
-    }
-    
-    @objc public override func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
-        super.processor(processor, firstFrameDidBecomeReadyFor: lens)
-        
-        // Hide loading indicator (specific to ZMMultiLensCameraView)
-        DispatchQueue.main.async { [weak self] in
-            self?.loadingIndicator.stopAnimating()
         }
     }
 }

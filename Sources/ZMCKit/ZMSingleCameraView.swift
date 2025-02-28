@@ -113,6 +113,78 @@ public class ZMSingleCameraView: ZMCameraView {
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        setupCameraAngle()
+    }
+    
+    private func setupCameraAngle() {
+        // Set initial camera position based on the cameraPosition property
+        let position = cameraPosition
+        
+        // Configure camera device for optimal angle
+        do {
+            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                      for: .video, 
+                                                      position: position == .front ? .front : .back) else {
+                print("Failed to get camera device")
+                return
+            }
+            
+            try device.lockForConfiguration()
+            
+            // Set zoom factor for better framing
+            let initialZoomFactor: CGFloat = 1.2 // Adjust this value as needed
+            
+            // Ensure zoom factor is within device limits
+            let minZoom = device.minAvailableVideoZoomFactor
+            let maxZoom = device.maxAvailableVideoZoomFactor
+            let zoomToUse = max(minZoom, min(initialZoomFactor, maxZoom))
+            
+            device.videoZoomFactor = zoomToUse
+            
+            // Set focus mode if needed
+            if device.isFocusModeSupported(.continuousAutoFocus) {
+                device.focusMode = .continuousAutoFocus
+            }
+            
+            // Set exposure mode if needed
+            if device.isExposureModeSupported(.continuousAutoExposure) {
+                device.exposureMode = .continuousAutoExposure
+            }
+            
+            device.unlockForConfiguration()
+            
+            print("Camera angle configured with zoom factor: \(zoomToUse)")
+        } catch {
+            print("Error configuring camera device: \(error.localizedDescription)")
+        }
+    }
+    
+    public func setCameraZoom(_ zoomFactor: CGFloat) {
+        do {
+            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                      for: .video, 
+                                                      position: cameraPosition == .front ? .front : .back) else {
+                return
+            }
+            
+            try device.lockForConfiguration()
+            
+            // Ensure zoom factor is within device limits
+            let minZoom = device.minAvailableVideoZoomFactor
+            let maxZoom = device.maxAvailableVideoZoomFactor
+            let zoomToUse = max(minZoom, min(zoomFactor, maxZoom))
+            
+            device.videoZoomFactor = zoomToUse
+            device.unlockForConfiguration()
+            
+            print("Camera zoom set to: \(zoomToUse)")
+        } catch {
+            print("Error setting camera zoom: \(error.localizedDescription)")
+        }
+    }
 }
 
 // MARK: - Photo Capture Delegate
@@ -162,28 +234,6 @@ extension ZMSingleCameraView: LensRepositorySpecificObserver {
     }
     
     public func repository(_ repository: LensRepository, didFailToUpdateLensID lensID: String, forGroupID groupID: String, error: Error?) {
-
         print("Failed to update lens: \(error?.localizedDescription ?? "")")
-    }
-}
-
-@available(iOS 13.0, *)
-extension ZMSingleCameraView: ProcessorObserver {
-    // Override the processor observer methods to add any specific behavior
-    // while still calling the parent class methods
-    
-    @objc public override func processor(_ processor: LensProcessor, didApplyLens lens: Lens) {
-        super.processor(processor, didApplyLens: lens)
-        // Add any ZMSingleCameraView specific behavior here
-    }
-    
-    @objc public override func processorDidIdle(_ processor: LensProcessor) {
-        super.processorDidIdle(processor)
-        // Add any ZMSingleCameraView specific behavior here
-    }
-    
-    @objc public override func processor(_ processor: LensProcessor, firstFrameDidBecomeReadyFor lens: Lens) {
-        super.processor(processor, firstFrameDidBecomeReadyFor: lens)
-        // Add any ZMSingleCameraView specific behavior here
     }
 }
