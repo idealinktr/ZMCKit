@@ -239,14 +239,35 @@ public class ZMMultiLensCameraView: ZMCameraView {
             
             try device.lockForConfiguration()
             
+            // Find the zoom format that allows the widest field of view
+            var maxWideFactor: CGFloat = 1.0
+            
+            // This approach enables "wide" zoom on supported devices (equivalent to 0.5x on iPhone)
+            if #available(iOS 13.0, *) {
+                // Get all available formats for this device
+                for format in device.formats {
+                    // Get the zoom factor range for this format
+                    let zoomFactorRange = format.videoZoomFactorUpscaleThreshold...format.videoMaxZoomFactor
+                    
+                    // Check if this format supports zoom factors below 1.0
+                    if zoomFactorRange.lowerBound < 1.0 {
+                        // We want a format that supports wide zoom but also decent quality
+                        device.activeFormat = format
+                        maxWideFactor = format.videoZoomFactorUpscaleThreshold
+                        print("Found format with wide zoom support: \(maxWideFactor)")
+                        break
+                    }
+                }
+            }
+            
             // Set a wider initial zoom factor (0.6x) for shoe lenses
+            // First, find the actual lowest available zoom factor for this device
+            let deviceMinZoom = device.minAvailableVideoZoomFactor
+            let actualMinZoom = min(maxWideFactor, deviceMinZoom)
+            
+            // Target is 0.6 but constrain to what device supports
             let initialZoomFactor: CGFloat = 0.6
-            
-            // Ensure zoom factor is within device limits
-            let minZoom = device.minAvailableVideoZoomFactor
-            let maxZoom = device.maxAvailableVideoZoomFactor
-            
-            let zoomToUse = max(minZoom, min(initialZoomFactor, maxZoom))
+            let zoomToUse = max(actualMinZoom, min(initialZoomFactor, device.maxAvailableVideoZoomFactor))
             
             device.videoZoomFactor = zoomToUse
             device.unlockForConfiguration()
@@ -338,12 +359,28 @@ public class ZMMultiLensCameraView: ZMCameraView {
             do {
                 try device.lockForConfiguration()
                 
-                // Calculate new zoom factor
+                // Check if trying to zoom below 1.0 and reconfigure if needed
+                let wantedZoom = gesture.scale
+                let wideZoomSupported = device.minAvailableVideoZoomFactor < 1.0
+                
+                // If we're trying to use wide zoom but device doesn't support it,
+                // try to find a format that does
+                if wantedZoom < 1.0 && !wideZoomSupported, #available(iOS 13.0, *) {
+                    for format in device.formats {
+                        if format.videoZoomFactorUpscaleThreshold < 1.0 {
+                            // Switch to a format that supports wide zoom
+                            device.activeFormat = format
+                            break
+                        }
+                    }
+                }
+                
+                // Get the updated min/max zoom factors
                 let minZoom = device.minAvailableVideoZoomFactor
                 let maxZoom = min(device.maxAvailableVideoZoomFactor, 10.0) // Cap at 10x for usability
-                let newZoomFactor = max(minZoom, min(gesture.scale, maxZoom))
                 
-                // Set the new zoom factor
+                // Set the new zoom factor, clamped to valid range
+                let newZoomFactor = max(minZoom, min(wantedZoom, maxZoom))
                 device.videoZoomFactor = newZoomFactor
                 
                 // Update current zoom factor and UI
@@ -414,9 +451,27 @@ public class ZMMultiLensCameraView: ZMCameraView {
         do {
             try device.lockForConfiguration()
             
-            // Calculate new zoom factor
+            // Get the true minimum zoom supported by this device/format
+            let actualMinZoom = device.minAvailableVideoZoomFactor
+            let wideZoomSupported = actualMinZoom < 1.0
+            
+            // If we're trying to use wide zoom but device doesn't support it,
+            // try to find a format that does
+            if zoomFactor < 1.0 && !wideZoomSupported, #available(iOS 13.0, *) {
+                for format in device.formats {
+                    if format.videoZoomFactorUpscaleThreshold < 1.0 {
+                        // Switch to a format that supports wide zoom
+                        device.activeFormat = format
+                        break
+                    }
+                }
+            }
+            
+            // Recalculate min/max zoom after potentially changing format
             let minZoom = device.minAvailableVideoZoomFactor
             let maxZoom = min(device.maxAvailableVideoZoomFactor, 10.0) // Cap at 10x for usability
+            
+            // Safely clamp the zoom factor to supported values
             let newZoomFactor = max(minZoom, min(zoomFactor, maxZoom))
             
             // Set the new zoom factor
@@ -427,6 +482,8 @@ public class ZMMultiLensCameraView: ZMCameraView {
             updateZoomLevelUI()
             
             device.unlockForConfiguration()
+            
+            print("Set zoom to: \(newZoomFactor) (requested: \(zoomFactor), device min: \(minZoom))")
         } catch {
             print("Error setting zoom factor: \(error.localizedDescription)")
         }
