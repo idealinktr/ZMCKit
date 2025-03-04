@@ -81,6 +81,53 @@ public class ZMMultiLensCameraView: ZMCameraView {
     
     private let initialZoomFactor: CGFloat = 0.6
     
+    private var currentZoomFactor: CGFloat = 1.0
+    private lazy var zoomLevelLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        label.textAlignment = .center
+        label.font = UIFont.monospacedDigitSystemFont(ofSize: 14, weight: .medium)
+        label.layer.cornerRadius = 12
+        label.layer.masksToBounds = true
+        label.text = "1.0x"
+        label.isHidden = false
+        label.alpha = 0.7
+        return label
+    }()
+    
+    private lazy var pinchGestureRecognizer: UIPinchGestureRecognizer = {
+        let gesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
+        return gesture
+    }()
+    
+    private lazy var doubleTapGestureRecognizer: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture(_:)))
+        gesture.numberOfTapsRequired = 2
+        return gesture
+    }()
+    
+    private lazy var zoomInButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("+", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        button.layer.cornerRadius = 20
+        button.addTarget(self, action: #selector(handleZoomIn), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var zoomOutButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("−", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        button.layer.cornerRadius = 20
+        button.addTarget(self, action: #selector(handleZoomOut), for: .touchUpInside)
+        return button
+    }()
     
     public override init(snapAPIToken: String,
                          partnerGroupId: String,
@@ -105,11 +152,17 @@ public class ZMMultiLensCameraView: ZMCameraView {
         addSubview(captureButton)
         addSubview(processingLabel)
         addSubview(loadingIndicator)
+        addSubview(zoomLevelLabel)
+        addSubview(zoomInButton)
+        addSubview(zoomOutButton)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         captureButton.translatesAutoresizingMaskIntoConstraints = false
         processingLabel.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        zoomLevelLabel.translatesAutoresizingMaskIntoConstraints = false
+        zoomInButton.translatesAutoresizingMaskIntoConstraints = false
+        zoomOutButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             captureButton.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -126,11 +179,30 @@ public class ZMMultiLensCameraView: ZMCameraView {
             processingLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            zoomLevelLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            zoomLevelLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
+            zoomLevelLabel.widthAnchor.constraint(equalToConstant: 60),
+            zoomLevelLabel.heightAnchor.constraint(equalToConstant: 30),
+            
+            zoomInButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            zoomInButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            zoomInButton.widthAnchor.constraint(equalToConstant: 40),
+            zoomInButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            zoomOutButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            zoomOutButton.topAnchor.constraint(equalTo: zoomInButton.bottomAnchor, constant: 10),
+            zoomOutButton.widthAnchor.constraint(equalToConstant: 40),
+            zoomOutButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         collectionView.backgroundColor = .clear
         bringSubviewToFront(collectionView)
+        
+        // Add pinch gesture recognizer for zoom
+        addGestureRecognizer(pinchGestureRecognizer)
+        addGestureRecognizer(doubleTapGestureRecognizer)
     }
     
     public override func layoutSubviews() {
@@ -179,6 +251,10 @@ public class ZMMultiLensCameraView: ZMCameraView {
             device.videoZoomFactor = zoomToUse
             device.unlockForConfiguration()
             
+            // Update current zoom factor and UI
+            self.currentZoomFactor = zoomToUse
+            updateZoomLevelUI()
+            
             print("Set initial zoom factor to: \(zoomToUse)")
         } catch {
             print("Error setting initial zoom: \(error.localizedDescription)")
@@ -187,37 +263,12 @@ public class ZMMultiLensCameraView: ZMCameraView {
     
     private func adjustZoomForShoeLens(lens: Lens) {
         // Check if this is a shoe lens based on lens ID or other criteria
-        // This is a placeholder - you should implement your own logic to identify shoe lenses
-        let isShoeLens = lens.id.lowercased().contains("shoe") || lens.name?.lowercased().contains("shoe") == true
+        // let isShoeLens = lens.id.lowercased().contains("shoe") || lens.name?.lowercased().contains("shoe") == true
+        let isShoeLens = true
         
         if isShoeLens {
-            do {
-                // Get the appropriate camera device based on position
-                guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
-                                                         for: .video, 
-                                                         position: cameraPosition == .front ? .front : .back) else {
-                    print("Failed to get camera device")
-                    return
-                }
-                
-                try device.lockForConfiguration()
-                
-                // Set a wider zoom factor (0.6x) for shoe lenses
-                let shoeZoomFactor: CGFloat = 0.6
-                
-                // Ensure zoom factor is within device limits
-                let minZoom = device.minAvailableVideoZoomFactor
-                let maxZoom = device.maxAvailableVideoZoomFactor
-                
-                let zoomToUse = max(minZoom, min(shoeZoomFactor, maxZoom))
-                
-                device.videoZoomFactor = zoomToUse
-                device.unlockForConfiguration()
-                
-                print("Set shoe lens zoom factor to: \(zoomToUse)")
-            } catch {
-                print("Error setting shoe lens zoom: \(error.localizedDescription)")
-            }
+            let shoeZoomFactor: CGFloat = 0.6
+            setZoomFactor(shoeZoomFactor)
         }
     }
     
@@ -270,6 +321,140 @@ public class ZMMultiLensCameraView: ZMCameraView {
         capturePhoto()
     }
     
+    @objc private func handlePinchGesture(_ gesture: UIPinchGestureRecognizer) {
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                 for: .video, 
+                                                 position: cameraPosition == .front ? .front : .back) else {
+            return
+        }
+        
+        // Get initial state when gesture begins
+        if gesture.state == .began {
+            gesture.scale = currentZoomFactor
+        }
+        
+        // Only change zoom when gesture state is changed or ended
+        if gesture.state == .changed || gesture.state == .ended {
+            do {
+                try device.lockForConfiguration()
+                
+                // Calculate new zoom factor
+                let minZoom = device.minAvailableVideoZoomFactor
+                let maxZoom = min(device.maxAvailableVideoZoomFactor, 10.0) // Cap at 10x for usability
+                let newZoomFactor = max(minZoom, min(gesture.scale, maxZoom))
+                
+                // Set the new zoom factor
+                device.videoZoomFactor = newZoomFactor
+                
+                // Update current zoom factor and UI
+                currentZoomFactor = newZoomFactor
+                updateZoomLevelUI()
+                
+                device.unlockForConfiguration()
+            } catch {
+                print("Error adjusting zoom: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    @objc private func handleDoubleTapGesture(_ gesture: UITapGestureRecognizer) {
+        // Preset zoom levels to cycle through
+        let zoomLevels: [CGFloat] = [0.6, 1.0, 2.0, 5.0]
+        
+        // Find the next zoom level in the cycle
+        var nextZoomIndex = 0
+        for (index, zoom) in zoomLevels.enumerated() {
+            if currentZoomFactor < zoom {
+                nextZoomIndex = index
+                break
+            }
+        }
+        
+        // If we're already at or past the last zoom level, cycle back to the first
+        if nextZoomIndex == 0 && currentZoomFactor >= zoomLevels.last! {
+            nextZoomIndex = 0
+        }
+        
+        // Apply the new zoom level
+        let newZoom = zoomLevels[nextZoomIndex]
+        setZoomFactor(newZoom)
+        
+        // Provide haptic feedback
+        let feedback = UIImpactFeedbackGenerator(style: .medium)
+        feedback.impactOccurred()
+    }
+    
+    private func updateZoomLevelUI() {
+        let formattedZoom = String(format: "%.1fx", currentZoomFactor)
+        DispatchQueue.main.async {
+            self.zoomLevelLabel.text = formattedZoom
+            
+            // Show label with animation when zoom changes
+            UIView.animate(withDuration: 0.2) {
+                self.zoomLevelLabel.alpha = 1.0
+            }
+            
+            // Hide label after 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                UIView.animate(withDuration: 0.5) {
+                    // Don't fully hide it, just make it semi-transparent
+                    self.zoomLevelLabel.alpha = 0.7
+                }
+            }
+        }
+    }
+    
+    public func setZoomFactor(_ zoomFactor: CGFloat) {
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                 for: .video, 
+                                                 position: cameraPosition == .front ? .front : .back) else {
+            return
+        }
+        
+        do {
+            try device.lockForConfiguration()
+            
+            // Calculate new zoom factor
+            let minZoom = device.minAvailableVideoZoomFactor
+            let maxZoom = min(device.maxAvailableVideoZoomFactor, 10.0) // Cap at 10x for usability
+            let newZoomFactor = max(minZoom, min(zoomFactor, maxZoom))
+            
+            // Set the new zoom factor
+            device.videoZoomFactor = newZoomFactor
+            
+            // Update current zoom factor and UI
+            currentZoomFactor = newZoomFactor
+            updateZoomLevelUI()
+            
+            device.unlockForConfiguration()
+        } catch {
+            print("Error setting zoom factor: \(error.localizedDescription)")
+        }
+    }
+    
+    public func getCurrentZoomFactor() -> CGFloat {
+        return currentZoomFactor
+    }
+    
+    @objc private func handleZoomIn() {
+        // Increase zoom by 25%
+        let newZoom = currentZoomFactor * 1.25
+        setZoomFactor(newZoom)
+        
+        // Provide haptic feedback
+        let feedback = UIImpactFeedbackGenerator(style: .light)
+        feedback.impactOccurred()
+    }
+    
+    @objc private func handleZoomOut() {
+        // Decrease zoom by 20%
+        let newZoom = currentZoomFactor * 0.8
+        setZoomFactor(newZoom)
+        
+        // Provide haptic feedback
+        let feedback = UIImpactFeedbackGenerator(style: .light)
+        feedback.impactOccurred()
+    }
 }
 
 // MARK: - UICollectionView DataSource & Delegate
