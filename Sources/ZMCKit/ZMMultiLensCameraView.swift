@@ -441,9 +441,39 @@ public class ZMMultiLensCameraView: ZMCameraView {
         // This is more reliable than our custom implementation
         let arInput = ARSessionInput()
         
-        // Restart CameraKit with the new input
+        // Get the current device position for CameraKit
+        let devicePosition: AVCaptureDevice.Position = cameraPosition == .front ? .front : .back
+        
+        // Get the correct video orientation
+        let videoOrientation: AVCaptureVideoOrientation = {
+            switch UIDevice.current.orientation {
+            case .portrait:
+                return .portrait
+            case .portraitUpsideDown:
+                return .portraitUpsideDown
+            case .landscapeLeft:
+                return .landscapeRight // Note: Camera orientation is opposite to device orientation
+            case .landscapeRight:
+                return .landscapeLeft // Note: Camera orientation is opposite to device orientation
+            default:
+                return .portrait // Default to portrait for face-up, face-down, or unknown
+            }
+        }()
+        
+        // Restart CameraKit with the new input and all required parameters
         cameraKit.stop()
-        cameraKit.start(input: input, arInput: arInput)
+        
+        // Use the full start method with all required parameters
+        cameraKit.start(
+            input: input,
+            arInput: arInput,
+            cameraPosition: devicePosition,
+            videoOrientation: videoOrientation,
+            dataProvider: nil,
+            hintDelegate: nil,
+            textInputContextProvider: nil,
+            agreementsPresentationContextProvider: nil
+        )
         
         // Re-add our preview view as an output
         cameraKit.add(output: previewView)
@@ -461,26 +491,66 @@ public class ZMMultiLensCameraView: ZMCameraView {
         
         if isShoeLens {
             let shoeZoomFactor: CGFloat = 0.6
-            setZoomFactor(shoeZoomFactor)
+            
+            // Log more details about available cameras
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
+                
+                if #available(iOS 13.0, *) {
+                    // Check if ultra-wide camera is available
+                    if let _ = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: self.cameraPosition == .front ? .front : .back) {
+                        // For devices with ultra-wide camera, we need to reconfigure the capture session
+                        // This will ensure we get the 0.5x or 0.6x zoom factor we need
+                        DispatchQueue.main.async {
+                            self.configureForWideZoom(targetZoom: shoeZoomFactor)
+                        }
+                    } else {
+                        // For devices without ultra-wide camera, try standard approach
+                        self.setZoomFactor(shoeZoomFactor)
+                    }
+                } else {
+                    // For older iOS versions
+                    self.setZoomFactor(shoeZoomFactor)
+                }
+            }
         }
     }
     
     private func applyLens(lens: Lens) {
+        // Start a loading indicator
+        DispatchQueue.main.async {
+            self.loadingIndicator.startAnimating()
+        }
+        
+        print("Applying lens: \(lens.id)")
+        
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.loadingIndicator.stopAnimating()
+            }
             
             if success {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
                 
-                // Adjust zoom for shoe lenses
-                self.adjustZoomForShoeLens(lens: lens)
+                // Wait a short moment to ensure lens is fully loaded before adjusting zoom
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    guard let self = self else { return }
+                    
+                    // Check current camera configuration
+                    if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: self.cameraPosition == .front ? .front : .back) {
+                        print("Current zoom factor after lens applied: \(device.videoZoomFactor)")
+                        print("Device min zoom: \(device.minAvailableVideoZoomFactor), max zoom: \(device.maxAvailableVideoZoomFactor)")
+                    }
+                    
+                    // Adjust zoom for shoe lenses - needed since lens application might reset camera settings
+                    self.adjustZoomForShoeLens(lens: lens)
+                }
             } else {
                 print("Failed to apply lens: \(lens.id)")
-                DispatchQueue.main.async {
-                    self.loadingIndicator.stopAnimating()
-                    self.handleLensApplicationFailure(lens: lens, error: nil)
-                }
+                self.handleLensApplicationFailure(lens: lens, error: nil)
             }
         }
     }
