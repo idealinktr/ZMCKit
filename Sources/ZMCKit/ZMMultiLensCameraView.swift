@@ -220,8 +220,16 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupCaptureOutputs() {
-        if captureSession.canAddOutput(photoOutput) {
-            captureSession.addOutput(photoOutput)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            self.captureSession.beginConfiguration()
+            
+            if self.captureSession.canAddOutput(self.photoOutput) {
+                self.captureSession.addOutput(self.photoOutput)
+            }
+            
+            self.captureSession.commitConfiguration()
         }
     }
     
@@ -229,179 +237,200 @@ public class ZMMultiLensCameraView: ZMCameraView {
         // Set initial camera position based on the cameraPosition property
         let position = cameraPosition
         
-        do {
-            // First, check if the device has an ultra-wide camera
-            // This is available on iPhone 11 and newer models
-            var hasUltraWideCamera = false
-            var ultraWideDevice: AVCaptureDevice?
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             
-            if #available(iOS 13.0, *) {
-                if let ultraWide = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: position == .front ? .front : .back) {
-                    hasUltraWideCamera = true
-                    ultraWideDevice = ultraWide
-                    print("Ultra-wide camera detected!")
-                }
-            }
-            
-            // Get the appropriate camera device based on position
-            guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
-                                                     for: .video, 
-                                                     position: position == .front ? .front : .back) else {
-                print("Failed to get camera device")
-                return
-            }
-            
-            try device.lockForConfiguration()
-            
-            // The target zoom factor for shoe lenses (0.6x)
-            let targetZoom: CGFloat = 0.6
-            
-            // If ultra-wide camera is available, we need to reconfigure the capture session
-            if hasUltraWideCamera && ultraWideDevice != nil {
-                // Defer to the setup method that can properly switch cameras
-                device.unlockForConfiguration()
-                configureForWideZoom(targetZoom: targetZoom)
-                return
-            }
-            
-            // If no ultra-wide camera, try to find the best format for wide zoom
-            var bestFormat: AVCaptureDevice.Format?
-            var lowestZoomFactor: CGFloat = 1.0
-            
-            if #available(iOS 13.0, *) {
-                // Get all available formats for this device
-                for format in device.formats {
-                    let formatDescription = CMFormatDescriptionGetMediaSubType(format.formatDescription)
-                    let dimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
-                    
-                    // Get the zoom factor range for this format
-                    let minZoom = format.videoZoomFactorUpscaleThreshold
-                    
-                    // Check if this format supports zoom factors below 1.0
-                    if minZoom < lowestZoomFactor {
-                        bestFormat = format
-                        lowestZoomFactor = minZoom
-                        print("Found better format: min zoom \(minZoom), resolution \(dimensions.width)x\(dimensions.height), type \(formatDescription)")
+            do {
+                // First, check if the device has an ultra-wide camera
+                // This is available on iPhone 11 and newer models
+                var hasUltraWideCamera = false
+                var ultraWideDevice: AVCaptureDevice?
+                
+                if #available(iOS 13.0, *) {
+                    if let ultraWide = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: position == .front ? .front : .back) {
+                        hasUltraWideCamera = true
+                        ultraWideDevice = ultraWide
+                        print("Ultra-wide camera detected!")
                     }
                 }
                 
-                // If we found a better format, use it
-                if let bestFormat = bestFormat, lowestZoomFactor < 1.0 {
-                    device.activeFormat = bestFormat
-                    print("Using format with minimum zoom factor: \(lowestZoomFactor)")
-                } else {
-                    print("No formats with zoom factor < 1.0 found, device min: \(device.minAvailableVideoZoomFactor)")
+                // Get the appropriate camera device based on position
+                guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, 
+                                                         for: .video, 
+                                                         position: position == .front ? .front : .back) else {
+                    print("Failed to get camera device")
+                    return
                 }
+                
+                try device.lockForConfiguration()
+                
+                // The target zoom factor for shoe lenses (0.6x)
+                let targetZoom: CGFloat = 0.6
+                
+                // If ultra-wide camera is available, we need to reconfigure the capture session
+                if hasUltraWideCamera && ultraWideDevice != nil {
+                    // Defer to the setup method that can properly switch cameras
+                    device.unlockForConfiguration()
+                    
+                    DispatchQueue.main.async {
+                        self.configureForWideZoom(targetZoom: targetZoom)
+                    }
+                    return
+                }
+                
+                // If no ultra-wide camera, try to find the best format for wide zoom
+                var bestFormat: AVCaptureDevice.Format?
+                var lowestZoomFactor: CGFloat = 1.0
+                
+                if #available(iOS 13.0, *) {
+                    // Get all available formats for this device
+                    for format in device.formats {
+                        let formatDescription = CMFormatDescriptionGetMediaSubType(format.formatDescription)
+                        let dimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+                        
+                        // Get the zoom factor range for this format
+                        let minZoom = format.videoZoomFactorUpscaleThreshold
+                        
+                        // Check if this format supports zoom factors below 1.0
+                        if minZoom < lowestZoomFactor {
+                            bestFormat = format
+                            lowestZoomFactor = minZoom
+                            print("Found better format: min zoom \(minZoom), resolution \(dimensions.width)x\(dimensions.height), type \(formatDescription)")
+                        }
+                    }
+                    
+                    // If we found a better format, use it
+                    if let bestFormat = bestFormat, lowestZoomFactor < 1.0 {
+                        device.activeFormat = bestFormat
+                        print("Using format with minimum zoom factor: \(lowestZoomFactor)")
+                    } else {
+                        print("No formats with zoom factor < 1.0 found, device min: \(device.minAvailableVideoZoomFactor)")
+                    }
+                }
+                
+                // Set a wider initial zoom factor (0.6x) for shoe lenses
+                // First, find the actual lowest available zoom factor for this device
+                let deviceMinZoom = device.minAvailableVideoZoomFactor
+                
+                // Target is 0.6 but constrain to what device supports
+                let zoomToUse = max(deviceMinZoom, min(targetZoom, device.maxAvailableVideoZoomFactor))
+                
+                device.videoZoomFactor = zoomToUse
+                device.unlockForConfiguration()
+                
+                // Update current zoom factor and UI
+                DispatchQueue.main.async {
+                    self.currentZoomFactor = zoomToUse
+                    self.updateZoomLevelUI()
+                }
+                
+                print("Set initial zoom factor to: \(zoomToUse) (device min: \(deviceMinZoom))")
+            } catch {
+                print("Error setting initial zoom: \(error.localizedDescription)")
             }
-            
-            // Set a wider initial zoom factor (0.6x) for shoe lenses
-            // First, find the actual lowest available zoom factor for this device
-            let deviceMinZoom = device.minAvailableVideoZoomFactor
-            
-            // Target is 0.6 but constrain to what device supports
-            let zoomToUse = max(deviceMinZoom, min(targetZoom, device.maxAvailableVideoZoomFactor))
-            
-            device.videoZoomFactor = zoomToUse
-            device.unlockForConfiguration()
-            
-            // Update current zoom factor and UI
-            self.currentZoomFactor = zoomToUse
-            updateZoomLevelUI()
-            
-            print("Set initial zoom factor to: \(zoomToUse) (device min: \(deviceMinZoom))")
-        } catch {
-            print("Error setting initial zoom: \(error.localizedDescription)")
         }
     }
     
     private func configureForWideZoom(targetZoom: CGFloat) {
         // Temporarily pause session
-        captureSession.stopRunning()
-        
-        // Begin configuration
-        captureSession.beginConfiguration()
-        
-        // Remove existing inputs
-        captureSession.inputs.forEach { captureSession.removeInput($0) }
-        
-        // Create and add input for ultra-wide camera if available
-        if #available(iOS 13.0, *) {
-            // First try to get the ultra-wide camera
-            if let ultraWideDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: cameraPosition == .front ? .front : .back),
-               let ultraWideInput = try? AVCaptureDeviceInput(device: ultraWideDevice),
-               captureSession.canAddInput(ultraWideInput) {
-                
-                // Add ultra-wide camera input
-                captureSession.addInput(ultraWideInput)
-                print("Successfully configured ultra-wide camera input")
-                
-                try? ultraWideDevice.lockForConfiguration()
-                ultraWideDevice.videoZoomFactor = 1.0 // 1.0 on ultra-wide is effectively 0.5x on a standard camera
-                ultraWideDevice.unlockForConfiguration()
-                
-                // Update current zoom factor and UI
-                self.currentZoomFactor = 0.5
-                updateZoomLevelUI()
-                
-                // Commit configuration and restart session
-                captureSession.commitConfiguration()
-                captureSession.startRunning()
-                
-                // Reconnect CameraKit to the new capture session
-                reconnectCameraKit()
-                return
-            }
-        }
-        
-        // If ultra-wide camera isn't available, fall back to standard camera
-        if let wideDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: cameraPosition == .front ? .front : .back),
-           let wideInput = try? AVCaptureDeviceInput(device: wideDevice),
-           captureSession.canAddInput(wideInput) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             
-            // Add wide-angle camera input
-            captureSession.addInput(wideInput)
-            print("Falling back to standard wide-angle camera input")
+            self.captureSession.stopRunning()
             
-            try? wideDevice.lockForConfiguration()
+            // Begin configuration
+            self.captureSession.beginConfiguration()
             
-            // Try to find a format that supports wide zoom
+            // Remove existing inputs
+            self.captureSession.inputs.forEach { self.captureSession.removeInput($0) }
+            
+            // Create and add input for ultra-wide camera if available
             if #available(iOS 13.0, *) {
-                var bestFormat: AVCaptureDevice.Format?
-                var lowestZoomFactor: CGFloat = 1.0
+                // First try to get the ultra-wide camera
+                if let ultraWideDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: self.cameraPosition == .front ? .front : .back),
+                   let ultraWideInput = try? AVCaptureDeviceInput(device: ultraWideDevice),
+                   self.captureSession.canAddInput(ultraWideInput) {
+                    
+                    // Add ultra-wide camera input
+                    self.captureSession.addInput(ultraWideInput)
+                    print("Successfully configured ultra-wide camera input")
+                    
+                    try? ultraWideDevice.lockForConfiguration()
+                    ultraWideDevice.videoZoomFactor = 1.0 // 1.0 on ultra-wide is effectively 0.5x on a standard camera
+                    ultraWideDevice.unlockForConfiguration()
+                    
+                    // Update current zoom factor and UI
+                    DispatchQueue.main.async {
+                        self.currentZoomFactor = 0.5
+                        self.updateZoomLevelUI()
+                    }
+                    
+                    // Commit configuration and restart session
+                    self.captureSession.commitConfiguration()
+                    self.captureSession.startRunning()
+                    
+                    // Reconnect CameraKit to the new capture session
+                    DispatchQueue.main.async {
+                        self.reconnectCameraKit()
+                    }
+                    return
+                }
+            }
+            
+            // If ultra-wide camera isn't available, fall back to standard camera
+            if let wideDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: self.cameraPosition == .front ? .front : .back),
+               let wideInput = try? AVCaptureDeviceInput(device: wideDevice),
+               self.captureSession.canAddInput(wideInput) {
                 
-                for format in wideDevice.formats {
-                    let minZoom = format.videoZoomFactorUpscaleThreshold
-                    if minZoom < lowestZoomFactor {
-                        bestFormat = format
-                        lowestZoomFactor = minZoom
+                // Add wide-angle camera input
+                self.captureSession.addInput(wideInput)
+                print("Falling back to standard wide-angle camera input")
+                
+                try? wideDevice.lockForConfiguration()
+                
+                // Try to find a format that supports wide zoom
+                if #available(iOS 13.0, *) {
+                    var bestFormat: AVCaptureDevice.Format?
+                    var lowestZoomFactor: CGFloat = 1.0
+                    
+                    for format in wideDevice.formats {
+                        let minZoom = format.videoZoomFactorUpscaleThreshold
+                        if minZoom < lowestZoomFactor {
+                            bestFormat = format
+                            lowestZoomFactor = minZoom
+                        }
+                    }
+                    
+                    if let bestFormat = bestFormat, lowestZoomFactor < 1.0 {
+                        wideDevice.activeFormat = bestFormat
+                        print("Using format with minimum zoom factor: \(lowestZoomFactor)")
                     }
                 }
                 
-                if let bestFormat = bestFormat, lowestZoomFactor < 1.0 {
-                    wideDevice.activeFormat = bestFormat
-                    print("Using format with minimum zoom factor: \(lowestZoomFactor)")
+                // Set zoom factor (constrained to device capabilities)
+                let deviceMinZoom = wideDevice.minAvailableVideoZoomFactor
+                let zoomToUse = max(deviceMinZoom, min(targetZoom, wideDevice.maxAvailableVideoZoomFactor))
+                wideDevice.videoZoomFactor = zoomToUse
+                wideDevice.unlockForConfiguration()
+                
+                // Update current zoom factor and UI
+                DispatchQueue.main.async {
+                    self.currentZoomFactor = zoomToUse
+                    self.updateZoomLevelUI()
                 }
+                
+                print("Set initial zoom factor to: \(zoomToUse) (device min: \(deviceMinZoom))")
             }
             
-            // Set zoom factor (constrained to device capabilities)
-            let deviceMinZoom = wideDevice.minAvailableVideoZoomFactor
-            let zoomToUse = max(deviceMinZoom, min(targetZoom, wideDevice.maxAvailableVideoZoomFactor))
-            wideDevice.videoZoomFactor = zoomToUse
-            wideDevice.unlockForConfiguration()
+            // Commit configuration and restart session
+            self.captureSession.commitConfiguration()
+            self.captureSession.startRunning()
             
-            // Update current zoom factor and UI
-            self.currentZoomFactor = zoomToUse
-            updateZoomLevelUI()
-            
-            print("Set initial zoom factor to: \(zoomToUse) (device min: \(deviceMinZoom))")
+            // Reconnect CameraKit to the new capture session
+            DispatchQueue.main.async {
+                self.reconnectCameraKit()
+            }
         }
-        
-        // Commit configuration and restart session
-        captureSession.commitConfiguration()
-        captureSession.startRunning()
-        
-        // Reconnect CameraKit to the new capture session
-        reconnectCameraKit()
     }
     
     private func reconnectCameraKit() {
