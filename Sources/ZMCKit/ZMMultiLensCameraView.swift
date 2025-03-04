@@ -212,10 +212,27 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupLenses() {
-        cameraKit.lenses.repository.addObserver(self, groupID: self.partnerGroupId)
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
+        // First, ensure we're using a standard camera configuration
+        // This is more likely to be compatible with Snapchat Camera Kit
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            // Check if we need to switch to standard camera
+            if self.currentZoomFactor < 1.0 {
+                print("Ensuring standard camera configuration for lens initialization")
+                self.resetToStandardCamera()
+            }
+            
+            // Wait for camera configuration to complete
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                // Now add the lens repository observer
+                self.cameraKit.lenses.repository.addObserver(self, groupID: self.partnerGroupId)
+                
+                // Refresh the UI
+                self.collectionView.reloadData()
+                
+                print("Lens repository observer added")
+            }
         }
     }
     
@@ -460,8 +477,27 @@ public class ZMMultiLensCameraView: ZMCameraView {
             }
         }()
         
+        // Set a flag to track successful reconnection
+        var reconnectionSuccessful = false
+        
         // Restart CameraKit with the new input and all required parameters
         cameraKit.stop()
+        
+        // Set a timeout to ensure we don't get stuck if Camera Kit fails to initialize
+        let timeout = DispatchWorkItem { [weak self] in
+            guard let self = self, !reconnectionSuccessful else { return }
+            
+            print("Camera Kit reconnection timed out - falling back to standard camera configuration")
+            
+            // Fallback to standard camera configuration
+            DispatchQueue.global(qos: .userInitiated).async {
+                // Reset to standard camera configuration
+                self.resetToStandardCamera()
+            }
+        }
+        
+        // Schedule timeout after 5 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0, execute: timeout)
         
         // Use the full start method with all required parameters
         cameraKit.start(
@@ -478,9 +514,72 @@ public class ZMMultiLensCameraView: ZMCameraView {
         // Re-add our preview view as an output
         cameraKit.add(output: previewView)
         
-        // Apply current lens again if needed
+        // Mark reconnection as successful
+        reconnectionSuccessful = true
+        
+        // Cancel the timeout since reconnection was successful
+        timeout.cancel()
+        
+        // Apply current lens again if needed, but with a slight delay
+        // to ensure Camera Kit is fully initialized
         if let lens = lenses.first {
-            applyLens(lens: lens)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self else { return }
+                self.applyLens(lens: lens)
+            }
+        }
+    }
+    
+    // Add a new helper method to reset to standard camera configuration
+    private func resetToStandardCamera() {
+        // This method provides a clean reset to standard camera when needed
+        self.captureSession.stopRunning()
+        
+        self.captureSession.beginConfiguration()
+        
+        // Remove all inputs
+        for input in self.captureSession.inputs {
+            self.captureSession.removeInput(input)
+        }
+        
+        // Use standard wide angle camera
+        if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: self.cameraPosition == .front ? .front : .back),
+           let deviceInput = try? AVCaptureDeviceInput(device: device),
+           self.captureSession.canAddInput(deviceInput) {
+            
+            self.captureSession.addInput(deviceInput)
+            
+            try? device.lockForConfiguration()
+            // Use standard zoom
+            device.videoZoomFactor = 1.0
+            device.unlockForConfiguration()
+            
+            // Update UI on main thread
+            DispatchQueue.main.async {
+                self.currentZoomFactor = 1.0
+                self.updateZoomLevelUI()
+            }
+        }
+        
+        // Re-add the photo output if needed
+        if !self.captureSession.outputs.contains(where: { $0 === self.photoOutput }) {
+            if self.captureSession.canAddOutput(self.photoOutput) {
+                self.captureSession.addOutput(self.photoOutput)
+            }
+        }
+        
+        self.captureSession.commitConfiguration()
+        self.captureSession.startRunning()
+        
+        // Create new inputs for Camera Kit with standard camera
+        let input = AVSessionInput(session: self.captureSession)
+        let arInput = ARSessionInput()
+        
+        // Restart Camera Kit on the main thread
+        DispatchQueue.main.async {
+            self.cameraKit.stop()
+            self.cameraKit.start(input: input, arInput: arInput)
+            self.cameraKit.add(output: self.previewView)
         }
     }
     
@@ -524,6 +623,9 @@ public class ZMMultiLensCameraView: ZMCameraView {
         
         print("Applying lens: \(lens.id)")
         
+        // Check if we're using ultra-wide camera before applying lens
+        let wasUsingUltraWide = currentZoomFactor < 0.6
+        
         cameraKit.lenses.processor?.apply(lens: lens, launchData: nil) { [weak self] success in
             guard let self = self else { return }
             
@@ -535,7 +637,7 @@ public class ZMMultiLensCameraView: ZMCameraView {
                 print("Successfully applied lens: \(lens.id)")
                 ZMCKit.updateCurrentLensId(lens.id)
                 
-                // Wait a short moment to ensure lens is fully loaded before adjusting zoom
+                // Wait a short moment to ensure lens is fully loaded
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                     guard let self = self else { return }
                     
@@ -543,14 +645,89 @@ public class ZMMultiLensCameraView: ZMCameraView {
                     if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: self.cameraPosition == .front ? .front : .back) {
                         print("Current zoom factor after lens applied: \(device.videoZoomFactor)")
                         print("Device min zoom: \(device.minAvailableVideoZoomFactor), max zoom: \(device.maxAvailableVideoZoomFactor)")
+                        
+                        // If we were using ultra-wide camera but now CameraKit switched to standard camera
+                        if wasUsingUltraWide && device.videoZoomFactor >= 1.0 {
+                            print("CameraKit appears to have switched from ultra-wide to standard camera")
+                            
+                            // Instead of trying to force ultra-wide, adapt to what Snapchat allows
+                            // Set zoom to 1.0x (standard) as a safe default
+                            DispatchQueue.main.async {
+                                self.currentZoomFactor = 1.0
+                                self.updateZoomLevelUI()
+                            }
+                        } else {
+                            // Try to adjust zoom for shoe lenses, but only if not forced to standard camera
+                            self.adjustZoomForShoeLens(lens: lens)
+                        }
                     }
-                    
-                    // Adjust zoom for shoe lenses - needed since lens application might reset camera settings
-                    self.adjustZoomForShoeLens(lens: lens)
                 }
             } else {
                 print("Failed to apply lens: \(lens.id)")
                 self.handleLensApplicationFailure(lens: lens, error: nil)
+            }
+        }
+    }
+    
+    // Add this new method to troubleshoot potential lens issues
+    internal override func handleLensApplicationFailure(lens: Lens?, error: Error?) {
+        print("Lens application failed for lens ID: \(lens?.id ?? "unknown")")
+        if let error = error {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        // First, try to reset the camera configuration
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            // Stop and restart the session with standard camera
+            self.captureSession.stopRunning()
+            
+            self.captureSession.beginConfiguration()
+            
+            // Remove all inputs
+            for input in self.captureSession.inputs {
+                self.captureSession.removeInput(input)
+            }
+            
+            // Use standard wide angle camera
+            if let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: self.cameraPosition == .front ? .front : .back),
+               let deviceInput = try? AVCaptureDeviceInput(device: device),
+               self.captureSession.canAddInput(deviceInput) {
+                
+                self.captureSession.addInput(deviceInput)
+                
+                try? device.lockForConfiguration()
+                // Reset to standard zoom
+                device.videoZoomFactor = 1.0
+                device.unlockForConfiguration()
+                
+                // Update UI on main thread
+                DispatchQueue.main.async {
+                    self.currentZoomFactor = 1.0
+                    self.updateZoomLevelUI()
+                }
+            }
+            
+            self.captureSession.commitConfiguration()
+            self.captureSession.startRunning()
+            
+            // Reconnect with standard parameters
+            DispatchQueue.main.async {
+                self.reconnectCameraKit()
+            }
+        }
+        
+        // Show an alert or recovery UI
+        DispatchQueue.main.async { [weak self] in
+            if let topVC = self?.findViewController() {
+                let alert = UIAlertController(
+                    title: "Lens Application Issue",
+                    message: "There was a problem applying the lens. The camera has been reset.",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                topVC.present(alert, animated: true)
             }
         }
     }
@@ -806,21 +983,27 @@ extension ZMMultiLensCameraView: UICollectionViewDataSource, UICollectionViewDel
 @available(iOS 13.0, *)
 extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
     public func repository(_ repository: LensRepository, didUpdateLenses lenses: [Lens], forGroupID groupID: String) {
+        print("Repository updated with \(lenses.count) lenses for group ID: \(groupID)")
         self.lenses = lenses
         
         DispatchQueue.main.async {
             self.collectionView.reloadData()
             
-            // Apply first lens if available
+            // Apply first lens if available, but with a slight delay to ensure
+            // camera configuration has settled
             if let firstLens = self.lenses.first {
-                self.applyLens(lens: firstLens)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                    guard let self = self else { return }
+                    print("Applying first lens: \(firstLens.id)")
+                    self.applyLens(lens: firstLens)
+                }
             }
         }
     }
     
     public func repository(_ repository: LensRepository, didFailToUpdateLensesForGroupID groupID: String, error: Error?) {
-            print("Failed to update lenses for group: \(error?.localizedDescription ?? "")")
-        }
+        print("Failed to update lenses for group: \(error?.localizedDescription ?? "")")
+    }
 }
 
 // MARK: - Photo Capture Delegate
