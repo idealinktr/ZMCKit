@@ -465,7 +465,7 @@ extension ZMMultiLensCameraView: LensRepositoryGroupObserver {
 // MARK: - Photo Capture Delegate
 @available(iOS 13.0, *)
 extension ZMMultiLensCameraView: AVCapturePhotoCaptureDelegate {
-    open override func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+    open func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
