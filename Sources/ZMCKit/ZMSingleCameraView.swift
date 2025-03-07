@@ -134,8 +134,9 @@ public class ZMSingleCameraView: ZMCameraView {
             
             try device.lockForConfiguration()
             
-            // Set zoom factor for better framing
-            let initialZoomFactor: CGFloat = 1.2 // Adjust this value as needed
+            // Set zoom factor to 1.0 to match Snapchat's default appearance
+            // The previous value of 1.2 was making lenses appear bigger/closer
+            let initialZoomFactor: CGFloat = 1.0
             
             // Ensure zoom factor is within device limits
             let minZoom = device.minAvailableVideoZoomFactor

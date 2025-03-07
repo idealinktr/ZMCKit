@@ -29,7 +29,12 @@ public class ZMCameraView: UIView {
     
     public let captureSession = AVCaptureSession()
     public var cameraKit: CameraKitProtocol!
-    public let previewView = PreviewView()
+    public let previewView = {
+        let preview = PreviewView()
+        preview.contentMode = .aspectFill
+        preview.automaticallyConfiguresTouchHandler = true
+        return preview
+    }()
     
     public weak var delegate: ZMCameraDelegate?
     public weak var lensStatusDelegate: ZMLensStatusDelegate?
