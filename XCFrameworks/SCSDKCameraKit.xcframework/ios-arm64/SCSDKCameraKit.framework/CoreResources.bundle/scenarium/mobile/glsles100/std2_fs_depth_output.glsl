@@ -7,9 +7,9 @@
 #include <std2.glsl>
 void sc_writeFragDepth100ShaderConvertedTo300(float dep)
 {
-    #if __VERSION__>100
-        gl_FragDepth=dep;
-    #endif
+#if __VERSION__>100
+gl_FragDepth=dep;
+#endif
 }
 void sc_writeFragDepth(float dep)
 {

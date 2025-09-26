@@ -7,6 +7,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol SCCameraKitUserDataProvider;
 
+NS_SWIFT_NAME(BitmojiUserInfo)
+/// Bitmoji user info class to pass in Bitmoji avatar information to lenses
+@interface SCCameraKitBitmojiUserInfo : NSObject
+
+/// Identifier of user's 3D Bitmoji avatar
+@property (nonatomic, copy, readonly, nullable) NSString *avatarId;
+
+/// Designated init to pass in Bitmoji avatar information
+- (instancetype)initWithAvatarId:(nullable NSString *)avatarId;
+
+/// Use designated init or convenience init to pass in required user properties
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+@end
+
 NS_SWIFT_NAME(UserData)
 /// Concrete user data class to pass in user data that can be used by some lenses
 @interface SCCameraKitUserData : NSObject
@@ -17,10 +33,21 @@ NS_SWIFT_NAME(UserData)
 /// User's birth date (optional)
 @property (nonatomic, strong, readonly, nullable) NSDate *birthDate;
 
+/// User's Bitmoji avatar information
+@property (nonatomic, strong, readonly, nullable) SCCameraKitBitmojiUserInfo *bitmojiInfo;
+
 /// Designated init to pass in user data fields
 /// @param displayName user's full display name
 /// @param birthDate user's birth date (optional)
 - (instancetype)initWithDisplayName:(NSString *)displayName birthDate:(nullable NSDate *)birthDate;
+
+/// Designated init to pass in user data fields
+/// @param displayName user's full display name
+/// @param birthDate user's birth date (optional)
+/// @param bitmojiInfo user's Bitmoji avatar information (optional)
+- (instancetype)initWithDisplayName:(NSString *)displayName
+                          birthDate:(nullable NSDate *)birthDate
+                        bitmojiInfo:(nullable SCCameraKitBitmojiUserInfo *)bitmojiInfo;
 
 /// Use designated init or convenience init to pass in required user properties
 - (instancetype)init NS_UNAVAILABLE;

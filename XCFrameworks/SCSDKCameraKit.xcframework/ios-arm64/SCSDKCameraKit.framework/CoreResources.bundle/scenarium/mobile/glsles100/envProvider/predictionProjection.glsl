@@ -1,22 +1,13 @@
 #version 100 sc_convert_to 300 es
 //SG_REFLECTION_BEGIN(100)
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-#ifndef N_SPHERICAL_GAUSSIANS
-#define N_SPHERICAL_GAUSSIANS 12
-#endif
 uniform mat4 script_modelMatrix;
-uniform mat4 script_viewProjectionMatrix;
-uniform vec3 uniSphereCenter;
-uniform vec3 uniCameraPos;
-uniform vec3 sgAmbientLight;
-uniform vec4 sgColorAndSharpness[N_SPHERICAL_GAUSSIANS];
-uniform vec3 sgAxis[N_SPHERICAL_GAUSSIANS];
 varying vec3 varCustomNormal;
 void main()
 {
@@ -26,9 +17,6 @@ varCustomNormal=normalize(((script_modelMatrix*mat4(vec4(0.0,0.0,1.0,0.0),vec4(0
 sc_ProcessVertex(sc_Vertex_t(vec4(((l9_1*1.002)*2.0)-vec2(1.0),0.0,1.0),l9_0.normal,l9_0.tangent,l9_1,l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef N_SPHERICAL_GAUSSIANS
@@ -37,10 +25,6 @@ sc_ProcessVertex(sc_Vertex_t(vec4(((l9_1*1.002)*2.0)-vec2(1.0),0.0,1.0),l9_0.nor
 uniform vec3 sgAxis[N_SPHERICAL_GAUSSIANS];
 uniform vec4 sgColorAndSharpness[N_SPHERICAL_GAUSSIANS];
 uniform vec3 sgAmbientLight;
-uniform mat4 script_modelMatrix;
-uniform mat4 script_viewProjectionMatrix;
-uniform vec3 uniSphereCenter;
-uniform vec3 uniCameraPos;
 varying vec3 varCustomNormal;
 void main()
 {

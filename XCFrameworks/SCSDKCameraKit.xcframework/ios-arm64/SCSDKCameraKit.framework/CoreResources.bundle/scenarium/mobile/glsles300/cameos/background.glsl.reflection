@@ -1,0 +1,33 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler bgTextureAlphaSmpSC 0:8
+//sampler sampler bgTextureSmpSC 0:9
+//texture texture2D bgTexture 0:0:0:9
+//texture texture2D bgTextureAlpha 0:1:0:8
+//texture texture2DArray bgTextureAlphaArrSC 0:16:0:8
+//texture texture2DArray bgTextureArrSC 0:17:0:9
+//spec_const bool ALPHA_EXISTS 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_bgTexture 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_bgTextureAlpha 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_bgTexture 3 0
+//spec_const bool SC_USE_UV_MIN_MAX_bgTextureAlpha 4 0
+//spec_const bool SC_USE_UV_TRANSFORM_bgTexture 5 0
+//spec_const bool SC_USE_UV_TRANSFORM_bgTextureAlpha 6 0
+//spec_const bool TEXTURE_EXISTS 7 0
+//spec_const bool bgTextureAlphaHasSwappedViews 8 0
+//spec_const bool bgTextureHasSwappedViews 9 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_bgTexture 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_bgTextureAlpha 11 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_bgTexture 12 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_bgTextureAlpha 13 -1
+//spec_const int bgTextureAlphaLayout 14 0
+//spec_const int bgTextureLayout 15 0
+//spec_const int sc_ShaderCacheConstant 16 0
+//spec_const int sc_StereoRenderingMode 17 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 18 0
+//spec_const int sc_StereoViewID 19 0
+//SG_REFLECTION_END

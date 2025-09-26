@@ -1,0 +1,50 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//sampler sampler depthTextureSmpSC 0:15
+//texture texture2D depthTexture 0:3:0:15
+//ubo int UserUniforms 0:27:4336 {
+//float4 sc_UniformConstants 1392
+//float4x4 sc_ModelViewProjectionMatrixArray 1424:[2]:64
+//float4x4 sc_ViewProjectionMatrixArray 1680:[2]:64
+//float4x4 sc_ModelViewMatrixArray 1936:[2]:64
+//float4x4 sc_ProjectionMatrixArray 2384:[2]:64
+//float4x4 sc_ModelMatrix 3024
+//sc_Camera_t sc_Camera 3472
+//float3 sc_Camera.position 0
+//float sc_Camera.aspect 16
+//float2 sc_Camera.clipPlanes 24
+//float4 sc_StereoClipPlanes 3664:[2]:16
+//float3x3 depthTextureTransform 4240
+//float4 depthTextureUvMinMax 4288
+//float4 depthTextureBorderColor 4304
+//float depthScale 4320
+//float depthToDisparityNumerator 4324
+//float defaultDepth 4328
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool PACKED_DISPARITY 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_depthTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_depthTexture 2 0
+//spec_const bool SC_USE_UV_TRANSFORM_depthTexture 3 0
+//spec_const bool depthTextureHasSwappedViews 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_depthTexture 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_depthTexture 6 -1
+//spec_const int depthTextureLayout 7 0
+//spec_const int sc_DepthBufferMode 8 0
+//spec_const int sc_RenderingSpace 9 -1
+//spec_const int sc_ShaderCacheConstant 10 0
+//spec_const int sc_StereoRenderingMode 11 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 12 0
+//SG_REFLECTION_END

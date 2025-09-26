@@ -1,0 +1,56 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//sampler sampler alphaTextureSmpSC 0:16
+//sampler sampler assetTextureSmpSC 0:17
+//texture texture2D alphaTexture 0:3:0:16
+//texture texture2D assetTexture 0:4:0:17
+//ubo int UserUniforms 0:29:4576 {
+//float4 sc_UniformConstants 1392
+//float4 sc_StereoClipPlanes 3664:[2]:16
+//float3x3 assetTextureTransform 4240
+//float4 assetTextureUvMinMax 4288
+//float4 assetTextureBorderColor 4304
+//float3x3 alphaTextureTransform 4368
+//float4 alphaTextureUvMinMax 4416
+//float4 alphaTextureBorderColor 4432
+//int alphaChannel 4448
+//float3 bodyMedian 4464
+//float3 deviationRatio 4480
+//float3 faceMedian 4496
+//float4x4 modelView 4512
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_alphaTexture 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_assetTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_alphaTexture 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_assetTexture 3 0
+//spec_const bool SC_USE_UV_TRANSFORM_alphaTexture 4 0
+//spec_const bool SC_USE_UV_TRANSFORM_assetTexture 5 0
+//spec_const bool alphaTextureHasSwappedViews 6 0
+//spec_const bool assetTextureHasSwappedViews 7 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_alphaTexture 8 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_assetTexture 9 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_alphaTexture 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_assetTexture 11 -1
+//spec_const int alphaTextureLayout 12 0
+//spec_const int assetTextureLayout 13 0
+//spec_const int sc_ShaderCacheConstant 14 0
+//spec_const int sc_StereoRenderingMode 15 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 16 0
+//SG_REFLECTION_END

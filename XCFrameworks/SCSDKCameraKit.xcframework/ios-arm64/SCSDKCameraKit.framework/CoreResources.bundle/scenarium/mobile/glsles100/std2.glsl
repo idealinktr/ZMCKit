@@ -67,6 +67,9 @@
 #ifndef SC_DEVICE_CLASS
 #define SC_DEVICE_CLASS -1
 #endif
+#ifndef sc_ShaderCacheConstant
+#define sc_ShaderCacheConstant 0
+#endif
 #ifndef sc_CanUseSampler2DArray
 #define sc_CanUseSampler2DArray 0
 #elif sc_CanUseSampler2DArray==1
@@ -393,6 +396,12 @@
 #elif sc_TAAEnabled==1
 #undef sc_TAAEnabled
 #define sc_TAAEnabled 1
+#endif
+#ifndef sc_TAADisabled
+#define sc_TAADisabled 0
+#elif sc_TAADisabled==1
+#undef sc_TAADisabled
+#define sc_TAADisabled 1
 #endif
 #ifndef sc_VertexBlending
 #define sc_VertexBlending 0
@@ -969,6 +978,9 @@ return gl_VertexID;
 #ifndef SC_DEVICE_CLASS
 #define SC_DEVICE_CLASS -1
 #endif
+#ifndef sc_ShaderCacheConstant
+#define sc_ShaderCacheConstant 0
+#endif
 #ifndef sc_CanUseSampler2DArray
 #define sc_CanUseSampler2DArray 0
 #elif sc_CanUseSampler2DArray==1
@@ -1292,6 +1304,12 @@ return gl_VertexID;
 #elif sc_TAAEnabled==1
 #undef sc_TAAEnabled
 #define sc_TAAEnabled 1
+#endif
+#ifndef sc_TAADisabled
+#define sc_TAADisabled 0
+#elif sc_TAADisabled==1
+#undef sc_TAADisabled
+#define sc_TAADisabled 1
 #endif
 #ifndef sc_VertexBlending
 #define sc_VertexBlending 0

@@ -1,0 +1,26 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec4 tangent 2
+//sampler sampler baseTexSmpSC 0:8
+//sampler sampler borderTexSmpSC 0:9
+//texture texture2D baseTex 0:0:0:8
+//texture texture2D borderTex 0:1:0:9
+//texture texture2DArray baseTexArrSC 0:16:0:8
+//texture texture2DArray borderTexArrSC 0:17:0:9
+//spec_const bool SC_USE_CLAMP_TO_BORDER_baseTex 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_borderTex 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_baseTex 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_borderTex 3 0
+//spec_const bool baseTexHasSwappedViews 4 0
+//spec_const bool borderTexHasSwappedViews 5 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_baseTex 6 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_borderTex 7 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_baseTex 8 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_borderTex 9 -1
+//spec_const int baseTexLayout 10 0
+//spec_const int borderTexLayout 11 0
+//spec_const int sc_ShaderCacheConstant 12 0
+//SG_REFLECTION_END

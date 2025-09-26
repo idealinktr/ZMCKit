@@ -3,6 +3,7 @@
 #include <simd/simd.h>
 using namespace metal;
 #include "std2_shadows.metal"
+#include "std2_taa.metal"
 //SG_REFLECTION_BEGIN(100)
 //SG_REFLECTION_END
 
@@ -15,6 +16,14 @@ float3 tangent;
 float2 texture0;
 float2 texture1;
 };
+int sc_GetLocalInstanceIDInternal(thread const int& id)
+{
+#ifdef sc_LocalInstanceID
+return sc_LocalInstanceID;
+#else
+return 0;
+#endif
+}
 int sc_GetLocalInstanceID(thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
 return sc_sysIn.gl_InstanceIndex;
@@ -45,8 +54,13 @@ sc_SetClipDistance(param,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
 }
 #endif
 }
-void sc_SetClipPosition(thread const float4& clipPosition,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+void sc_SetClipPosition(thread float4& clipPosition,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
+#if (sc_ShaderCacheConstant!=0)
+{
+clipPosition.x+=((*sc_set0.LibraryUniforms).sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+}
+#endif
 #if (sc_StereoRenderingMode>0)
 {
 sc_sysOut.varStereoViewID=sc_sysIn.gl_InstanceIndex%2;
@@ -460,12 +474,6 @@ sc_sysOut.varViewSpaceDepth=-sc_ObjectToView(param_5,sc_sysIn,sc_sysOut,sc_set0,
 float4 param_6=screenPosition;
 float4 l9_4=applyDepthAlgorithm(param_6,sc_sysIn,sc_sysOut,sc_set0,sc_set1);
 screenPosition=l9_4;
-#if (sc_TAAEnabled)
-{
-float2 l9_5=screenPosition.xy+((*sc_set0.LibraryUniforms).sc_TAAJitterOffset*screenPosition.w);
-screenPosition=float4(l9_5.x,l9_5.y,screenPosition.z,screenPosition.w);
-}
-#endif
 float4 clipPosition=screenPosition*1.0;
 float4 param_7=clipPosition;
 sc_SetClipPosition(param_7,sc_sysIn,sc_sysOut,sc_set0,sc_set1);

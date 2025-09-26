@@ -48,150 +48,31 @@ using namespace metal;
 //texture utexture2D z_hitIdAndBarycentric 0:13:0:25
 //texture texture2D z_rayDirections 0:14:0:26
 //ubo int LibraryUniforms 0:27:3152 {
-//sc_PointLight_t sc_PointLights 0:[]:80
-//bool sc_PointLights.falloffEnabled 0
-//float sc_PointLights.falloffEndDistance 4
-//float sc_PointLights.negRcpFalloffEndDistance4 8
-//float sc_PointLights.angleScale 12
-//float sc_PointLights.angleOffset 16
-//float3 sc_PointLights.direction 32
-//float3 sc_PointLights.position 48
-//float4 sc_PointLights.color 64
-//sc_DirectionalLight_t sc_DirectionalLights :[]:32
-//float3 sc_DirectionalLights.direction 0
-//float4 sc_DirectionalLights.color 16
-//sc_AmbientLight_t sc_AmbientLights :[]:32
-//float3 sc_AmbientLights.color 0
-//float sc_AmbientLights.intensity 16
-//sc_LightEstimationData_t sc_LightEstimationData
-//sc_SphericalGaussianLight_t sc_LightEstimationData.sg 0:[12]:48
-//float3 sc_LightEstimationData.sg.color 0
-//float sc_LightEstimationData.sg.sharpness 16
-//float3 sc_LightEstimationData.sg.axis 32
-//float3 sc_LightEstimationData.ambientLight 576
-//float4 sc_EnvmapDiffuseSize
-//float4 sc_EnvmapDiffuseDims
-//float4 sc_EnvmapDiffuseView
-//float4 sc_EnvmapSpecularSize
-//float4 sc_EnvmapSpecularDims
-//float4 sc_EnvmapSpecularView
-//float3 sc_EnvmapRotation
-//float sc_EnvmapExposure
-//float3 sc_Sh :[9]:16
-//float sc_ShIntensity
-//float4 sc_Time
-//float4 sc_UniformConstants
-//float4 sc_GeometryInfo
-//float4x4 sc_ModelViewProjectionMatrixArray :[]:64
-//float4x4 sc_ModelViewProjectionMatrixInverseArray :[]:64
-//float4x4 sc_ViewProjectionMatrixArray :[]:64
-//float4x4 sc_ViewProjectionMatrixInverseArray :[]:64
-//float4x4 sc_ModelViewMatrixArray :[]:64
-//float4x4 sc_ModelViewMatrixInverseArray :[]:64
-//float3x3 sc_ViewNormalMatrixArray :[]:48
-//float3x3 sc_ViewNormalMatrixInverseArray :[]:48
+//float4 sc_EnvmapDiffuseDims 
+//float4 sc_EnvmapSpecularDims 
 //float4x4 sc_ProjectionMatrixArray :[]:64
-//float4x4 sc_ProjectionMatrixInverseArray :[]:64
-//float4x4 sc_ViewMatrixArray :[]:64
-//float4x4 sc_ViewMatrixInverseArray :[]:64
-//float4x4 sc_PrevFrameViewProjectionMatrixArray :[]:64
-//float4x4 sc_ModelMatrix
-//float4x4 sc_ModelMatrixInverse
-//float3x3 sc_NormalMatrix
-//float3x3 sc_NormalMatrixInverse
-//float4x4 sc_PrevFrameModelMatrix
-//float4x4 sc_PrevFrameModelMatrixInverse
-//float3 sc_LocalAabbMin
-//float3 sc_LocalAabbMax
-//float3 sc_WorldAabbMin
-//float3 sc_WorldAabbMax
-//float4 sc_WindowToViewportTransform
-//float4 sc_CurrentRenderTargetDims
-//sc_Camera_t sc_Camera
-//float3 sc_Camera.position 0
-//float sc_Camera.aspect 16
-//float2 sc_Camera.clipPlanes 24
-//float sc_ShadowDensity
-//float4 sc_ShadowColor
-//float4x4 sc_ProjectorMatrix
-//float _sc_GetFramebufferColorInvalidUsageMarker
-//float shaderComplexityValue
-//float sc_DisableFrustumCullingMarker
-//float4 sc_BoneMatrices :[]:16
-//float3x3 sc_SkinBonesNormalMatrices :[]:48
-//float4 weights0
-//float4 weights1
-//float4 weights2
-//float4 sc_StereoClipPlanes :[]:16
-//int sc_FallbackInstanceID
-//float _sc_framebufferFetchMarker
-//float2 sc_TAAJitterOffset
-//float strandWidth
-//float strandTaper
-//float4 sc_StrandDataMapTextureSize
-//float clumpInstanceCount
-//float clumpRadius
-//float clumpTipScale
-//float hairstyleInstanceCount
-//float hairstyleNoise
-//float4 sc_ScreenTextureSize
-//float4 sc_ScreenTextureDims
-//float4 sc_ScreenTextureView
-//bool receivesRayTracedReflections
-//bool isProxyMode
-//bool receivesRayTracedShadows
-//bool receivesRayTracedDiffuseIndirect
-//bool receivesRayTracedAo
-//float4 sc_RayTracedReflectionTextureSize
-//float4 sc_RayTracedReflectionTextureDims
-//float4 sc_RayTracedReflectionTextureView
-//float4 sc_RayTracedShadowTextureSize
-//float4 sc_RayTracedShadowTextureDims
-//float4 sc_RayTracedShadowTextureView
-//float4 sc_RayTracedDiffIndTextureSize
-//float4 sc_RayTracedDiffIndTextureDims
-//float4 sc_RayTracedDiffIndTextureView
-//float4 sc_RayTracedAoTextureSize
-//float4 sc_RayTracedAoTextureDims
-//float4 sc_RayTracedAoTextureView
-//float receiver_mask
-//float3 OriginNormalizationScale
-//float3 OriginNormalizationScaleInv
-//float3 OriginNormalizationOffset
-//int receiverId
-//int instance_id
-//int lray_triangles_last
-//bool noEarlyZ
-//bool has_animated_pn
-//int emitter_stride
-//int proxy_offset_position
-//int proxy_offset_normal
-//int proxy_offset_tangent
-//int proxy_offset_color
-//int proxy_offset_texture0
-//int proxy_offset_texture1
-//int proxy_offset_texture2
-//int proxy_offset_texture3
-//int proxy_format_position
-//int proxy_format_normal
-//int proxy_format_tangent
-//int proxy_format_color
-//int proxy_format_texture0
-//int proxy_format_texture1
-//int proxy_format_texture2
-//int proxy_format_texture3
-//float4 z_rayDirectionsSize
-//float4 z_rayDirectionsDims
-//float4 z_rayDirectionsView
+//float4 sc_CurrentRenderTargetDims 
+//float4 sc_ScreenTextureDims 
+//bool receivesRayTracedReflections 
+//bool isProxyMode 
+//bool receivesRayTracedShadows 
+//bool receivesRayTracedDiffuseIndirect 
+//bool receivesRayTracedAo 
+//float4 sc_RayTracedReflectionTextureDims 
+//float4 sc_RayTracedShadowTextureDims 
+//float4 sc_RayTracedDiffIndTextureDims 
+//float4 sc_RayTracedAoTextureDims 
+//bool noEarlyZ 
+//float4 z_rayDirectionsDims 
 //}
 //ssbo int layoutIndices 0:0:4 {
-//uint _Triangles 0:[]:4
+//uint _Triangles 0:[1]:4
 //}
 //ssbo float layoutVerticesPN 0:2:4 {
-//float _VerticesPN 0:[]:4
+//float _VerticesPN 0:[1]:4
 //}
 //ssbo float layoutVertices 0:1:4 {
-//float _Vertices 0:[]:4
+//float _Vertices 0:[1]:4
 //}
 //SG_REFLECTION_END
 
@@ -444,6 +325,9 @@ float4 z_rayDirectionsView;
 #endif
 #ifndef SC_DEVICE_CLASS
 #define SC_DEVICE_CLASS -1
+#endif
+#ifndef sc_ShaderCacheConstant
+#define sc_ShaderCacheConstant 0
 #endif
 #ifndef sc_CanUseSampler2DArray
 #define sc_CanUseSampler2DArray 0
@@ -763,6 +647,12 @@ float4 z_rayDirectionsView;
 #undef sc_TAAEnabled
 #define sc_TAAEnabled 1
 #endif
+#ifndef sc_TAADisabled
+#define sc_TAADisabled 0
+#elif sc_TAADisabled==1
+#undef sc_TAADisabled
+#define sc_TAADisabled 1
+#endif
 #ifndef sc_VertexBlending
 #define sc_VertexBlending 0
 #elif sc_VertexBlending==1
@@ -902,9 +792,9 @@ float4 strandProperties [[attribute(17)]];
 };
 struct sc_SysIn
 {
-  sc_SysAttributes sc_sysAttributes;
-  int gl_VertexIndex;
-  int gl_InstanceIndex;
+sc_SysAttributes sc_sysAttributes;
+int gl_VertexIndex;
+int gl_InstanceIndex;
 };
 int sc_GetStereoViewIndex(thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
@@ -1910,6 +1800,9 @@ float4 z_rayDirectionsView;
 #ifndef SC_DEVICE_CLASS
 #define SC_DEVICE_CLASS -1
 #endif
+#ifndef sc_ShaderCacheConstant
+#define sc_ShaderCacheConstant 0
+#endif
 #ifndef sc_CanUseSampler2DArray
 #define sc_CanUseSampler2DArray 0
 #elif sc_CanUseSampler2DArray==1
@@ -2227,6 +2120,12 @@ float4 z_rayDirectionsView;
 #elif sc_TAAEnabled==1
 #undef sc_TAAEnabled
 #define sc_TAAEnabled 1
+#endif
+#ifndef sc_TAADisabled
+#define sc_TAADisabled 0
+#elif sc_TAADisabled==1
+#undef sc_TAADisabled
+#define sc_TAADisabled 1
 #endif
 #ifndef sc_VertexBlending
 #define sc_VertexBlending 0

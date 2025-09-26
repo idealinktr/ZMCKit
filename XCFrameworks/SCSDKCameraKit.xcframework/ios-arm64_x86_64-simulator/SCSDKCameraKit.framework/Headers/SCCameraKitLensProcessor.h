@@ -12,6 +12,7 @@
 @protocol SCCameraKitLensLaunchData;
 @protocol SCCameraKitLensHintDelegate;
 @protocol SCCameraKitLensProcessorObserver;
+@protocol SCCameraKitLensUIEventsDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,9 @@ NS_SWIFT_NAME(LensProcessor)
 
 /// Lens hint delegate to show/hide hints for applied lenses
 @property (nonatomic, weak) id<SCCameraKitLensHintDelegate> hintDelegate;
+
+/// Lens hint delegate to show/hide hints for applied lenses
+@property (nonatomic, weak) id<SCCameraKitLensUIEventsDelegate> lensUIEventsDelegate;
 
 /// Specifies whether lenses will have their audio muted. NO by default.
 /// @note: Does NOT mute the device microphone, only prevents lenses from producing audio output.
@@ -41,6 +45,21 @@ NS_SWIFT_NAME(LensProcessor)
 - (void)applyLens:(id<SCCameraKitLens>)lens
        launchData:(nullable id<SCCameraKitLensLaunchData>)launchData
        completion:(nullable void (^)(BOOL success))completion NS_SWIFT_NAME(apply(lens:launchData:completion:));
+
+/// Prepares a specified lens for quick activation by applying it to preload resources without rendering it to the screen.
+/// Warmup is limited to the first two frames; resources loaded after this period will not be preloaded.
+/// Multiple lenses can be warmed up, but doing so may impact the performance of the currently applied lens.
+/// All warmed-up lenses are cleared when a new lens is applied.
+/// @param lens the lens to apply. This should be a lens provided by the repository.
+/// @param launchData launch data to pass to lens.
+/// @param completion a completion handler called once the operation finishes.
+/// @note Launch data for a specific lens gets persisted automatically so passing nil will reuse the launch data passed
+/// to the lens from the previous time applied.
+/// @warning If the lens provided is NOT provided by the repository, and simply conforms to the protocol, a runtime
+/// error will occur.
+- (void)warmupLens:(id<SCCameraKitLens>)lens
+       launchData:(nullable id<SCCameraKitLensLaunchData>)launchData
+       completion:(nullable void (^)(BOOL success))completion NS_SWIFT_NAME(warmup(lens:launchData:completion:));
 
 /// Removes any applied lenses.
 /// @param completion a completion handler called once the operation finishes.

@@ -1,11 +1,11 @@
 #version 100 sc_convert_to 300 es
 //SG_REFLECTION_BEGIN(100)
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
@@ -18,10 +18,6 @@ varPackedTex=vec4(l9_1.x,l9_1.y,varPackedTex.z,varPackedTex.w);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>

@@ -5,29 +5,13 @@
 //texture texture2D baseTex 2:0:2:2
 //texture texture2D prevTex 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 baseTexDims;
-uniform vec4 prevTexDims;
 uniform mat4 script_modelMatrix;
 uniform mat3 prevTexTransform;
-uniform mat4 script_viewProjectionMatrix;
-uniform vec3 uniSphereCenter;
-uniform vec3 uniCameraPos;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform mat3 baseTexTransform;
-uniform vec4 baseTexUvMinMax;
-uniform vec4 baseTexBorderColor;
-uniform vec4 prevTexSize;
-uniform vec4 prevTexView;
-uniform vec4 prevTexUvMinMax;
-uniform vec4 prevTexBorderColor;
-uniform float stopCapture;
-uniform float blendInFactor;
 varying vec3 varCustomPos;
 varying vec3 varCustomNormal;
 varying vec2 varCustomTex0;
@@ -42,8 +26,6 @@ varCustomTex0=vec2((prevTexTransform*vec3(l9_2,1.0)).xy);
 sc_ProcessVertex(sc_Vertex_t(vec4((l9_2*2.0)-vec2(1.0),0.0,1.0),l9_0.normal,l9_0.tangent,l9_1,l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef baseTexHasSwappedViews
@@ -112,12 +94,6 @@ uniform float blendInFactor;
 uniform float stopCapture;
 uniform vec4 prevTexUvMinMax;
 uniform vec4 prevTexBorderColor;
-uniform mat4 script_modelMatrix;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform vec4 prevTexSize;
-uniform vec4 prevTexView;
-uniform mat3 prevTexTransform;
 uniform mediump sampler2D baseTex;
 uniform mediump sampler2D prevTex;
 varying vec3 varCustomNormal;

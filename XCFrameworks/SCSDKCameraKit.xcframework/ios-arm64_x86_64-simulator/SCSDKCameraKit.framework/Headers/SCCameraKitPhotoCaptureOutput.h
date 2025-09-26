@@ -45,6 +45,18 @@ NS_SWIFT_NAME(PhotoCaptureOutput)
                              completion:(void (^)(UIImage *_Nullable image, NSError *_Nullable error))completion
     NS_SWIFT_NAME(capture(with:completion:));
 
+/// Capture a photo and call a completion with the resulting image when done.
+/// @param settings the photo capture settings to be used. If nil, the default settings will be used.
+/// @param outputSize the size of the captured photo that should be outputted. Defaults to CGSizeZero which means
+/// default system size.
+/// @param usePixelBuffer If YES, forces capturing a frame from the video stream; otherwise, it will use AVCapturePhotoOutput (if provided in init).
+/// @param completion the completion block called with the captured image.
+- (void)capturePhotoWithCaptureSettings:(nullable AVCapturePhotoSettings *)settings
+                             outputSize:(CGSize)outputSize
+                             usePixelBuffer:(BOOL)usePixelBuffer
+                             completion:(void (^)(UIImage *_Nullable image, NSError *_Nullable error))completion
+    NS_SWIFT_NAME(capture(with:outputSize:usePixelBuffer:completion:));
+
 NS_ASSUME_NONNULL_END
 
 @end

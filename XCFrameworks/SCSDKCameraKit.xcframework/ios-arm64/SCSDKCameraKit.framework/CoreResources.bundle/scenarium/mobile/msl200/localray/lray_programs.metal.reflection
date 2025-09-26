@@ -1,0 +1,36 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//output vec4 sc_FragData0 0
+//sampler sampler casterColorSmpSC 0:7
+//sampler sampler denoiserKernelSmpSC 0:8
+//sampler sampler hitCasterIdAndBarycentricSmpSC 0:9
+//sampler sampler hitDistanceSmpSC 0:10
+//sampler sampler receiverData0SmpSC 0:12
+//sampler sampler receiverData1SmpSC 0:13
+//texture texture2D casterColor 0:0:0:7
+//texture texture2D denoiserKernel 0:1:0:8
+//texture utexture2D hitCasterIdAndBarycentric 0:2:0:9
+//texture utexture2D hitDistance 0:3:0:10
+//texture utexture2D receiverData0 0:5:0:12
+//texture utexture2D receiverData1 0:6:0:13
+//ubo float UserUniforms 0:14:400 {
+//float4 casterColorSize 0
+//float3 cameraPosition 16
+//float3 originScaleInv 48
+//float3 originOffset 64
+//float distanceScale 80
+//bool stochasticEnabled 84
+//float depthRef 88
+//float2 kernelMask 96
+//float minStochFilterDiameter 104
+//float sceneDimensions 108
+//float maxDistance 112
+//float maxStochFilterDiameter 116
+//float2 planarReceiverData 120:[32]:8
+//float depthScale 376
+//float depthMax 380
+//float maxRayLen 384
+//}
+//spec_const bool sc_UseFragDepth 0 0
+//spec_const int lray_ProgramIndex 1 0
+//SG_REFLECTION_END

@@ -2,10 +2,10 @@
 //SG_REFLECTION_BEGIN(100)
 //attribute vec4 atbCoord2d 18
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -32,7 +32,6 @@
 #endif
 uniform mat4 ptsInvMat[10];
 uniform vec3 camDirO[10];
-uniform vec4 coeffs[10];
 attribute vec4 atbCoord2d;
 varying vec2 varScreenSpacePointsPos0;
 varying vec2 varScreenSpacePointsPos1;
@@ -470,9 +469,6 @@ varScreenPos=vec4(varScreenPos.x,varScreenPos.y,l9_71.x,l9_71.y);
 #endif
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -492,8 +488,6 @@ varScreenPos=vec4(varScreenPos.x,varScreenPos.y,l9_71.x,l9_71.y);
 #define LIQUIFY_FACESTRETCH 1
 #endif
 uniform vec4 coeffs[10];
-uniform mat4 ptsInvMat[10];
-uniform vec3 camDirO[10];
 varying vec2 varScreenSpacePointsPos0;
 varying vec2 varScreenSpacePointsPos1;
 varying vec2 varScreenSpacePointsPos2;

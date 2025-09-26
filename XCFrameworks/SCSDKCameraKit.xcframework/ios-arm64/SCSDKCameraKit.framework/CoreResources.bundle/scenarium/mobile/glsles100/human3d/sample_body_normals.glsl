@@ -3,26 +3,17 @@
 //sampler sampler cropTextureSmpSC 2:1
 //texture texture2D cropTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 cropTextureDims;
-uniform vec4 cropTextureSize;
-uniform vec4 cropTextureView;
-uniform mat3 cropTextureTransform;
-uniform vec4 cropTextureUvMinMax;
-uniform vec4 cropTextureBorderColor;
 void main()
 {
 sc_ProcessVertex(sc_LoadVertexAttributes());
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef cropTextureHasSwappedViews
@@ -62,8 +53,6 @@ uniform vec4 cropTextureDims;
 uniform mat3 cropTextureTransform;
 uniform vec4 cropTextureUvMinMax;
 uniform vec4 cropTextureBorderColor;
-uniform vec4 cropTextureSize;
-uniform vec4 cropTextureView;
 uniform mediump sampler2D cropTexture;
 void main()
 {

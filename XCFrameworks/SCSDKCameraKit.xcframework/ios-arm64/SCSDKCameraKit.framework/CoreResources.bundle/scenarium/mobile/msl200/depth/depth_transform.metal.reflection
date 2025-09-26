@@ -1,0 +1,39 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//sampler sampler mainTextureSmpSC 0:15
+//texture texture2D mainTexture 0:3:0:15
+//ubo int UserUniforms 0:27:4320 {
+//float4 sc_UniformConstants 1392
+//float4 sc_StereoClipPlanes 3664:[2]:16
+//float3x3 mainTextureTransform 4240
+//float4 mainTextureUvMinMax 4288
+//float4 mainTextureBorderColor 4304
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 0 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 1 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 2 0
+//spec_const bool mainTextureHasSwappedViews 3 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 4 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 5 -1
+//spec_const int mainTextureLayout 6 0
+//spec_const int sc_ShaderCacheConstant 7 0
+//spec_const int sc_StereoRenderingMode 8 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 9 0
+//SG_REFLECTION_END

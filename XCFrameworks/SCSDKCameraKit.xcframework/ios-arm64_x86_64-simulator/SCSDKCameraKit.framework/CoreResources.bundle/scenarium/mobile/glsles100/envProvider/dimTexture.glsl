@@ -5,25 +5,14 @@
 //texture texture2D baseTex 2:0:2:2
 //texture texture2D mainTexture 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 mainTextureDims;
-uniform vec4 baseTexDims;
 uniform mat3 mainTextureTransform;
-uniform vec4 mainTextureSize;
-uniform vec4 mainTextureView;
-uniform vec4 mainTextureUvMinMax;
-uniform vec4 mainTextureBorderColor;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform mat3 baseTexTransform;
-uniform vec4 baseTexUvMinMax;
-uniform vec4 baseTexBorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -31,9 +20,6 @@ vec2 l9_1=vec2((mainTextureTransform*vec3(texture0,1.0)).xy)-vec2(0.5);
 sc_ProcessVertex(sc_Vertex_t(vec4(sign(l9_1.x),sign(l9_1.y),0.0,1.0),l9_0.normal,l9_0.tangent,l9_0.texture0,l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -111,10 +97,6 @@ uniform vec4 baseTexBorderColor;
 uniform mat3 mainTextureTransform;
 uniform vec4 mainTextureUvMinMax;
 uniform vec4 mainTextureBorderColor;
-uniform vec4 mainTextureSize;
-uniform vec4 mainTextureView;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
 uniform mediump sampler2D baseTex;
 uniform mediump sampler2D mainTexture;
 void main()

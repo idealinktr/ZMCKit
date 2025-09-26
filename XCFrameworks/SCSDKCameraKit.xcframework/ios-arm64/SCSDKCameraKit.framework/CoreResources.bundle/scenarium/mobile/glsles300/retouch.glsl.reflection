@@ -1,0 +1,65 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec4 position 0
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec3 positionNext 15
+//attribute vec3 positionPrevious 16
+//attribute vec4 strandProperties 17
+//sampler sampler lookupTextureSmpSC 0:8
+//sampler sampler maskTextureSmpSC 0:9
+//sampler sampler sc_ScreenTextureSmpSC 0:13
+//texture texture2D lookupTexture 0:0:0:8
+//texture texture2D maskTexture 0:1:0:9
+//texture texture2D sc_ScreenTexture 0:5:0:13
+//texture texture2DArray lookupTextureArrSC 0:16:0:8
+//texture texture2DArray maskTextureArrSC 0:17:0:9
+//texture texture2DArray sc_ScreenTextureArrSC 0:20:0:13
+//spec_const bool ADD_NOISE 0 1
+//spec_const bool EYE_SHARPEN 1 0
+//spec_const bool EYE_WHITENING 2 0
+//spec_const bool IS_LEGACY_LOOKUP 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_lookupTexture 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_maskTexture 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_lookupTexture 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_maskTexture 7 0
+//spec_const bool SC_USE_UV_TRANSFORM_lookupTexture 8 0
+//spec_const bool SC_USE_UV_TRANSFORM_maskTexture 9 0
+//spec_const bool SOFT_SKIN 10 0
+//spec_const bool TEETH_WHITENING 11 0
+//spec_const bool lookupTextureHasSwappedViews 12 0
+//spec_const bool maskTextureHasSwappedViews 13 0
+//spec_const bool sc_FramebufferFetch 14 0
+//spec_const bool sc_OITCompositingPass 15 0
+//spec_const bool sc_OITDepthBoundsPass 16 0
+//spec_const bool sc_OITDepthGatherPass 17 0
+//spec_const bool sc_ProjectiveShadowsReceiver 18 0
+//spec_const bool sc_ScreenTextureHasSwappedViews 19 0
+//spec_const bool sc_VertexBlending 20 0
+//spec_const bool sc_VertexBlendingUseNormals 21 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_lookupTexture 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_maskTexture 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_lookupTexture 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_maskTexture 25 -1
+//spec_const int lookupTextureLayout 26 0
+//spec_const int maskTextureLayout 27 0
+//spec_const int sc_DepthBufferMode 28 0
+//spec_const int sc_RenderingSpace 29 -1
+//spec_const int sc_ScreenTextureLayout 30 0
+//spec_const int sc_ShaderCacheConstant 31 0
+//spec_const int sc_SkinBonesCount 32 0
+//spec_const int sc_StereoRenderingMode 33 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 34 0
+//spec_const int sc_StereoViewID 35 0
+//SG_REFLECTION_END

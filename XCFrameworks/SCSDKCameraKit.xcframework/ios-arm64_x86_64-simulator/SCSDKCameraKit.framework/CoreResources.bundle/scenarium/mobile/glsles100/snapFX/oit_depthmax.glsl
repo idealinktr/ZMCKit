@@ -3,20 +3,14 @@
 //sampler sampler sc_OITDepthBoundsTextureSmpSC 2:1
 //texture texture2D sc_OITDepthBoundsTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 sc_OITDepthBoundsTextureDims;
-uniform vec4 sc_OITDepthBoundsTextureSize;
-uniform vec4 sc_OITDepthBoundsTextureView;
-uniform mat3 sc_OITDepthBoundsTextureTransform;
-uniform vec4 sc_OITDepthBoundsTextureUvMinMax;
-uniform vec4 sc_OITDepthBoundsTextureBorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -25,10 +19,6 @@ varPackedTex=vec4(l9_1.x,l9_1.y,varPackedTex.z,varPackedTex.w);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -72,8 +62,6 @@ uniform vec4 sc_OITDepthBoundsTextureDims;
 uniform mat3 sc_OITDepthBoundsTextureTransform;
 uniform vec4 sc_OITDepthBoundsTextureUvMinMax;
 uniform vec4 sc_OITDepthBoundsTextureBorderColor;
-uniform vec4 sc_OITDepthBoundsTextureSize;
-uniform vec4 sc_OITDepthBoundsTextureView;
 uniform mediump sampler2D sc_OITDepthBoundsTexture;
 void main()
 {

@@ -3,20 +3,14 @@
 //sampler sampler screenTextureSmpSC 2:1
 //texture texture2D screenTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 screenTextureDims;
 uniform mat3 screenTextureTransform;
 uniform mat3 meshTransform;
-uniform float screenTextureBias;
-uniform vec4 screenTextureSize;
-uniform vec4 screenTextureView;
-uniform vec4 screenTextureUvMinMax;
-uniform vec4 screenTextureBorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -25,9 +19,6 @@ vec2 l9_2=vec2((meshTransform*vec3(position.xy,1.0)).xy);
 sc_ProcessVertex(sc_Vertex_t(vec4(l9_2.x,l9_2.y,l9_1.z,l9_1.w),l9_0.normal,l9_0.tangent,vec2((screenTextureTransform*vec3((l9_1.xy+vec2(1.0))*0.5,1.0)).xy),l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef screenTextureHasSwappedViews
@@ -60,11 +51,6 @@ sc_ProcessVertex(sc_Vertex_t(vec4(l9_2.x,l9_2.y,l9_1.z,l9_1.w),l9_0.normal,l9_0.
 uniform vec4 screenTextureDims;
 uniform float screenTextureBias;
 uniform vec4 screenTextureBorderColor;
-uniform mat3 meshTransform;
-uniform vec4 screenTextureSize;
-uniform vec4 screenTextureView;
-uniform mat3 screenTextureTransform;
-uniform vec4 screenTextureUvMinMax;
 uniform mediump sampler2D screenTexture;
 void main()
 {

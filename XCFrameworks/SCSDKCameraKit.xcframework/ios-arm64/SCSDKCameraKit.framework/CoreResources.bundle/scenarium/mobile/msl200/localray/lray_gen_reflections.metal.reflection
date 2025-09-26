@@ -3,26 +3,21 @@
 //output uvec4 origin_and_mask 0
 //output vec2 direction 1
 //output vec2 micro_normal 2
-//sampler sampler rankingTextureSmp 2:21
-//sampler sampler receivers0Smp 2:22
-//sampler sampler receivers1Smp 2:23
-//sampler sampler scramblingTextureSmp 2:25
-//texture texture2D rankingTexture 2:5:2:21
-//texture utexture2D receivers0 2:6:2:22
-//texture utexture2D receivers1 2:7:2:23
-//texture texture2D scramblingTexture 2:9:2:25
-//ubo float UserUniforms 2:32:144 {
-//float4 searchParamResultsSize 0
-//float4 colorInputSize 16
-//float4 aoBufferTextureSize 32
-//float3 cameraPosition 48
-//float3 OriginNormalizationScale 64
-//float3 OriginNormalizationScaleInv 80
-//float3 OriginNormalizationOffset 96
-//float distanceNormalizationScale 112
-//bool stochasticEnabled 116
-//float force_mirror_refl 120
-//bool reflectionPass 124
-//float terminatorEpsilon 128
+//sampler sampler rankingTextureSmp 0:13
+//sampler sampler receiverData0SmpSC 0:15
+//sampler sampler receiverData1SmpSC 0:16
+//sampler sampler scramblingTextureSmp 0:17
+//texture texture2D rankingTexture 0:4:0:13
+//texture utexture2D receiverData0 0:6:0:15
+//texture utexture2D receiverData1 0:7:0:16
+//texture texture2D scramblingTexture 0:8:0:17
+//ubo float UserUniforms 0:18:112 {
+//float3 cameraPosition 16
+//float3 originScale 32
+//float3 originScaleInv 48
+//float3 originOffset 64
+//float forceMirror 88
+//bool reflectionPass 92
+//float terminatorEpsilon 96
 //}
 //SG_REFLECTION_END

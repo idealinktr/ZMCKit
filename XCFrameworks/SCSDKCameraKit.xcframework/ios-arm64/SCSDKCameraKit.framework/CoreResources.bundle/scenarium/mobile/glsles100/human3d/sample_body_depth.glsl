@@ -5,38 +5,20 @@
 //texture texture2D confidenceTexture 2:0:2:2
 //texture texture2D cropTexture 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs_without_output.glsl>
 #include <std2_fs_depth_output.glsl>
 #include <std2_texture.glsl>
-uniform vec4 cropTextureDims;
-uniform vec4 confidenceTextureDims;
-uniform vec4 cropTextureSize;
-uniform vec4 cropTextureView;
-uniform mat3 cropTextureTransform;
-uniform vec4 cropTextureUvMinMax;
-uniform vec4 cropTextureBorderColor;
-uniform vec4 confidenceTextureSize;
-uniform vec4 confidenceTextureView;
-uniform mat3 confidenceTextureTransform;
-uniform vec4 confidenceTextureUvMinMax;
-uniform vec4 confidenceTextureBorderColor;
-uniform mat3 screenToCropTransform;
-uniform float minimumConfidence;
-uniform vec4 depthProjectionMatrixTerms;
 void main()
 {
 sc_ProcessVertex(sc_LoadVertexAttributes());
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs_without_output.glsl>
@@ -119,10 +101,6 @@ uniform mat3 cropTextureTransform;
 uniform vec4 cropTextureUvMinMax;
 uniform vec4 cropTextureBorderColor;
 uniform vec4 depthProjectionMatrixTerms;
-uniform vec4 cropTextureSize;
-uniform vec4 cropTextureView;
-uniform vec4 confidenceTextureSize;
-uniform vec4 confidenceTextureView;
 uniform mediump sampler2D confidenceTexture;
 uniform mediump sampler2D cropTexture;
 void main()

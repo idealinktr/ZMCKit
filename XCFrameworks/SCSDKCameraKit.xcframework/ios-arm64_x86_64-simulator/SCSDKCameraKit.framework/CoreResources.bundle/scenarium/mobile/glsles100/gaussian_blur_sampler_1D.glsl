@@ -3,32 +3,18 @@
 //sampler sampler targetTextureSmpSC 2:1
 //texture texture2D targetTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-#ifndef sc_GaussianFilterDataLength
-#define sc_GaussianFilterDataLength 5
-#endif
-uniform vec4 targetTextureDims;
-uniform vec4 targetTextureSize;
-uniform vec4 targetTextureView;
-uniform mat3 targetTextureTransform;
-uniform vec4 targetTextureUvMinMax;
-uniform vec4 targetTextureBorderColor;
-uniform float gaussianFilterWeights[sc_GaussianFilterDataLength];
-uniform float gaussianFilterOffsets[sc_GaussianFilterDataLength];
 void main()
 {
 sc_ProcessVertex(sc_LoadVertexAttributes());
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -80,8 +66,6 @@ uniform vec4 targetTextureUvMinMax;
 uniform vec4 targetTextureBorderColor;
 uniform float gaussianFilterWeights[sc_GaussianFilterDataLength];
 uniform float gaussianFilterOffsets[sc_GaussianFilterDataLength];
-uniform vec4 targetTextureSize;
-uniform vec4 targetTextureView;
 uniform mediump sampler2D targetTexture;
 void main()
 {

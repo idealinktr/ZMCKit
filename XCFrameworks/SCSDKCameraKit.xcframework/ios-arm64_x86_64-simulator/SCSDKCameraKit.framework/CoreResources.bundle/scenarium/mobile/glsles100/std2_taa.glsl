@@ -3,6 +3,20 @@
 //SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <std2.glsl>
+vec4 sc_ApplyTAAJitter(vec4 screenPosition)
+{
+#if (!sc_TAADisabled)
+{
+#if (sc_TAAEnabled)
+{
+vec2 l9_0=screenPosition.xy+(sc_TAAJitterOffset*screenPosition.w);
+screenPosition=vec4(l9_0.x,l9_0.y,screenPosition.z,screenPosition.w);
+}
+#endif
+}
+#endif
+return screenPosition;
+}
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #include <std2.glsl>
 vec2 encodeVal(float f)
@@ -43,6 +57,14 @@ return computeMotionVector(surfacePosWorldSpace);
 #else
 {
 return finalColor;
+}
+#endif
+}
+void sc_DiscardVelocityAndDepthInMotionVectorPass()
+{
+#if (sc_MotionVectorsPass)
+{
+discard;
 }
 #endif
 }

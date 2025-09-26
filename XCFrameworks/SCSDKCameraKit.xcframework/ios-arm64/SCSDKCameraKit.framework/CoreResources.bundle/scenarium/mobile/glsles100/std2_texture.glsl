@@ -1,25 +1,25 @@
 #pragma once
 //SG_REFLECTION_BEGIN(100)
 //SG_REFLECTION_END
+#ifndef sc_TextureRenderingLayout_Regular
+#define sc_TextureRenderingLayout_Regular 0
+#define sc_TextureRenderingLayout_StereoInstancedClipped 1
+#define sc_TextureRenderingLayout_StereoMultiview 2
+#endif
+#define depthToGlobal   depthScreenToViewSpace
+#define depthToLocal    depthViewToScreenSpace
+#ifndef quantizeUV
+#define quantizeUV sc_QuantizeUV
+#define sc_platformUVFlip sc_PlatformFlipV
+#define sc_PlatformFlipUV sc_PlatformFlipV
+#endif
+#ifndef sc_texture2DLod
+#define sc_texture2DLod sc_InternalTextureLevel
+#define sc_textureLod sc_InternalTextureLevel
+#define sc_textureBias sc_InternalTextureBiasOrLevel
+#define sc_texture sc_InternalTexture
+#endif
 #if defined VERTEX_SHADER
-    #ifndef sc_TextureRenderingLayout_Regular
-        #define sc_TextureRenderingLayout_Regular 0
-        #define sc_TextureRenderingLayout_StereoInstancedClipped 1
-        #define sc_TextureRenderingLayout_StereoMultiview 2
-    #endif
-    #define depthToGlobal   depthScreenToViewSpace
-    #define depthToLocal    depthViewToScreenSpace
-    #ifndef quantizeUV
-        #define quantizeUV sc_QuantizeUV
-        #define sc_platformUVFlip sc_PlatformFlipV
-        #define sc_PlatformFlipUV sc_PlatformFlipV
-    #endif
-    #ifndef sc_texture2DLod
-        #define sc_texture2DLod sc_InternalTextureLevel
-        #define sc_textureLod sc_InternalTextureLevel
-        #define sc_textureBias sc_InternalTextureBiasOrLevel
-        #define sc_texture sc_InternalTexture
-    #endif
 #include <required2.glsl>
 #include <std2_texture_sub.glsl>
 vec2 sc_PlatformFlipV(vec2 uv)
@@ -661,24 +661,6 @@ uv=sc_TransformUV(uv,useUvTransform,uvTransform);
 return sc_InternalTextureBiasOrLevel(combinedSmp,uv,0.0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-    #ifndef sc_TextureRenderingLayout_Regular
-        #define sc_TextureRenderingLayout_Regular 0
-        #define sc_TextureRenderingLayout_StereoInstancedClipped 1
-        #define sc_TextureRenderingLayout_StereoMultiview 2
-    #endif
-    #define depthToGlobal   depthScreenToViewSpace
-    #define depthToLocal    depthViewToScreenSpace
-    #ifndef quantizeUV
-        #define quantizeUV sc_QuantizeUV
-        #define sc_platformUVFlip sc_PlatformFlipV
-        #define sc_PlatformFlipUV sc_PlatformFlipV
-    #endif
-    #ifndef sc_texture2DLod
-        #define sc_texture2DLod sc_InternalTextureLevel
-        #define sc_textureLod sc_InternalTextureLevel
-        #define sc_textureBias sc_InternalTextureBiasOrLevel
-        #define sc_texture sc_InternalTexture
-    #endif
 #include <required2.glsl>
 #include <std2_texture_sub.glsl>
 vec2 sc_PlatformFlipV(vec2 uv)

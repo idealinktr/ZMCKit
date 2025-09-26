@@ -1,0 +1,91 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//sampler sampler mainTextureSmpSC 0:20
+//sampler sampler tex_BY_YSmpSC 0:32
+//sampler sampler tex_RG_RB_GBSmpSC 0:33
+//sampler sampler tex_RR_GG_BBSmpSC 0:34
+//sampler sampler tex_RY_GYSmpSC 0:35
+//sampler sampler tex_R_G_BSmpSC 0:36
+//texture texture2D mainTexture 0:3:0:20
+//texture texture2D tex_BY_Y 0:15:0:32
+//texture texture2D tex_RG_RB_GB 0:16:0:33
+//texture texture2D tex_RR_GG_BB 0:17:0:34
+//texture texture2D tex_RY_GY 0:18:0:35
+//texture texture2D tex_R_G_B 0:19:0:36
+//ubo int UserUniforms 0:37:4976 {
+//float4 sc_UniformConstants 1392
+//float4 sc_StereoClipPlanes 3664:[2]:16
+//float4 tex_RY_GYUvMinMax 4288
+//float4 tex_RY_GYBorderColor 4304
+//float4 tex_BY_YUvMinMax 4416
+//float4 tex_BY_YBorderColor 4432
+//float4 tex_R_G_BUvMinMax 4544
+//float4 tex_R_G_BBorderColor 4560
+//float4 tex_RR_GG_BBUvMinMax 4672
+//float4 tex_RR_GG_BBBorderColor 4688
+//float4 tex_RG_RB_GBUvMinMax 4800
+//float4 tex_RG_RB_GBBorderColor 4816
+//float3x3 mainTextureTransform 4880
+//float4 mainTextureUvMinMax 4928
+//float4 mainTextureBorderColor 4944
+//float epsilon 4960
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool CAMEOS_MATTING 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_BY_Y 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RR_GG_BB 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RY_GY 5 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_R_G_B 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 7 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_BY_Y 8 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RG_RB_GB 9 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RR_GG_BB 10 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RY_GY 11 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_R_G_B 12 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 13 0
+//spec_const bool mainTextureHasSwappedViews 14 0
+//spec_const bool tex_BY_YHasSwappedViews 15 0
+//spec_const bool tex_RG_RB_GBHasSwappedViews 16 0
+//spec_const bool tex_RR_GG_BBHasSwappedViews 17 0
+//spec_const bool tex_RY_GYHasSwappedViews 18 0
+//spec_const bool tex_R_G_BHasSwappedViews 19 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 20 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_BY_Y 21 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RG_RB_GB 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RR_GG_BB 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RY_GY 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_R_G_B 25 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 26 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_BY_Y 27 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RG_RB_GB 28 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RR_GG_BB 29 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RY_GY 30 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_R_G_B 31 -1
+//spec_const int mainTextureLayout 32 0
+//spec_const int sc_ShaderCacheConstant 33 0
+//spec_const int sc_StereoRenderingMode 34 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 35 0
+//spec_const int tex_BY_YLayout 36 0
+//spec_const int tex_RG_RB_GBLayout 37 0
+//spec_const int tex_RR_GG_BBLayout 38 0
+//spec_const int tex_RY_GYLayout 39 0
+//spec_const int tex_R_G_BLayout 40 0
+//SG_REFLECTION_END

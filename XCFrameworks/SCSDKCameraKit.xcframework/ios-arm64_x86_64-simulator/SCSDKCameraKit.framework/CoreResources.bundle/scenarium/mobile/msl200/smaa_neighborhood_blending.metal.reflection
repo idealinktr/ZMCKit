@@ -1,0 +1,49 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//sampler sampler blendTexSmpSC 0:16
+//sampler sampler inputTexSmpSC 0:17
+//texture texture2D blendTex 0:3:0:16
+//texture texture2D inputTex 0:4:0:17
+//ubo int UserUniforms 0:29:4464 {
+//float4 sc_UniformConstants 1392
+//float3x3 blendTexTransform 4240
+//float4 blendTexUvMinMax 4288
+//float4 blendTexBorderColor 4304
+//float3x3 inputTexTransform 4368
+//float4 inputTexUvMinMax 4416
+//float4 inputTexBorderColor 4432
+//float2 inputRTSize 4448
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_blendTex 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_inputTex 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_blendTex 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_inputTex 3 0
+//spec_const bool SC_USE_UV_TRANSFORM_blendTex 4 0
+//spec_const bool SC_USE_UV_TRANSFORM_inputTex 5 0
+//spec_const bool blendTexHasSwappedViews 6 0
+//spec_const bool inputTexHasSwappedViews 7 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_blendTex 8 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTex 9 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_blendTex 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTex 11 -1
+//spec_const int blendTexLayout 12 0
+//spec_const int inputTexLayout 13 0
+//spec_const int sc_ShaderCacheConstant 14 0
+//SG_REFLECTION_END

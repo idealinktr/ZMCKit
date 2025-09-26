@@ -5,42 +5,18 @@
 //texture texture2D texAb 2:0:2:2
 //texture texture2D texMain 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 texAbDims;
-uniform vec4 texMainDims;
-uniform vec4 texAbSize;
-uniform vec4 texAbView;
-uniform mat3 texAbTransform;
-uniform vec4 texAbUvMinMax;
-uniform vec4 texAbBorderColor;
-uniform vec4 texMainSize;
-uniform vec4 texMainView;
-uniform mat3 texMainTransform;
-uniform vec4 texMainUvMinMax;
-uniform vec4 texMainBorderColor;
-uniform float epsilonSq;
-uniform float maskScaleMultiplier;
 void main()
 {
-sc_Vertex_t l9_0=sc_LoadVertexAttributes();
-sc_ProcessVertex(l9_0);
-vec2 l9_1=(l9_0.position.xy*0.5)+vec2(0.5);
-vec2 l9_2=l9_1;
-l9_2.y=1.0-l9_1.y;
-varPackedTex=vec4(l9_2.x,l9_2.y,varPackedTex.z,varPackedTex.w);
+sc_ProcessVertex(sc_LoadVertexAttributes());
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
@@ -61,6 +37,12 @@ varPackedTex=vec4(l9_2.x,l9_2.y,varPackedTex.z,varPackedTex.w);
 #endif
 #ifndef texMainLayout
 #define texMainLayout 0
+#endif
+#ifndef SC_USE_UV_TRANSFORM_texAb
+#define SC_USE_UV_TRANSFORM_texAb 0
+#elif SC_USE_UV_TRANSFORM_texAb==1
+#undef SC_USE_UV_TRANSFORM_texAb
+#define SC_USE_UV_TRANSFORM_texAb 1
 #endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_texAb
 #define SC_SOFTWARE_WRAP_MODE_U_texAb -1
@@ -124,18 +106,17 @@ varPackedTex=vec4(l9_2.x,l9_2.y,varPackedTex.z,varPackedTex.w);
 #endif
 uniform vec4 texAbDims;
 uniform vec4 texMainDims;
+uniform mat3 texAbTransform;
 uniform vec4 texAbUvMinMax;
 uniform vec4 texAbBorderColor;
 uniform mat3 texMainTransform;
 uniform vec4 texMainUvMinMax;
 uniform vec4 texMainBorderColor;
 uniform float epsilonSq;
+uniform float maskSmoothStepMin;
+uniform float maskSmoothStepMax;
 uniform float maskScaleMultiplier;
-uniform vec4 texAbSize;
-uniform vec4 texAbView;
-uniform mat3 texAbTransform;
-uniform vec4 texMainSize;
-uniform vec4 texMainView;
+uniform bool invertMask;
 uniform mediump sampler2D texAb;
 uniform mediump sampler2D texMain;
 void main()
@@ -151,7 +132,7 @@ l9_0=1-sc_GetStereoViewIndex();
 l9_0=sc_GetStereoViewIndex();
 }
 #endif
-vec4 l9_1=sc_SampleTextureBiasOrLevel(texAbDims.xy,texAbLayout,l9_0,varPackedTex.xy,false,mat3(vec3(1.0,0.0,0.0),vec3(0.0,1.0,0.0),vec3(0.0,0.0,1.0)),ivec2(SC_SOFTWARE_WRAP_MODE_U_texAb,SC_SOFTWARE_WRAP_MODE_V_texAb),(int(SC_USE_UV_MIN_MAX_texAb)!=0),texAbUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_texAb)!=0),texAbBorderColor,0.0,texAb);
+vec4 l9_1=sc_SampleTextureBiasOrLevel(texAbDims.xy,texAbLayout,l9_0,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_texAb)!=0),texAbTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_texAb,SC_SOFTWARE_WRAP_MODE_V_texAb),(int(SC_USE_UV_MIN_MAX_texAb)!=0),texAbUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_texAb)!=0),texAbBorderColor,0.0,texAb);
 int l9_2;
 #if (texMainHasSwappedViews)
 {
@@ -162,7 +143,7 @@ l9_2=1-sc_GetStereoViewIndex();
 l9_2=sc_GetStereoViewIndex();
 }
 #endif
-vec4 l9_3=sc_SampleTextureBiasOrLevel(texMainDims.xy,texMainLayout,l9_2,sc_PlatformFlipV(varPackedTex.xy),(int(SC_USE_UV_TRANSFORM_texMain)!=0),texMainTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_texMain,SC_SOFTWARE_WRAP_MODE_V_texMain),(int(SC_USE_UV_MIN_MAX_texMain)!=0),texMainUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_texMain)!=0),texMainBorderColor,0.0,texMain);
+vec4 l9_3=sc_SampleTextureBiasOrLevel(texMainDims.xy,texMainLayout,l9_2,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_texMain)!=0),texMainTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_texMain,SC_SOFTWARE_WRAP_MODE_V_texMain),(int(SC_USE_UV_MIN_MAX_texMain)!=0),texMainUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_texMain)!=0),texMainBorderColor,0.0,texMain);
 vec2 l9_4=l9_1.zw-(l9_1.xx*l9_1.yx);
 float l9_5=((l9_4.x/(l9_4.y+epsilonSq))*(dot(l9_3.xyz,vec3(0.21259999,0.71520001,0.0722))-l9_1.x))+l9_1.y;
 float l9_6;
@@ -175,7 +156,7 @@ l9_6=l9_5*l9_5;
 float l9_7;
 #if (MASK_PROCESSING_SMOOTH_STEP)
 {
-l9_7=smoothstep(0.15700001,0.50199997,l9_5);
+l9_7=smoothstep(maskSmoothStepMin,maskSmoothStepMax,l9_5);
 }
 #else
 {
@@ -195,6 +176,15 @@ l9_7=l9_8;
 l9_6=l9_7;
 }
 #endif
-sc_writeFragData0(vec4(l9_6,l9_6,l9_6,1.0));
+float l9_9;
+if (invertMask)
+{
+l9_9=1.0-l9_6;
+}
+else
+{
+l9_9=l9_6;
+}
+sc_writeFragData0(vec4(l9_9,l9_9,l9_9,1.0));
 }
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

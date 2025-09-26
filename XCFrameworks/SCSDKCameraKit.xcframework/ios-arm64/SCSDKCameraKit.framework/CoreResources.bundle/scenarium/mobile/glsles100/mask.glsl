@@ -3,27 +3,16 @@
 //sampler sampler maskTextureSmpSC 2:1
 //texture texture2D maskTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 maskTextureDims;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform mat3 maskTextureTransform;
-uniform vec4 maskTextureUvMinMax;
-uniform vec4 maskTextureBorderColor;
-uniform vec4 mainColor;
-uniform float backgroundCornerRadius;
-uniform vec2 backgroundSize;
 void main()
 {
 sc_ProcessVertex(sc_LoadVertexAttributes());
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef maskTextureHasSwappedViews
@@ -72,8 +61,6 @@ uniform vec4 mainColor;
 uniform mat3 maskTextureTransform;
 uniform vec4 maskTextureUvMinMax;
 uniform vec4 maskTextureBorderColor;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
 uniform mediump sampler2D maskTexture;
 float getCornerFade(vec2 corner)
 {

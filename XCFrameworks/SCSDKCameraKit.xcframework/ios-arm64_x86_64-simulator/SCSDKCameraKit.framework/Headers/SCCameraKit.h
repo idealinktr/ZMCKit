@@ -8,6 +8,7 @@
 @protocol SCCameraKitOutput;
 @protocol SCCameraKitLensProcessor;
 @protocol SCCameraKitLensHintDelegate;
+@protocol SCCameraKitLensUIEventsDelegate;
 @protocol SCCameraKitInput;
 @protocol SCCameraKitARInput;
 @protocol SCCameraKitErrorHandler;
@@ -18,6 +19,7 @@
 @protocol SCCameraKitAgreementsStore;
 @protocol SCCameraKitTextInputContextProvider;
 @protocol SCCameraKitAdjustmentsComponent;
+@protocol SCCameraKitCachesManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -88,6 +90,29 @@ NS_SWIFT_NAME(CameraKitProtocol)
         (nullable id<SCCameraKitAgreementsPresentationContextProvider>)agreementsPresentationContextProvider
     NS_SWIFT_NAME(start(input:arInput:cameraPosition:videoOrientation:dataProvider:hintDelegate:textInputContextProvider:agreementsPresentationContextProvider:));
 
+/// Begin processing input frames.
+/// @param input the input to configure.
+/// @param arInput the ARKit input to configure.
+/// @param cameraPosition the camera position in use
+/// @param videoOrientation the orientation for the outputted video buffers
+/// @param dataProvider data provider component to pass in custom data providers (optional -- will create and handle
+/// data providers by default if nil)
+/// @param hintDelegate lens hint delegate to show/hide hints for applied lenses
+/// @param textInputContextProvider context provider for providing keyboard access to lenses
+/// @param agreementsPresentationContextProvider context provider for presenting agreements screens
+/// @param lensUIEventsDelegate delegate to handle UI events from applied lenses
+- (void)startWithInput:(id<SCCameraKitInput>)input
+                                  arInput:(id<SCCameraKitARInput>)arInput
+                           cameraPosition:(AVCaptureDevicePosition)cameraPosition
+                         videoOrientation:(AVCaptureVideoOrientation)videoOrientation
+                             dataProvider:(nullable SCCameraKitDataProviderComponent *)dataProvider
+                             hintDelegate:(nullable id<SCCameraKitLensHintDelegate>)hintDelegate
+                 textInputContextProvider:(nullable id<SCCameraKitTextInputContextProvider>)textInputContextProvider
+    agreementsPresentationContextProvider:
+        (nullable id<SCCameraKitAgreementsPresentationContextProvider>)agreementsPresentationContextProvider
+                     lensUIEventsDelegate:(nullable id<SCCameraKitLensUIEventsDelegate>)lensUIEventsDelegate
+    NS_SWIFT_NAME(start(input:arInput:cameraPosition:videoOrientation:dataProvider:hintDelegate:textInputContextProvider:agreementsPresentationContextProvider:lensUIEventsDelegate:));
+
 /// End processing input frames.
 - (void)stop;
 
@@ -119,11 +144,34 @@ NS_SWIFT_NAME(CameraKitProtocol)
 /// app's Terms of Service)
 - (void)presentAgreementsImmediately;
 
+/// Registers an extension with CameraKit.
+/// @param extension the extension to register.
+/// @param completion Callback on completion with success or error on failure.
+- (void)registerExtension:(id)extension completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion NS_SWIFT_NAME(register(_:completion:));
+
+/// Provides access to the caches manager for managing and freeing disk space.
+///
+/// Use this property to interact with cache-related functionality, such as clearing
+/// cached resources and querying cache statistics.
+@property (strong, nonatomic, readonly) id<SCCameraKitCachesManager> caches;
+
 @end
 
 NS_SWIFT_NAME(Session)
 /// CameraKit handles interaction with the camera and contains several components like lenses.
 @interface SCCameraKitSession : NSObject <SCCameraKitProtocol>
+
+/// Init with session and lenses config instance to configure properties within lenses component
+/// @param sessionConfig session config to configure session with application id and api token
+/// @param lensesConfig lenses config to configure lenses component such as caches
+/// @param errorHandler optional error handler instance to handle exceptions thrown by CameraKit
+/// @param initializationExtensions extensions that should be registered to the session on initialization.
+/// @note Only add extensions that are specifically designed for session initialization.
+///       This requirement should be explicitly mentioned in the extension's documentation.
+- (instancetype)initWithSessionConfig:(nullable SCCameraKitSessionConfig *)sessionConfig
+                         lensesConfig:(SCCameraKitLensesConfig *)lensesConfig
+                         errorHandler:(nullable id<SCCameraKitErrorHandler>)errorHandler
+             initializationExtensions:(nullable NSArray<id> *)initializationExtensions;
 
 /// Init with session and lenses config instance to configure properties within lenses component
 /// @param sessionConfig session config to configure session with application id and api token

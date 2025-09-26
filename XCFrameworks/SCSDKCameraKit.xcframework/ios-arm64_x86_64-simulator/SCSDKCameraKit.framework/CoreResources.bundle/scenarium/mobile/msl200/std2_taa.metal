@@ -7,6 +7,20 @@ using namespace metal;
 //SG_REFLECTION_END
 
 namespace SNAP_VS {
+float4 sc_ApplyTAAJitter(thread float4& screenPosition,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+{
+#if (!sc_TAADisabled)
+{
+#if (sc_TAAEnabled)
+{
+float2 l9_0=screenPosition.xy+((*sc_set0.LibraryUniforms).sc_TAAJitterOffset*screenPosition.w);
+screenPosition=float4(l9_0.x,l9_0.y,screenPosition.z,screenPosition.w);
+}
+#endif
+}
+#endif
+return screenPosition;
+}
 } // VERTEX SHADER
 
 
@@ -55,6 +69,14 @@ return computeMotionVector(param,sc_sysIn,sc_set0,sc_set1);
 #else
 {
 return finalColor;
+}
+#endif
+}
+void sc_DiscardVelocityAndDepthInMotionVectorPass()
+{
+#if (sc_MotionVectorsPass)
+{
+discard_fragment();
 }
 #endif
 }

@@ -5,10 +5,10 @@
 //texture texture2D lookupTexture 2:0:2:2
 //texture texture2D maskTexture 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef SOFT_SKIN
@@ -23,23 +23,6 @@
 #undef EYE_SHARPEN
 #define EYE_SHARPEN 1
 #endif
-uniform vec4 lookupTextureDims;
-uniform vec4 maskTextureDims;
-uniform vec4 lookupTextureSize;
-uniform vec4 lookupTextureView;
-uniform mat3 lookupTextureTransform;
-uniform vec4 lookupTextureUvMinMax;
-uniform vec4 lookupTextureBorderColor;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform mat3 maskTextureTransform;
-uniform vec4 maskTextureUvMinMax;
-uniform vec4 maskTextureBorderColor;
-uniform float softSkinRadius;
-uniform float softSkinIntensity;
-uniform float teethWhiteningIntensity;
-uniform float eyeWhiteningIntensity;
-uniform float sharpenEyeIntensity;
 varying vec4 varCustomTex0;
 varying vec4 varCustomTex1;
 varying vec4 varCustomTex2;
@@ -79,9 +62,6 @@ varCustomTex3=vec4(varCustomTex3.x,varCustomTex3.y,l9_12.x,l9_12.y);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef lookupTextureHasSwappedViews
@@ -199,10 +179,6 @@ uniform float softSkinIntensity;
 uniform float sharpenEyeIntensity;
 uniform float eyeWhiteningIntensity;
 uniform float teethWhiteningIntensity;
-uniform vec4 lookupTextureSize;
-uniform vec4 lookupTextureView;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
 uniform mediump sampler2D maskTexture;
 uniform mediump sampler2D lookupTexture;
 varying vec4 varCustomTex0;
@@ -288,7 +264,7 @@ return mix(l9_14.xyz,sc_SampleTextureBiasOrLevel(lookupTextureDims.xy,lookupText
 void main()
 {
 sc_DiscardStereoFragment();
-vec4 l9_0=getFramebufferColor();
+vec4 l9_0=sc_GetFramebufferColor();
 int l9_1;
 #if (maskTextureHasSwappedViews)
 {

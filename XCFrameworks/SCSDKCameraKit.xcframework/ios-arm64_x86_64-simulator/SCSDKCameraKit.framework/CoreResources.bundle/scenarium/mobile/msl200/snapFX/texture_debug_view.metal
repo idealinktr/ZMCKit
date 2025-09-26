@@ -12,15 +12,11 @@ using namespace metal;
 //texture texture2D leftTexture 2:0:2:2
 //texture texture2D rightTexture 2:1:2:3
 //ubo float UserUniforms 2:4:272 {
-//float4 leftTextureSize 0
 //float4 leftTextureDims 16
-//float4 leftTextureView 32
 //float3x3 leftTextureTransform 48
 //float4 leftTextureUvMinMax 96
 //float4 leftTextureBorderColor 112
-//float4 rightTextureSize 128
 //float4 rightTextureDims 144
-//float4 rightTextureView 160
 //float3x3 rightTextureTransform 176
 //float4 rightTextureUvMinMax 224
 //float4 rightTextureBorderColor 240

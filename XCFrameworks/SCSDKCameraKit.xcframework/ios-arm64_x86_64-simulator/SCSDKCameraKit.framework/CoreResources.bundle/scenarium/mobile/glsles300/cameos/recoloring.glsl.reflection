@@ -1,0 +1,31 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler alphaTextureSmpSC 0:8
+//sampler sampler assetTextureSmpSC 0:9
+//texture texture2D alphaTexture 0:0:0:8
+//texture texture2D assetTexture 0:1:0:9
+//texture texture2DArray alphaTextureArrSC 0:16:0:8
+//texture texture2DArray assetTextureArrSC 0:17:0:9
+//spec_const bool SC_USE_CLAMP_TO_BORDER_alphaTexture 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_assetTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_alphaTexture 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_assetTexture 3 0
+//spec_const bool SC_USE_UV_TRANSFORM_alphaTexture 4 0
+//spec_const bool SC_USE_UV_TRANSFORM_assetTexture 5 0
+//spec_const bool alphaTextureHasSwappedViews 6 0
+//spec_const bool assetTextureHasSwappedViews 7 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_alphaTexture 8 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_assetTexture 9 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_alphaTexture 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_assetTexture 11 -1
+//spec_const int alphaTextureLayout 12 0
+//spec_const int assetTextureLayout 13 0
+//spec_const int sc_ShaderCacheConstant 14 0
+//spec_const int sc_StereoRenderingMode 15 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 16 0
+//spec_const int sc_StereoViewID 17 0
+//SG_REFLECTION_END

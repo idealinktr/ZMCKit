@@ -5,26 +5,14 @@
 //texture texture2D sc_OITAlpha0 2:0:2:2
 //texture texture2D sc_OITAlpha1 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 sc_OITAlpha0Dims;
-uniform vec4 sc_OITAlpha1Dims;
-uniform vec4 sc_OITAlpha0Size;
-uniform vec4 sc_OITAlpha0View;
-uniform mat3 sc_OITAlpha0Transform;
-uniform vec4 sc_OITAlpha0UvMinMax;
-uniform vec4 sc_OITAlpha0BorderColor;
-uniform vec4 sc_OITAlpha1Size;
-uniform vec4 sc_OITAlpha1View;
-uniform mat3 sc_OITAlpha1Transform;
-uniform vec4 sc_OITAlpha1UvMinMax;
-uniform vec4 sc_OITAlpha1BorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -33,10 +21,6 @@ varPackedTex=vec4(l9_1.x,l9_1.y,varPackedTex.z,varPackedTex.w);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -114,10 +98,6 @@ uniform vec4 sc_OITAlpha0BorderColor;
 uniform mat3 sc_OITAlpha1Transform;
 uniform vec4 sc_OITAlpha1UvMinMax;
 uniform vec4 sc_OITAlpha1BorderColor;
-uniform vec4 sc_OITAlpha0Size;
-uniform vec4 sc_OITAlpha0View;
-uniform vec4 sc_OITAlpha1Size;
-uniform vec4 sc_OITAlpha1View;
 uniform mediump sampler2D sc_OITAlpha0;
 uniform mediump sampler2D sc_OITAlpha1;
 void main()

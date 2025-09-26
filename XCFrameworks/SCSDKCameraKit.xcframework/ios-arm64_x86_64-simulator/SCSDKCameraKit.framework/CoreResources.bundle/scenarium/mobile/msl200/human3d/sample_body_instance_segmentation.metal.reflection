@@ -21,183 +21,62 @@
 //output vec4 FragColor1 1
 //output vec4 FragColor2 2
 //output vec4 FragColor3 3
-//sampler sampler cropTextureSmpSC 2:17
-//texture texture2D cropTexture 2:4:2:17
-//ubo float sc_BonesUBO 2:3:96 {
-//sc_Bone_t sc_Bones 0:[]:96
+//sampler sampler cropTextureSmpSC 0:16
+//texture texture2D cropTexture 0:4:0:16
+//ubo float sc_BonesUBO 0:3:96 {
+//sc_Bone_t sc_Bones 0:[1]:96
 //float4 sc_Bones.boneMatrix 0:[3]:16
 //float4 sc_Bones.normalMatrix 48:[3]:16
 //}
-//ubo int UserUniforms 2:30:4432 {
-//sc_PointLight_t sc_PointLights 0:[3]:80
-//bool sc_PointLights.falloffEnabled 0
-//float sc_PointLights.falloffEndDistance 4
-//float sc_PointLights.negRcpFalloffEndDistance4 8
-//float sc_PointLights.angleScale 12
-//float sc_PointLights.angleOffset 16
-//float3 sc_PointLights.direction 32
-//float3 sc_PointLights.position 48
-//float4 sc_PointLights.color 64
-//sc_DirectionalLight_t sc_DirectionalLights 240:[5]:32
-//float3 sc_DirectionalLights.direction 0
-//float4 sc_DirectionalLights.color 16
-//sc_AmbientLight_t sc_AmbientLights 400:[3]:32
-//float3 sc_AmbientLights.color 0
-//float sc_AmbientLights.intensity 16
-//sc_LightEstimationData_t sc_LightEstimationData 496
-//sc_SphericalGaussianLight_t sc_LightEstimationData.sg 0:[12]:48
-//float3 sc_LightEstimationData.sg.color 0
-//float sc_LightEstimationData.sg.sharpness 16
-//float3 sc_LightEstimationData.sg.axis 32
-//float3 sc_LightEstimationData.ambientLight 576
-//float4 sc_EnvmapDiffuseSize 1088
-//float4 sc_EnvmapDiffuseDims 1104
-//float4 sc_EnvmapDiffuseView 1120
-//float4 sc_EnvmapSpecularSize 1136
-//float4 sc_EnvmapSpecularDims 1152
-//float4 sc_EnvmapSpecularView 1168
-//float3 sc_EnvmapRotation 1184
-//float sc_EnvmapExposure 1200
-//float3 sc_Sh 1216:[9]:16
-//float sc_ShIntensity 1360
-//float4 sc_Time 1376
+//ubo int UserUniforms 0:28:4320 {
 //float4 sc_UniformConstants 1392
-//float4 sc_GeometryInfo 1408
 //float4x4 sc_ModelViewProjectionMatrixArray 1424:[2]:64
-//float4x4 sc_ModelViewProjectionMatrixInverseArray 1552:[2]:64
 //float4x4 sc_ViewProjectionMatrixArray 1680:[2]:64
-//float4x4 sc_ViewProjectionMatrixInverseArray 1808:[2]:64
 //float4x4 sc_ModelViewMatrixArray 1936:[2]:64
-//float4x4 sc_ModelViewMatrixInverseArray 2064:[2]:64
-//float3x3 sc_ViewNormalMatrixArray 2192:[2]:48
-//float3x3 sc_ViewNormalMatrixInverseArray 2288:[2]:48
 //float4x4 sc_ProjectionMatrixArray 2384:[2]:64
 //float4x4 sc_ProjectionMatrixInverseArray 2512:[2]:64
 //float4x4 sc_ViewMatrixArray 2640:[2]:64
-//float4x4 sc_ViewMatrixInverseArray 2768:[2]:64
-//float4x4 sc_PrevFrameViewProjectionMatrixArray 2896:[2]:64
 //float4x4 sc_ModelMatrix 3024
-//float4x4 sc_ModelMatrixInverse 3088
 //float3x3 sc_NormalMatrix 3152
-//float3x3 sc_NormalMatrixInverse 3200
-//float4x4 sc_PrevFrameModelMatrix 3248
-//float4x4 sc_PrevFrameModelMatrixInverse 3312
-//float3 sc_LocalAabbMin 3376
-//float3 sc_LocalAabbMax 3392
-//float3 sc_WorldAabbMin 3408
-//float3 sc_WorldAabbMax 3424
-//float4 sc_WindowToViewportTransform 3440
-//float4 sc_CurrentRenderTargetDims 3456
 //sc_Camera_t sc_Camera 3472
 //float3 sc_Camera.position 0
 //float sc_Camera.aspect 16
 //float2 sc_Camera.clipPlanes 24
-//float sc_ShadowDensity 3504
-//float4 sc_ShadowColor 3520
 //float4x4 sc_ProjectorMatrix 3536
-//float _sc_GetFramebufferColorInvalidUsageMarker 3600
-//float shaderComplexityValue 3604
-//float sc_DisableFrustumCullingMarker 3608
 //float4 weights0 3616
 //float4 weights1 3632
-//float4 weights2 3648
 //float4 sc_StereoClipPlanes 3664:[2]:16
-//int sc_FallbackInstanceID 3696
-//float _sc_framebufferFetchMarker 3700
-//float2 sc_TAAJitterOffset 3704
-//float strandWidth 3712
-//float strandTaper 3716
-//float4 sc_StrandDataMapTextureSize 3728
-//float clumpInstanceCount 3744
-//float clumpRadius 3748
-//float clumpTipScale 3752
-//float hairstyleInstanceCount 3756
-//float hairstyleNoise 3760
-//float4 sc_ScreenTextureSize 3776
-//float4 sc_ScreenTextureDims 3792
-//float4 sc_ScreenTextureView 3808
-//bool receivesRayTracedReflections 3824
-//bool isProxyMode 3828
-//bool receivesRayTracedShadows 3832
-//bool receivesRayTracedDiffuseIndirect 3836
-//bool receivesRayTracedAo 3840
-//float4 sc_RayTracedReflectionTextureSize 3856
-//float4 sc_RayTracedReflectionTextureDims 3872
-//float4 sc_RayTracedReflectionTextureView 3888
-//float4 sc_RayTracedShadowTextureSize 3904
-//float4 sc_RayTracedShadowTextureDims 3920
-//float4 sc_RayTracedShadowTextureView 3936
-//float4 sc_RayTracedDiffIndTextureSize 3952
-//float4 sc_RayTracedDiffIndTextureDims 3968
-//float4 sc_RayTracedDiffIndTextureView 3984
-//float4 sc_RayTracedAoTextureSize 4000
-//float4 sc_RayTracedAoTextureDims 4016
-//float4 sc_RayTracedAoTextureView 4032
-//float receiver_mask 4048
-//float3 OriginNormalizationScale 4064
-//float3 OriginNormalizationScaleInv 4080
-//float3 OriginNormalizationOffset 4096
-//int receiverId 4112
-//int instance_id 4116
-//int lray_triangles_last 4120
-//bool noEarlyZ 4124
-//bool has_animated_pn 4128
-//int emitter_stride 4132
-//int proxy_offset_position 4136
-//int proxy_offset_normal 4140
-//int proxy_offset_tangent 4144
-//int proxy_offset_color 4148
-//int proxy_offset_texture0 4152
-//int proxy_offset_texture1 4156
-//int proxy_offset_texture2 4160
-//int proxy_offset_texture3 4164
-//int proxy_format_position 4168
-//int proxy_format_normal 4172
-//int proxy_format_tangent 4176
-//int proxy_format_color 4180
-//int proxy_format_texture0 4184
-//int proxy_format_texture1 4188
-//int proxy_format_texture2 4192
-//int proxy_format_texture3 4196
-//float4 z_rayDirectionsSize 4208
-//float4 z_rayDirectionsDims 4224
-//float4 z_rayDirectionsView 4240
-//float4 cropTextureSize 4256
-//float4 cropTextureDims 4272
-//float4 cropTextureView 4288
-//float3x3 cropTextureTransform 4304
-//float4 cropTextureUvMinMax 4352
-//float4 cropTextureBorderColor 4368
-//float3x3 screenToCropTransform 4384
+//float3x3 cropTextureTransform 4240
+//float4 cropTextureUvMinMax 4288
+//float4 cropTextureBorderColor 4304
 //}
-//ssbo int layoutIndices 2:0:4 {
-//uint _Triangles 0:[]:4
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
 //}
-//ssbo float layoutVerticesPN 2:2:4 {
-//float _VerticesPN 0:[]:4
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
 //}
-//ssbo float layoutVertices 2:1:4 {
-//float _Vertices 0:[]:4
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
 //}
-//spec_const bool SC_DISABLE_FRUSTUM_CULLING 1000
-//spec_const bool SC_USE_CLAMP_TO_BORDER_cropTexture 1001
-//spec_const bool SC_USE_UV_MIN_MAX_cropTexture 1002
-//spec_const bool SC_USE_UV_TRANSFORM_cropTexture 1003
-//spec_const bool cropTextureHasSwappedViews 1004
-//spec_const bool sc_IsEditor 1005
-//spec_const bool sc_OITCompositingPass 1006
-//spec_const bool sc_OITDepthBoundsPass 1007
-//spec_const bool sc_OITDepthGatherPass 1008
-//spec_const bool sc_ProjectiveShadowsReceiver 1009
-//spec_const bool sc_TAAEnabled 1010
-//spec_const bool sc_VertexBlendingUseNormals 1011
-//spec_const bool sc_VertexBlending 1012
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_cropTexture 1013
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_cropTexture 1014
-//spec_const int cropTextureLayout 1015
-//spec_const int sc_DepthBufferMode 1016
-//spec_const int sc_RenderingSpace 1017
-//spec_const int sc_SkinBonesCount 1018
-//spec_const int sc_StereoRenderingMode 1019
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 1020
+//spec_const bool INVERT_MASK 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_cropTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_cropTexture 2 0
+//spec_const bool SC_USE_UV_TRANSFORM_cropTexture 3 0
+//spec_const bool cropTextureHasSwappedViews 4 0
+//spec_const bool sc_OITCompositingPass 5 0
+//spec_const bool sc_OITDepthBoundsPass 6 0
+//spec_const bool sc_OITDepthGatherPass 7 0
+//spec_const bool sc_ProjectiveShadowsReceiver 8 0
+//spec_const bool sc_VertexBlendingUseNormals 9 0
+//spec_const bool sc_VertexBlending 10 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_cropTexture 11 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_cropTexture 12 -1
+//spec_const int cropTextureLayout 13 0
+//spec_const int sc_DepthBufferMode 14 0
+//spec_const int sc_RenderingSpace 15 -1
+//spec_const int sc_ShaderCacheConstant 16 0
+//spec_const int sc_SkinBonesCount 17 0
+//spec_const int sc_StereoRenderingMode 18 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 19 0
 //SG_REFLECTION_END

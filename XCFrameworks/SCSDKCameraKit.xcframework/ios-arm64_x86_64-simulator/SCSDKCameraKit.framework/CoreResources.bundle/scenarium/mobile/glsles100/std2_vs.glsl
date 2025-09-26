@@ -3,6 +3,7 @@
 //SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <std2_shadows.glsl>
+#include <std2_taa.glsl>
 struct sc_Vertex_t
 {
 vec4 position;
@@ -11,19 +12,23 @@ vec3 tangent;
 vec2 texture0;
 vec2 texture1;
 };
-int sc_GetLocalInstanceID()
+int sc_GetLocalInstanceIDInternal(int id)
 {
 #ifdef sc_LocalInstanceID
-    return sc_LocalInstanceID;
+return sc_LocalInstanceID;
 #else
-    return 0;
+return 0;
 #endif
+}
+int sc_GetLocalInstanceID()
+{
+return sc_GetLocalInstanceIDInternal(sc_FallbackInstanceID);
 }
 void sc_SetClipDistancePlatform(float dstClipDistance)
 {
-    #if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&sc_StereoRendering_IsClipDistanceEnabled
-        gl_ClipDistance[0]=dstClipDistance;
-    #endif
+#if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&sc_StereoRendering_IsClipDistanceEnabled
+gl_ClipDistance[0]=dstClipDistance;
+#endif
 }
 void sc_SetClipDistance(float dstClipDistance)
 {
@@ -48,13 +53,18 @@ sc_SetClipDistance(dstClipDistance);
 }
 void sc_DummyOutPos()
 {
-    #ifdef VERTEX_SHADER
-        #undef scOutPos
-        #define scOutPos sc_SetClipPosition
-    #endif
+#ifdef VERTEX_SHADER
+#undef scOutPos
+#define scOutPos sc_SetClipPosition
+#endif
 }
 void sc_SetClipPosition(vec4 clipPosition)
 {
+#if (sc_ShaderCacheConstant!=0)
+{
+clipPosition.x+=(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+}
+#endif
 #if (sc_StereoRenderingMode>0)
 {
 varStereoViewID=float(sc_StereoViewID);
@@ -395,15 +405,10 @@ varViewSpaceDepth=-sc_ObjectToView(v.position).z;
 }
 #endif
 screenPosition=applyDepthAlgorithm(screenPosition);
-#if (sc_TAAEnabled)
-{
-vec2 l9_3=screenPosition.xy+(sc_TAAJitterOffset*screenPosition.w);
-screenPosition=vec4(l9_3.x,l9_3.y,screenPosition.z,screenPosition.w);
-}
-#endif
 vec4 clipPosition=screenPosition*1.0;
 sc_SetClipPosition(clipPosition);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #include <std2_shadows.glsl>
+#include <std2_taa.glsl>
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

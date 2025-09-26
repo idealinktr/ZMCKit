@@ -18,33 +18,25 @@ using namespace metal;
 //texture texture2D screenTexture2 2:2:2:6
 //texture texture2D screenTexture3 2:3:2:7
 //ubo float UserUniforms 2:8:688 {
-//float4 screenTexture0Size 0
 //float4 screenTexture0Dims 16
-//float4 screenTexture0View 32
 //float3x3 screenTexture0Transform 48
 //float4 screenTexture0UvMinMax 96
 //float4 screenTexture0BorderColor 112
 //float screenTexture0LOD 128
 //float4 color0 144
-//float4 screenTexture1Size 160
 //float4 screenTexture1Dims 176
-//float4 screenTexture1View 192
 //float3x3 screenTexture1Transform 208
 //float4 screenTexture1UvMinMax 256
 //float4 screenTexture1BorderColor 272
 //float screenTexture1LOD 288
 //float4 color1 304
-//float4 screenTexture2Size 320
 //float4 screenTexture2Dims 336
-//float4 screenTexture2View 352
 //float3x3 screenTexture2Transform 368
 //float4 screenTexture2UvMinMax 416
 //float4 screenTexture2BorderColor 432
 //float screenTexture2LOD 448
 //float4 color2 464
-//float4 screenTexture3Size 480
 //float4 screenTexture3Dims 496
-//float4 screenTexture3View 512
 //float3x3 screenTexture3Transform 528
 //float4 screenTexture3UvMinMax 576
 //float4 screenTexture3BorderColor 592

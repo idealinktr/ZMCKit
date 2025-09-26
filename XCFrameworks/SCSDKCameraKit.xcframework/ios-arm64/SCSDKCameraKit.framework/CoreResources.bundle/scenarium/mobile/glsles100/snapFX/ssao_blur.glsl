@@ -9,16 +9,6 @@
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
 #include <ssao_common.glsl>
-uniform vec4 ambientOcclusionDims;
-uniform vec4 ambientOcclusionSize;
-uniform vec4 ambientOcclusionView;
-uniform mat3 ambientOcclusionTransform;
-uniform vec4 ambientOcclusionUvMinMax;
-uniform vec4 ambientOcclusionBorderColor;
-uniform float sampleCount;
-uniform float farPlaneOverBlurThreshold;
-uniform float kernel[16];
-uniform vec2 axis;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -71,8 +61,6 @@ uniform float farPlaneOverBlurThreshold;
 uniform float kernel[16];
 uniform vec2 axis;
 uniform float sampleCount;
-uniform vec4 ambientOcclusionSize;
-uniform vec4 ambientOcclusionView;
 uniform mediump sampler2D ambientOcclusion;
 void main()
 {

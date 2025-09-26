@@ -21,9 +21,9 @@ typedef NS_ERROR_ENUM(SCCameraKitAdjustmentsComponentErrorDomain, SCCameraKitAdj
 
 } NS_SWIFT_NAME(AdjustmentsComponentError);
 
-NS_SWIFT_NAME(AdjustmentsProcessor) NS_REFINED_FOR_SWIFT
-    /// The adjustments processor handles adjusting camera frames before they are processed by lenses.
-    @protocol SCCameraKitAdjustmentsProcessor<NSObject>
+NS_SWIFT_NAME(AdjustmentsProcessor)
+/// The adjustments processor handles adjusting camera frames before they are processed by lenses.
+@protocol SCCameraKitAdjustmentsProcessor<NSObject>
 
 /// Checks if an adjustment is available and supported by the current device. Some adjustments are performance sensitive
 /// or require specific hardware which may mean they are unavailable on specific devices. You should call this method
@@ -35,8 +35,7 @@ NS_SWIFT_NAME(AdjustmentsProcessor) NS_REFINED_FOR_SWIFT
 /// @param adjustment The adjustment to apply.
 /// @param error  Any error that may occur during application.
 - (nullable id<SCCameraKitAdjustmentController>)applyAdjustment:(id<SCCameraKitAdjustment>)adjustment
-                                                          error:(NSError *_Nullable __autoreleasing *_Nullable)error
-    NS_REFINED_FOR_SWIFT;
+                                                           error:(NSError *_Nullable __autoreleasing *_Nullable)error;
 
 /// Removes an adjustment.
 /// @param adjustmentController the controller associated with the adjustment you wish to remove.

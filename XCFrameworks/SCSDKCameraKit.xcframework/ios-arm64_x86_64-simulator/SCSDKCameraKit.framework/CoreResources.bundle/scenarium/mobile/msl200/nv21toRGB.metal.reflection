@@ -1,0 +1,53 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//sampler sampler uvTextureSmpSC 0:27
+//sampler sampler yTextureSmpSC 0:28
+//texture texture2D uvTexture 0:14:0:27
+//texture texture2D yTexture 0:15:0:28
+//ubo int UserUniforms 0:29:4448 {
+//float4 sc_UniformConstants 1392
+//float4 sc_StereoClipPlanes 3664:[2]:16
+//float3x3 yTextureTransform 4240
+//float4 yTextureUvMinMax 4288
+//float4 yTextureBorderColor 4304
+//float3x3 uvTextureTransform 4368
+//float4 uvTextureUvMinMax 4416
+//float4 uvTextureBorderColor 4432
+//}
+//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
+//uint sc_RayTracingCasterTriangles 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
+//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
+//}
+//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
+//float sc_RayTracingCasterVertices 0:[1]:4
+//}
+//spec_const bool FORMAT_NV12 0 0
+//spec_const bool FORMAT_NV21 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_uvTexture 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_yTexture 3 0
+//spec_const bool SC_USE_UV_MIN_MAX_uvTexture 4 0
+//spec_const bool SC_USE_UV_MIN_MAX_yTexture 5 0
+//spec_const bool SC_USE_UV_TRANSFORM_uvTexture 6 0
+//spec_const bool SC_USE_UV_TRANSFORM_yTexture 7 0
+//spec_const bool uvTextureHasSwappedViews 8 0
+//spec_const bool yTextureHasSwappedViews 9 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_uvTexture 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_yTexture 11 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_uvTexture 12 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_yTexture 13 -1
+//spec_const int sc_ShaderCacheConstant 14 0
+//spec_const int sc_StereoRenderingMode 15 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 16 0
+//spec_const int uvTextureLayout 17 0
+//spec_const int yTextureLayout 18 0
+//SG_REFLECTION_END
