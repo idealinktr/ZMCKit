@@ -3,20 +3,15 @@
 //sampler sampler texMainSmpSC 2:1
 //texture texture2D texMain 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 texMainDims;
 uniform vec4 texMainSize;
 uniform vec2 blurVector;
-uniform vec4 texMainView;
-uniform mat3 texMainTransform;
-uniform vec4 texMainUvMinMax;
-uniform vec4 texMainBorderColor;
 varying vec2 blurCoordinates[7];
 void main()
 {
@@ -36,10 +31,6 @@ blurCoordinates[5]=l9_1+l9_5;
 blurCoordinates[6]=l9_1-l9_5;
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef texMainHasSwappedViews
@@ -72,10 +63,6 @@ blurCoordinates[6]=l9_1-l9_5;
 uniform vec4 texMainDims;
 uniform vec4 texMainUvMinMax;
 uniform vec4 texMainBorderColor;
-uniform vec4 texMainSize;
-uniform vec4 texMainView;
-uniform mat3 texMainTransform;
-uniform vec2 blurVector;
 uniform mediump sampler2D texMain;
 varying vec2 blurCoordinates[7];
 void main()

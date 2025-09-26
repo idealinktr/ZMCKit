@@ -5,7 +5,7 @@ using namespace metal;
 namespace SNAP_VS {
 int sc_GetStereoViewIndex()
 {
-    return 0;
+return 0;
 }
 }
 //SG_REFLECTION_BEGIN(100)

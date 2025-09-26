@@ -15,15 +15,11 @@ using namespace metal;
 //texture texture2D sc_OITAlpha0 2:0:2:2
 //texture texture2D sc_OITAlpha1 2:1:2:3
 //ubo float UserUniforms 2:4:256 {
-//float4 sc_OITAlpha0Size 0
 //float4 sc_OITAlpha0Dims 16
-//float4 sc_OITAlpha0View 32
 //float3x3 sc_OITAlpha0Transform 48
 //float4 sc_OITAlpha0UvMinMax 96
 //float4 sc_OITAlpha0BorderColor 112
-//float4 sc_OITAlpha1Size 128
 //float4 sc_OITAlpha1Dims 144
-//float4 sc_OITAlpha1View 160
 //float3x3 sc_OITAlpha1Transform 176
 //float4 sc_OITAlpha1UvMinMax 224
 //float4 sc_OITAlpha1BorderColor 240

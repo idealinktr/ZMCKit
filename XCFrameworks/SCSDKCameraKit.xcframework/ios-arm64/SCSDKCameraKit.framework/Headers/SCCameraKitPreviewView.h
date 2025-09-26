@@ -62,6 +62,9 @@ NS_SWIFT_NAME(PreviewView)
 - (void)configureSafeAreaWithOccludingViews:(NSArray<UIView *> *)occludingViews
     NS_SWIFT_NAME(configureSafeArea(with:));
 
+/// Clears the underlying texture and notifies completion once done. 
+- (void)clearWithCompletion:(nullable void (^)(BOOL success))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

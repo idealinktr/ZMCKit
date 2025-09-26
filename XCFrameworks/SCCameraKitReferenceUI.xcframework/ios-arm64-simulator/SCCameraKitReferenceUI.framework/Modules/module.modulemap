@@ -1,6 +1,0 @@
-framework module SCCameraKitReferenceUI {
-  umbrella header "SCCameraKitReferenceUI.h"
-  export *
-
-  module * { export * }
-}

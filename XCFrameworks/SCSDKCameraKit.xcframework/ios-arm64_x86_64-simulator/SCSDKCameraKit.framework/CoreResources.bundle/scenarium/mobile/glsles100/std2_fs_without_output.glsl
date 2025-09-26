@@ -4,14 +4,14 @@
 #if defined VERTEX_SHADER
 #include <std2.glsl>
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-    #if sc_ExporterVersion<224
-        #if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&!sc_StereoRendering_IsClipDistanceEnabled
-            #define sc_StereoFragmentMain main
-            #define sc_MainInjector MAIN(); void sc_MainInjected
-        #else
-            #define MAIN sc_MainInjector
-        #endif
-    #endif
+#if sc_ExporterVersion<224
+#if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&!sc_StereoRendering_IsClipDistanceEnabled
+#define sc_StereoFragmentMain main
+#define sc_MainInjector MAIN(); void sc_MainInjected
+#else
+#define MAIN sc_MainInjector
+#endif
+#endif
 #include <std2.glsl>
 vec4 sc_ApplyBlendModeModifications(vec4 color)
 {
@@ -71,9 +71,9 @@ void sc_MainInjector()
 }
 void sc_CallLensFragmentMain()
 {
-    #if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&!sc_StereoRendering_IsClipDistanceEnabled&&sc_ExporterVersion<224
-        MAIN();
-    #endif
+#if sc_StereoRenderingMode==sc_StereoRendering_InstancedClipped&&!sc_StereoRendering_IsClipDistanceEnabled&&sc_ExporterVersion<224
+MAIN();
+#endif
 }
 void sc_StereoFragmentMain()
 {

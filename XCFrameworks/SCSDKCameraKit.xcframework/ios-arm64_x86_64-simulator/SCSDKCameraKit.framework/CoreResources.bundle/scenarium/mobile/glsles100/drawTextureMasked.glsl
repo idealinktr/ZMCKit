@@ -7,27 +7,17 @@
 //texture texture2D inputTexture 2:1:2:4
 //texture texture2D maskTexture 2:2:2:5
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2.glsl>
 #include <required2.glsl>
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 inputTextureDims;
-uniform vec4 maskTextureDims;
-uniform vec4 backTextureDims;
 uniform mat3 inputTextureTransform;
 uniform mat3 maskTransform;
 uniform mat3 backTransform;
-uniform vec4 inputTextureSize;
-uniform vec4 inputTextureView;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform vec4 backTextureSize;
-uniform vec4 backTextureView;
-uniform vec4 backColorMult;
 varying vec4 varTexMaskAndBack;
 void main()
 {
@@ -40,9 +30,6 @@ varTexMaskAndBack=vec4(varTexMaskAndBack.x,varTexMaskAndBack.y,l9_3.x,l9_3.y);
 sc_ProcessVertex(sc_Vertex_t(l9_0.position,l9_0.normal,l9_0.tangent,vec2((inputTextureTransform*l9_1).xy),l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2.glsl>
 #include <required2.glsl>
 #include <std2_vs.glsl>
@@ -81,15 +68,6 @@ uniform vec4 inputTextureDims;
 uniform vec4 maskTextureDims;
 uniform vec4 backTextureDims;
 uniform vec4 backColorMult;
-uniform vec4 inputTextureSize;
-uniform vec4 inputTextureView;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform vec4 backTextureSize;
-uniform vec4 backTextureView;
-uniform mat3 maskTransform;
-uniform mat3 backTransform;
-uniform mat3 inputTextureTransform;
 uniform mediump sampler2D inputTexture;
 uniform mediump sampler2D maskTexture;
 uniform mediump sampler2D backTexture;

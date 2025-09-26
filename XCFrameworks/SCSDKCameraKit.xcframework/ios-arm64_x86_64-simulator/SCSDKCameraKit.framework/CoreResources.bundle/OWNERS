@@ -1,0 +1,38 @@
+--- !OWNERS
+
+version: 2
+
+default:
+  jira_project: LOOK
+  owners:
+    num_required_reviewers: 1
+    teams:
+    - Snapchat/camera-platform-core
+
+file_matchers:
+  shaders:
+    jira_project: LOOK
+    owners:
+      num_required_reviewers: 1
+      teams:
+      - Snapchat/camera-platform-rendering
+    watchers:
+    - smarton
+    patterns:
+    - 'scenarium/**'
+    - 'scenarium_metal/**'
+  face_tracking_data:
+    jira_project: LOOK
+    owners:
+      num_required_reviewers: 1
+      users:
+      - yevhen-zadorozhnyi
+      - fedir-poliakov
+      - oleksandr-bacherikov
+      - nheravi
+    patterns:
+    - 'TrackingData/**'
+    - 'WASMTrackingData/**'
+    - 'Candide/**'
+    - 'Landmarks/**'
+    - 'LiteTrackingData.lns'

@@ -3,34 +3,19 @@
 //sampler sampler baseTexSmpSC 2:1
 //texture texture2D baseTex 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-#ifndef SAMPLE_COUNT
-#define SAMPLE_COUNT 0
-#endif
-uniform vec4 baseTexDims;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform mat3 baseTexTransform;
-uniform vec4 baseTexUvMinMax;
-uniform vec4 baseTexBorderColor;
-uniform float mipLevel;
-uniform mat4 fMipLevelsMat[((SAMPLE_COUNT/16)+1)];
-uniform vec4 lightVec[(SAMPLE_COUNT+1)];
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
 sc_ProcessVertex(sc_Vertex_t(vec4((texture0*2.0)-vec2(1.0),0.0,1.0),l9_0.normal,l9_0.tangent,l9_0.texture0,l9_0.texture1));
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -78,7 +63,6 @@ uniform mat3 baseTexTransform;
 uniform vec4 baseTexUvMinMax;
 uniform vec4 baseTexBorderColor;
 uniform float mipLevel;
-uniform vec4 baseTexView;
 uniform mediump sampler2D baseTex;
 vec4 filterEnvmap1(vec3 targetN)
 {

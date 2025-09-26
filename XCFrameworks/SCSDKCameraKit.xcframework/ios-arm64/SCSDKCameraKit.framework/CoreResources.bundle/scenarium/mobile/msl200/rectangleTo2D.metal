@@ -11,10 +11,7 @@ using namespace metal;
 //sampler sampler rectTextureSmpSC 2:1
 //texture texture2D rectTexture 2:0:2:1
 //ubo float UserUniforms 2:2:128 {
-//float4 rectTextureSize 0
 //float4 rectTextureDims 16
-//float4 rectTextureView 32
-//float3x3 rectTextureTransform 48
 //float4 rectTextureUvMinMax 96
 //float4 rectTextureBorderColor 112
 //}

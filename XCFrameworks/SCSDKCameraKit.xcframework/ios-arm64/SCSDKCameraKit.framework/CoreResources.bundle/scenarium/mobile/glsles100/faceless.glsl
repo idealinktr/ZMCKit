@@ -3,20 +3,15 @@
 //sampler sampler cameraTextureSmpSC 2:1
 //texture texture2D cameraTexture 2:0:2:1
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
-uniform vec4 cameraTextureDims;
 uniform mat3 cameraTextureTransform;
 uniform vec4 leftSampleOffsetSize;
 uniform vec4 rightSampleOffsetSize;
-uniform vec4 cameraTextureSize;
-uniform vec4 cameraTextureView;
-uniform vec4 cameraTextureUvMinMax;
-uniform vec4 cameraTextureBorderColor;
 varying float varLerp;
 varying vec2 varLeftSampleCoord;
 varying vec2 varRightSampleCoord;
@@ -39,9 +34,6 @@ varRightSampleCoord=(((l9_6*l9_5).xy+rightSampleOffsetSize.xy)*0.5)+vec2(0.5);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #ifndef cameraTextureHasSwappedViews
@@ -74,11 +66,6 @@ sc_ProcessVertex(l9_0);
 uniform vec4 cameraTextureDims;
 uniform vec4 cameraTextureUvMinMax;
 uniform vec4 cameraTextureBorderColor;
-uniform vec4 cameraTextureSize;
-uniform vec4 cameraTextureView;
-uniform mat3 cameraTextureTransform;
-uniform vec4 leftSampleOffsetSize;
-uniform vec4 rightSampleOffsetSize;
 uniform mediump sampler2D cameraTexture;
 varying vec2 varLeftSampleCoord;
 varying vec2 varRightSampleCoord;

@@ -11,21 +11,16 @@ using namespace metal;
 //sampler sampler depthBufferSmpSC 2:1
 //texture texture2D depthBuffer 2:0:2:1
 //ubo float UserUniforms 2:2:192 {
-//float4 depthBufferSize 0
 //float4 depthBufferDims 16
-//float4 depthBufferView 32
 //float3x3 depthBufferTransform 48
 //float4 depthBufferUvMinMax 96
 //float4 depthBufferBorderColor 112
 //float intensity 128
 //float power 132
 //float2 sampleCount 136
-//float spiralTurns 144
 //float2 tapRotationCosSin 152
 //float projectionScaleRadiusInPixels 160
 //float invRadiusSquared 164
-//float minHorizonAngleSineSquared 168
-//float maxLevel 172
 //float selfOcclusionBias 176
 //float peakFalloffSquared 180
 //float invFarPlane 184

@@ -1,0 +1,67 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//sampler sampler mainTextureSmpSC 0:12
+//sampler sampler tex_BY_YSmpSC 0:19
+//sampler sampler tex_RG_RB_GBSmpSC 0:20
+//sampler sampler tex_RR_GG_BBSmpSC 0:21
+//sampler sampler tex_RY_GYSmpSC 0:22
+//sampler sampler tex_R_G_BSmpSC 0:23
+//texture texture2D mainTexture 0:0:0:12
+//texture texture2D tex_BY_Y 0:7:0:19
+//texture texture2D tex_RG_RB_GB 0:8:0:20
+//texture texture2D tex_RR_GG_BB 0:9:0:21
+//texture texture2D tex_RY_GY 0:10:0:22
+//texture texture2D tex_R_G_B 0:11:0:23
+//texture texture2DArray mainTextureArrSC 0:24:0:12
+//texture texture2DArray tex_BY_YArrSC 0:28:0:19
+//texture texture2DArray tex_RG_RB_GBArrSC 0:29:0:20
+//texture texture2DArray tex_RR_GG_BBArrSC 0:30:0:21
+//texture texture2DArray tex_RY_GYArrSC 0:31:0:22
+//texture texture2DArray tex_R_G_BArrSC 0:32:0:23
+//spec_const bool CAMEOS_MATTING 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_BY_Y 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RR_GG_BB 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RY_GY 5 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_R_G_B 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 7 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_BY_Y 8 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RG_RB_GB 9 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RR_GG_BB 10 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_RY_GY 11 0
+//spec_const bool SC_USE_UV_MIN_MAX_tex_R_G_B 12 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 13 0
+//spec_const bool mainTextureHasSwappedViews 14 0
+//spec_const bool tex_BY_YHasSwappedViews 15 0
+//spec_const bool tex_RG_RB_GBHasSwappedViews 16 0
+//spec_const bool tex_RR_GG_BBHasSwappedViews 17 0
+//spec_const bool tex_RY_GYHasSwappedViews 18 0
+//spec_const bool tex_R_G_BHasSwappedViews 19 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 20 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_BY_Y 21 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RG_RB_GB 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RR_GG_BB 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RY_GY 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_R_G_B 25 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 26 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_BY_Y 27 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RG_RB_GB 28 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RR_GG_BB 29 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RY_GY 30 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_R_G_B 31 -1
+//spec_const int mainTextureLayout 32 0
+//spec_const int sc_ShaderCacheConstant 33 0
+//spec_const int sc_StereoRenderingMode 34 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 35 0
+//spec_const int sc_StereoViewID 36 0
+//spec_const int tex_BY_YLayout 37 0
+//spec_const int tex_RG_RB_GBLayout 38 0
+//spec_const int tex_RR_GG_BBLayout 39 0
+//spec_const int tex_RY_GYLayout 40 0
+//spec_const int tex_R_G_BLayout 41 0
+//SG_REFLECTION_END

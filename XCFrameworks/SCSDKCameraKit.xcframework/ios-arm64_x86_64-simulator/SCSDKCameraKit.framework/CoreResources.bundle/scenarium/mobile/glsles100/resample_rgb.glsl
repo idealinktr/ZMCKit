@@ -5,25 +5,13 @@
 //texture texture2D mainTexture 2:0:2:2
 //texture texture2D segmentationMask 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 segmentationMaskDims;
-uniform vec4 mainTextureDims;
-uniform vec4 segmentationMaskSize;
-uniform vec4 segmentationMaskView;
-uniform mat3 segmentationMaskTransform;
-uniform vec4 segmentationMaskUvMinMax;
-uniform vec4 segmentationMaskBorderColor;
-uniform vec4 mainTextureSize;
-uniform vec4 mainTextureView;
-uniform mat3 mainTextureTransform;
-uniform vec4 mainTextureUvMinMax;
-uniform vec4 mainTextureBorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -33,9 +21,6 @@ varPackedTex=vec4(varPackedTex.x,varPackedTex.y,l9_2.x,l9_2.y);
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -129,6 +114,12 @@ sc_ProcessVertex(l9_0);
 #undef SC_USE_CLAMP_TO_BORDER_segmentationMask
 #define SC_USE_CLAMP_TO_BORDER_segmentationMask 1
 #endif
+#ifndef SC_USE_UV_TRANSFORM_segmentationMask
+#define SC_USE_UV_TRANSFORM_segmentationMask 0
+#elif SC_USE_UV_TRANSFORM_segmentationMask==1
+#undef SC_USE_UV_TRANSFORM_segmentationMask
+#define SC_USE_UV_TRANSFORM_segmentationMask 1
+#endif
 uniform vec4 segmentationMaskDims;
 uniform vec4 mainTextureDims;
 uniform mat3 mainTextureTransform;
@@ -136,11 +127,7 @@ uniform vec4 mainTextureUvMinMax;
 uniform vec4 mainTextureBorderColor;
 uniform vec4 segmentationMaskUvMinMax;
 uniform vec4 segmentationMaskBorderColor;
-uniform vec4 segmentationMaskSize;
-uniform vec4 segmentationMaskView;
 uniform mat3 segmentationMaskTransform;
-uniform vec4 mainTextureSize;
-uniform vec4 mainTextureView;
 uniform mediump sampler2D mainTexture;
 uniform mediump sampler2D segmentationMask;
 void main()
@@ -156,7 +143,7 @@ l9_0=1-sc_GetStereoViewIndex();
 l9_0=sc_GetStereoViewIndex();
 }
 #endif
-vec4 l9_1=sc_SampleTextureBiasOrLevel(mainTextureDims.xy,mainTextureLayout,l9_0,sc_PlatformFlipV(varPackedTex.xy),(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
+vec4 l9_1=sc_SampleTextureBiasOrLevel(mainTextureDims.xy,mainTextureLayout,l9_0,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
 vec3 l9_2=l9_1.xyz;
 vec3 l9_3;
 #if (GRAY_SCALE)
@@ -221,7 +208,7 @@ l9_12=1-sc_GetStereoViewIndex();
 l9_12=sc_GetStereoViewIndex();
 }
 #endif
-vec4 l9_13=sc_SampleTextureBiasOrLevel(segmentationMaskDims.xy,segmentationMaskLayout,l9_12,varPackedTex.zw,false,mat3(vec3(1.0,0.0,0.0),vec3(0.0,1.0,0.0),vec3(0.0,0.0,1.0)),ivec2(SC_SOFTWARE_WRAP_MODE_U_segmentationMask,SC_SOFTWARE_WRAP_MODE_V_segmentationMask),(int(SC_USE_UV_MIN_MAX_segmentationMask)!=0),segmentationMaskUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_segmentationMask)!=0),segmentationMaskBorderColor,0.0,segmentationMask);
+vec4 l9_13=sc_SampleTextureBiasOrLevel(segmentationMaskDims.xy,segmentationMaskLayout,l9_12,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_segmentationMask)!=0),segmentationMaskTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_segmentationMask,SC_SOFTWARE_WRAP_MODE_V_segmentationMask),(int(SC_USE_UV_MIN_MAX_segmentationMask)!=0),segmentationMaskUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_segmentationMask)!=0),segmentationMaskBorderColor,0.0,segmentationMask);
 float l9_14=l9_13.x;
 l9_11=vec4(l9_3.x,l9_14,l9_3.x*l9_14,l9_3.x*l9_3.x);
 }

@@ -9,24 +9,6 @@
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
 #include <ssao_common.glsl>
-uniform vec4 depthBufferDims;
-uniform vec4 depthBufferSize;
-uniform vec4 depthBufferView;
-uniform mat3 depthBufferTransform;
-uniform vec4 depthBufferUvMinMax;
-uniform vec4 depthBufferBorderColor;
-uniform float intensity;
-uniform float power;
-uniform vec2 sampleCount;
-uniform float spiralTurns;
-uniform vec2 tapRotationCosSin;
-uniform float projectionScaleRadiusInPixels;
-uniform float invRadiusSquared;
-uniform float minHorizonAngleSineSquared;
-uniform float maxLevel;
-uniform float selfOcclusionBias;
-uniform float peakFalloffSquared;
-uniform float invFarPlane;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -84,11 +66,6 @@ uniform float peakFalloffSquared;
 uniform float intensity;
 uniform float power;
 uniform float invFarPlane;
-uniform vec4 depthBufferSize;
-uniform vec4 depthBufferView;
-uniform float spiralTurns;
-uniform float minHorizonAngleSineSquared;
-uniform float maxLevel;
 uniform mediump sampler2D depthBuffer;
 float scalableAmbientObscurance(vec2 uv,vec3 viewPos,vec3 normal)
 {

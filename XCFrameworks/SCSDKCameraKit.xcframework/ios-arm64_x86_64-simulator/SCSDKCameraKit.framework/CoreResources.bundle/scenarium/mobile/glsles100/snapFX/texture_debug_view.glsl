@@ -10,22 +10,6 @@
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 leftTextureDims;
-uniform vec4 rightTextureDims;
-uniform vec4 leftTextureSize;
-uniform vec4 leftTextureView;
-uniform mat3 leftTextureTransform;
-uniform vec4 leftTextureUvMinMax;
-uniform vec4 leftTextureBorderColor;
-uniform vec4 rightTextureSize;
-uniform vec4 rightTextureView;
-uniform mat3 rightTextureTransform;
-uniform vec4 rightTextureUvMinMax;
-uniform vec4 rightTextureBorderColor;
-uniform float depthRange;
-uniform bool leftTextureIsDepthBuffer;
-uniform bool rightTextureIsDepthBuffer;
-uniform bool splitView;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -114,10 +98,6 @@ uniform vec4 rightTextureUvMinMax;
 uniform vec4 rightTextureBorderColor;
 uniform bool rightTextureIsDepthBuffer;
 uniform float depthRange;
-uniform vec4 leftTextureSize;
-uniform vec4 leftTextureView;
-uniform vec4 rightTextureSize;
-uniform vec4 rightTextureView;
 uniform mediump sampler2D leftTexture;
 uniform mediump sampler2D rightTexture;
 void main()

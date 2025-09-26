@@ -11,9 +11,7 @@ using namespace metal;
 //sampler sampler ambientOcclusionSmpSC 2:1
 //texture texture2D ambientOcclusion 2:0:2:1
 //ubo float UserUniforms 2:2:208 {
-//float4 ambientOcclusionSize 0
 //float4 ambientOcclusionDims 16
-//float4 ambientOcclusionView 32
 //float3x3 ambientOcclusionTransform 48
 //float4 ambientOcclusionUvMinMax 96
 //float4 ambientOcclusionBorderColor 112

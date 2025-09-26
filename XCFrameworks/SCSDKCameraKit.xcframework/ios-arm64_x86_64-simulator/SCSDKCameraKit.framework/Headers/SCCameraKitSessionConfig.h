@@ -14,7 +14,7 @@ NS_SWIFT_NAME(SessionConfig)
 /// API token that is found in the dev portal
 @property (nonatomic, copy, readonly) NSString *apiToken;
 
-// Additional configuration.
+/// Additional configuration.
 /// @warning USE ONLY AS DIRECTED BY SNAP SUPPORT.
 @property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *additionalConfigurationAttributes;
 
@@ -25,8 +25,8 @@ NS_SWIFT_NAME(SessionConfig)
 
 /// Init to pass in apiToken
 /// @param apiToken api token that is found in the dev portal
-/// @param additionalConfigurationAttributes additional configuration
 /// @note as well as overwrite the apiToken passed into `Info.plist` with the key `SCCameraKitAPIToken`
+/// @param additionalConfigurationAttributes additional configuration
 /// @warning USE ONLY AS DIRECTED BY SNAP SUPPORT.
 - (instancetype)initWithApiToken:(NSString *)apiToken
     additionalConfigurationAttributes:(nullable NSDictionary<NSString *, id> *)additionalConfigurationAttributes;

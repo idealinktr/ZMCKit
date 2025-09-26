@@ -7,38 +7,20 @@
 //texture texture2D maskTexture 2:1:2:4
 //texture texture2D originalTexture 2:2:2:5
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
 #ifndef KERNEL_SIZE
 #define KERNEL_SIZE 13
 #endif
-uniform vec4 originalTextureDims;
-uniform vec4 inputTextureDims;
-uniform vec4 maskTextureDims;
 uniform vec4 inputTextureSize;
 uniform vec2 blurDir;
 uniform vec3 offset;
-uniform vec4 originalTextureSize;
-uniform vec4 originalTextureView;
-uniform mat3 originalTextureTransform;
-uniform vec4 originalTextureUvMinMax;
-uniform vec4 originalTextureBorderColor;
-uniform vec4 inputTextureView;
-uniform mat3 inputTextureTransform;
-uniform vec4 inputTextureUvMinMax;
-uniform vec4 inputTextureBorderColor;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform mat3 maskTextureTransform;
-uniform vec4 maskTextureUvMinMax;
-uniform vec4 maskTextureBorderColor;
-uniform vec4 weight;
 varying vec2 blurCoordinates[((KERNEL_SIZE/2)+1)];
 void main()
 {
@@ -60,10 +42,6 @@ blurCoordinates[6]=varPackedTex.xy-l9_6;
 sc_ProcessVertex(l9_0);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_NORMAL 1
-#define STD_DISABLE_VERTEX_TANGENT 1
-#define STD_DISABLE_VERTEX_TEXTURE0 1
-#define STD_DISABLE_VERTEX_TEXTURE1 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -188,14 +166,6 @@ uniform vec4 weight;
 uniform mat3 originalTextureTransform;
 uniform vec4 originalTextureUvMinMax;
 uniform vec4 originalTextureBorderColor;
-uniform vec4 originalTextureSize;
-uniform vec4 originalTextureView;
-uniform vec4 inputTextureSize;
-uniform vec4 inputTextureView;
-uniform vec4 maskTextureSize;
-uniform vec4 maskTextureView;
-uniform vec2 blurDir;
-uniform vec3 offset;
 uniform mediump sampler2D inputTexture;
 uniform mediump sampler2D maskTexture;
 uniform mediump sampler2D originalTexture;

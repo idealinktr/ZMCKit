@@ -1,0 +1,33 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 positionNext 15
+//attribute vec3 positionPrevious 16
+//attribute vec4 strandProperties 17
+//spec_const bool sc_OITCompositingPass 0 0
+//spec_const bool sc_OITDepthBoundsPass 1 0
+//spec_const bool sc_OITDepthGatherPass 2 0
+//spec_const bool sc_ProjectiveShadowsReceiver 3 0
+//spec_const bool sc_VertexBlending 4 0
+//spec_const bool sc_VertexBlendingUseNormals 5 0
+//spec_const int sc_DepthBufferMode 6 0
+//spec_const int sc_RenderingSpace 7 -1
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_SkinBonesCount 9 0
+//spec_const int sc_StereoRenderingMode 10 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 11 0
+//spec_const int sc_StereoViewID 12 0
+//SG_REFLECTION_END

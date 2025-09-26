@@ -1,0 +1,55 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec2 texture2 5
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler bgTextureSmpSC 0:9
+//sampler sampler fgAlphaTextureSmpSC 0:10
+//sampler sampler fgTextureSmpSC 0:11
+//texture texture2D bgTexture 0:0:0:9
+//texture texture2D fgAlphaTexture 0:1:0:10
+//texture texture2D fgTexture 0:2:0:11
+//texture texture2DArray bgTextureArrSC 0:18:0:9
+//texture texture2DArray fgAlphaTextureArrSC 0:19:0:10
+//texture texture2DArray fgTextureArrSC 0:20:0:11
+//spec_const bool ADDITION_BLENDING 0 0
+//spec_const bool ALPHA_EXISTS 1 0
+//spec_const bool COLOR_DODGE_BLENDING 2 0
+//spec_const bool CUSTOM_BLENDING 3 0
+//spec_const bool HARD_LIGHT_BLENDING 4 0
+//spec_const bool LIGHTEN_BLENDING 5 0
+//spec_const bool LINEAR_LIGHT_BLENDING 6 0
+//spec_const bool MULTIPLY_BLENDING 7 0
+//spec_const bool NONE_BLENDING 8 0
+//spec_const bool OVERLAY_BLENDING 9 0
+//spec_const bool SCREEN_BLENDING 10 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_bgTexture 11 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_fgAlphaTexture 12 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_fgTexture 13 0
+//spec_const bool SC_USE_UV_MIN_MAX_bgTexture 14 0
+//spec_const bool SC_USE_UV_MIN_MAX_fgAlphaTexture 15 0
+//spec_const bool SC_USE_UV_MIN_MAX_fgTexture 16 0
+//spec_const bool SC_USE_UV_TRANSFORM_bgTexture 17 0
+//spec_const bool SC_USE_UV_TRANSFORM_fgAlphaTexture 18 0
+//spec_const bool SC_USE_UV_TRANSFORM_fgTexture 19 0
+//spec_const bool SOFT_LIGHT_BLENDING 20 0
+//spec_const bool VIVID_LIGHT_BLENDING 21 0
+//spec_const bool bgTextureHasSwappedViews 22 0
+//spec_const bool fgAlphaTextureHasSwappedViews 23 0
+//spec_const bool fgTextureHasSwappedViews 24 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_bgTexture 25 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_fgAlphaTexture 26 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_fgTexture 27 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_bgTexture 28 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_fgAlphaTexture 29 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_fgTexture 30 -1
+//spec_const int bgTextureLayout 31 0
+//spec_const int fgAlphaTextureLayout 32 0
+//spec_const int fgTextureLayout 33 0
+//spec_const int sc_ShaderCacheConstant 34 0
+//spec_const int sc_StereoRenderingMode 35 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 36 0
+//spec_const int sc_StereoViewID 37 0
+//SG_REFLECTION_END

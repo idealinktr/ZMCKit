@@ -1,0 +1,36 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec4 position 0
+//attribute vec2 uv 18
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 positionNext 15
+//attribute vec3 positionPrevious 16
+//attribute vec4 strandProperties 17
+//sampler sampler texCenterXYZScaleXSmp 0:17
+//sampler sampler texChunkInfoSmp 0:18
+//sampler sampler texColorSmp 0:19
+//sampler sampler texRotationSmp 0:20
+//sampler sampler texScaleYZSmp 0:21
+//texture texture2D texCenterXYZScaleX 0:6:0:17
+//texture texture2D texChunkInfo 0:7:0:18
+//texture texture2D texColor 0:8:0:19
+//texture texture2D texRotation 0:9:0:20
+//texture texture2D texScaleYZ 0:10:0:21
+//spec_const bool sc_ChunkySplats 0 0
+//spec_const int sc_ShaderCacheConstant 1 0
+//spec_const int sc_StereoRenderingMode 2 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 3 0
+//spec_const int sc_StereoViewID 4 0
+//SG_REFLECTION_END

@@ -1,0 +1,24 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler maskTextureSmpSC 0:7
+//texture texture2D maskTexture 0:0:0:7
+//texture texture2DArray maskTextureArrSC 0:14:0:7
+//spec_const bool NOMASK 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_maskTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_maskTexture 2 0
+//spec_const bool SC_USE_UV_TRANSFORM_maskTexture 3 0
+//spec_const bool maskTextureHasSwappedViews 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_maskTexture 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_maskTexture 6 -1
+//spec_const int maskTextureLayout 7 0
+//spec_const int sc_DepthBufferMode 8 0
+//spec_const int sc_RenderingSpace 9 -1
+//spec_const int sc_ShaderCacheConstant 10 0
+//spec_const int sc_StereoRenderingMode 11 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 12 0
+//spec_const int sc_StereoViewID 13 0
+//SG_REFLECTION_END

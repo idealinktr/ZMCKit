@@ -1,0 +1,20 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//output uvec4 origin_and_mask 0
+//output uint max_distance 2
+//output vec2 direction 1
+//sampler sampler receiverData0SmpSC 0:12
+//sampler sampler receiverData1SmpSC 0:13
+//texture utexture2D receiverData0 0:5:0:12
+//texture utexture2D receiverData1 0:6:0:13
+//ubo float UserUniforms 0:14:144 {
+//float3 originScale 32
+//float3 originScaleInv 48
+//float3 originOffset 64
+//float distanceScale 80
+//float lightRadius 88
+//float3 posLightWS 96
+//float4 lightDirectionAndAngle 112
+//float lightRange 128
+//}
+//SG_REFLECTION_END

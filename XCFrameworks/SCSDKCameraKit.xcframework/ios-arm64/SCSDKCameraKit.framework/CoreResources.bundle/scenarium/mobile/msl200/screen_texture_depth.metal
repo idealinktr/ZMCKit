@@ -13,13 +13,10 @@ using namespace metal;
 //sampler sampler screenTextureSmpSC 2:1
 //texture texture2D screenTexture 2:0:2:1
 //ubo float UserUniforms 2:2:224 {
-//float4 screenTextureSize 0
 //float4 screenTextureDims 16
-//float4 screenTextureView 32
 //float3x3 screenTextureTransform 48
 //float4 screenTextureUvMinMax 96
 //float4 screenTextureBorderColor 112
-//float2 screenTextureProjectionMatrixTerms 128
 //float3x3 meshTransform 144
 //float4 currentProjectionMatrixTerms 192
 //float4 inputProjectionMatrixTerms 208

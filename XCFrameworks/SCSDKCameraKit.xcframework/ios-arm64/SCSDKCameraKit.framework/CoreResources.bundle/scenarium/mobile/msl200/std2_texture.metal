@@ -2,27 +2,27 @@
 #include <metal_stdlib>
 #include <simd/simd.h>
 using namespace metal;
-    #ifndef sc_TextureRenderingLayout_Regular
-        #define sc_TextureRenderingLayout_Regular 0
-        #define sc_TextureRenderingLayout_StereoInstancedClipped 1
-        #define sc_TextureRenderingLayout_StereoMultiview 2
-    #endif
-    #define depthToGlobal   depthScreenToViewSpace
-    #define depthToLocal    depthViewToScreenSpace
-    #ifndef quantizeUV
-        #define quantizeUV sc_QuantizeUV
-        #define sc_platformUVFlip sc_PlatformFlipV
-        #define sc_PlatformFlipUV sc_PlatformFlipV
-    #endif
-    #ifndef sc_SampleTexture
-        #define sc_SampleTexture sc_SampleTextureBiasOrLevel
-    #endif
-    #ifndef sc_texture2DLod
-        #define sc_texture2DLod sc_InternalTextureLevel
-        #define sc_textureLod sc_InternalTextureLevel
-        #define sc_textureBias sc_InternalTextureBiasOrLevel
-        #define sc_texture sc_InternalTexture
-    #endif
+#ifndef sc_TextureRenderingLayout_Regular
+#define sc_TextureRenderingLayout_Regular 0
+#define sc_TextureRenderingLayout_StereoInstancedClipped 1
+#define sc_TextureRenderingLayout_StereoMultiview 2
+#endif
+#define depthToGlobal   depthScreenToViewSpace
+#define depthToLocal    depthViewToScreenSpace
+#ifndef quantizeUV
+#define quantizeUV sc_QuantizeUV
+#define sc_platformUVFlip sc_PlatformFlipV
+#define sc_PlatformFlipUV sc_PlatformFlipV
+#endif
+#ifndef sc_SampleTexture
+#define sc_SampleTexture sc_SampleTextureBiasOrLevel
+#endif
+#ifndef sc_texture2DLod
+#define sc_texture2DLod sc_InternalTextureLevel
+#define sc_textureLod sc_InternalTextureLevel
+#define sc_textureBias sc_InternalTextureBiasOrLevel
+#define sc_texture sc_InternalTexture
+#endif
 #include "required2.metal"
 #include "std2_texture_sub.metal"
 //SG_REFLECTION_BEGIN(100)

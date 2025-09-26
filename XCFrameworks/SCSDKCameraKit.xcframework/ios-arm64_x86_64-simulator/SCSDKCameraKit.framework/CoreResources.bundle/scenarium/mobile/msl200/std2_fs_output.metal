@@ -24,8 +24,13 @@ float4 FragColor1 [[color(1)]];
 float4 FragColor2 [[color(2)]];
 float4 FragColor3 [[color(3)]];
 };
-void sc_writeFragData0(thread const float4& col,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
+void sc_writeFragData0(thread float4& col,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)
 {
+#if (sc_ShaderCacheConstant!=0)
+{
+col.x+=((*sc_set0.LibraryUniforms).sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+}
+#endif
 sc_sysOut.FragColor0=col;
 }
 void sc_writeFragData1(thread const float4& col,thread sc_SysIn& sc_sysIn,thread sc_SysOut& sc_sysOut,const constant sc_Set0& sc_set0,const constant sc_Set1& sc_set1)

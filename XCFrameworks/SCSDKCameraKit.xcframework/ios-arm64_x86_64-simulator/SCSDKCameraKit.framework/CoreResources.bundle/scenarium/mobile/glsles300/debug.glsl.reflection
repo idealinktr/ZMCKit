@@ -1,0 +1,14 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec4 color 5
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//spec_const int sc_DepthBufferMode 0 0
+//spec_const int sc_RenderingSpace 1 -1
+//spec_const int sc_ShaderCacheConstant 2 0
+//spec_const int sc_StereoRenderingMode 3 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 4 0
+//spec_const int sc_StereoViewID 5 0
+//SG_REFLECTION_END

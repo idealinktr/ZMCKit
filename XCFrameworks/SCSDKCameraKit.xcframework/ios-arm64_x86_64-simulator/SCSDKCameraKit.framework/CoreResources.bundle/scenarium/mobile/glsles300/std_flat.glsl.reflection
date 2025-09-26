@@ -1,0 +1,71 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler mainTextureSmpSC 0:8
+//sampler sampler maskTextureSmpSC 0:9
+//sampler sampler sc_ShadowTextureSmpSC 0:14
+//texture texture2D mainTexture 0:0:0:8
+//texture texture2D maskTexture 0:1:0:9
+//texture texture2D sc_ShadowTexture 0:6:0:14
+//texture texture2DArray mainTextureArrSC 0:16:0:8
+//texture texture2DArray maskTextureArrSC 0:17:0:9
+//spec_const bool EMOCHECKERS 0 0
+//spec_const bool ENABLESHADOWS 1 0
+//spec_const bool NOMASK 2 0
+//spec_const bool NOTEXTURE 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_maskTexture 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_maskTexture 7 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 8 0
+//spec_const bool SC_USE_UV_TRANSFORM_maskTexture 9 0
+//spec_const bool mainTextureHasSwappedViews 10 0
+//spec_const bool maskTextureHasSwappedViews 11 0
+//spec_const bool sc_BlendMode_Add 12 0
+//spec_const bool sc_BlendMode_AddWithAlphaFactor 13 0
+//spec_const bool sc_BlendMode_AlphaTest 14 0
+//spec_const bool sc_BlendMode_AlphaToCoverage 15 0
+//spec_const bool sc_BlendMode_ColoredGlass 16 0
+//spec_const bool sc_BlendMode_Max 17 0
+//spec_const bool sc_BlendMode_Min 18 0
+//spec_const bool sc_BlendMode_Multiply 19 0
+//spec_const bool sc_BlendMode_MultiplyOriginal 20 0
+//spec_const bool sc_BlendMode_Normal 21 0
+//spec_const bool sc_BlendMode_PremultipliedAlpha 22 0
+//spec_const bool sc_BlendMode_PremultipliedAlphaAuto 23 0
+//spec_const bool sc_BlendMode_PremultipliedAlphaHardware 24 0
+//spec_const bool sc_BlendMode_Screen 25 0
+//spec_const bool sc_OITCompositingPass 26 0
+//spec_const bool sc_OITDepthBoundsPass 27 0
+//spec_const bool sc_OITDepthGatherPass 28 0
+//spec_const bool sc_ProjectiveShadowsCaster 29 0
+//spec_const bool sc_ProjectiveShadowsReceiver 30 0
+//spec_const bool sc_VertexBlending 31 0
+//spec_const bool sc_VertexBlendingUseNormals 32 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 33 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_maskTexture 34 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 35 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_maskTexture 36 -1
+//spec_const int mainTextureLayout 37 0
+//spec_const int maskTextureLayout 38 0
+//spec_const int sc_DepthBufferMode 39 0
+//spec_const int sc_RenderingSpace 40 -1
+//spec_const int sc_ShaderCacheConstant 41 0
+//spec_const int sc_SkinBonesCount 42 0
+//spec_const int sc_StereoRenderingMode 43 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 44 0
+//spec_const int sc_StereoViewID 45 0
+//SG_REFLECTION_END

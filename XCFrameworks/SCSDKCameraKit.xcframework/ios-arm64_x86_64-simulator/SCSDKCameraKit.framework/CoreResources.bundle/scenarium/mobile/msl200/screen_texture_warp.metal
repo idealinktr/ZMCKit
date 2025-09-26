@@ -17,25 +17,17 @@ using namespace metal;
 //texture texture2D inputTextureWarp 2:1:2:4
 //texture texture2D screenTexture 2:2:2:5
 //ubo float UserUniforms 2:6:512 {
-//float4 screenTextureSize 0
 //float4 screenTextureDims 16
-//float4 screenTextureView 32
-//float3x3 screenTextureTransform 48
 //float4 screenTextureUvMinMax 96
 //float4 screenTextureBorderColor 112
 //float screenTextureLOD 128
 //float3x3 meshTransform 144
 //float3x3 meshTransformR 192
-//float4 inputTextureSize 240
 //float4 inputTextureDims 256
-//float4 inputTextureView 272
 //float3x3 inputTextureTransform 288
 //float4 inputTextureUvMinMax 336
 //float4 inputTextureBorderColor 352
-//float4 inputTextureWarpSize 368
 //float4 inputTextureWarpDims 384
-//float4 inputTextureWarpView 400
-//float3x3 inputTextureWarpTransform 416
 //float4 inputTextureWarpUvMinMax 464
 //float4 inputTextureWarpBorderColor 480
 //float2 inputDenorm 496

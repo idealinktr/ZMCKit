@@ -5,27 +5,12 @@
 //texture texture2D baseTex 2:0:2:2
 //texture texture2D borderTex 2:1:2:3
 //SG_REFLECTION_END
-#if defined VERTEX_SHADER
 #define STD_DISABLE_VERTEX_TANGENT 1
+#if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
-uniform vec4 baseTexDims;
-uniform vec4 borderTexDims;
 uniform mat4 script_modelMatrix;
-uniform mat4 script_viewProjectionMatrix;
-uniform vec3 uniSphereCenter;
-uniform vec3 uniCameraPos;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform mat3 baseTexTransform;
-uniform vec4 baseTexUvMinMax;
-uniform vec4 baseTexBorderColor;
-uniform vec4 borderTexSize;
-uniform vec4 borderTexView;
-uniform mat3 borderTexTransform;
-uniform vec4 borderTexUvMinMax;
-uniform vec4 borderTexBorderColor;
 void main()
 {
 sc_Vertex_t l9_0=sc_LoadVertexAttributes();
@@ -34,7 +19,6 @@ varPos=(script_modelMatrix*(mat4(vec4(12.0,0.0,0.0,0.0),vec4(0.0,12.0,0.0,0.0),v
 varNormal=normalize(((script_modelMatrix*mat4(vec4(0.0,0.0,1.0,0.0),vec4(0.0,1.0,0.0,0.0),vec4(-1.0,0.0,0.0,0.0),vec4(0.0,0.0,0.0,1.0)))*vec4(normalize(position.xyz),0.0)).xyz);
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-#define STD_DISABLE_VERTEX_TANGENT 1
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>
 #include <std2_texture.glsl>
@@ -108,11 +92,6 @@ uniform vec4 borderTexUvMinMax;
 uniform vec4 borderTexBorderColor;
 uniform vec4 baseTexUvMinMax;
 uniform vec4 baseTexBorderColor;
-uniform mat4 script_modelMatrix;
-uniform vec4 baseTexSize;
-uniform vec4 baseTexView;
-uniform vec4 borderTexSize;
-uniform vec4 borderTexView;
 uniform mediump sampler2D borderTex;
 uniform mediump sampler2D baseTex;
 void getLineSphereIntersection(vec3 p1,vec3 p2,vec3 shpereCenter,float sphereRadius,inout twoPoints intersections)

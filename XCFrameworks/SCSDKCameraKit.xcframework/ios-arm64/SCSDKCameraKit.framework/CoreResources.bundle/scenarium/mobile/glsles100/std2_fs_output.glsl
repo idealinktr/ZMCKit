@@ -4,120 +4,125 @@
 #if defined VERTEX_SHADER
 #include <std2.glsl>
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
-    #ifndef sc_FramebufferFetch
-    #define sc_FramebufferFetch 0
-    #elif sc_FramebufferFetch==1
-    #undef sc_FramebufferFetch
-    #define sc_FramebufferFetch 1
-    #endif
-    #if !defined(GL_ES)&&__VERSION__<420
-        #ifdef FRAGMENT_SHADER
-            #define sc_FragData0 gl_FragData[0]
-            #define sc_FragData1 gl_FragData[1]
-            #define sc_FragData2 gl_FragData[2]
-            #define sc_FragData3 gl_FragData[3]
-        #endif
-        mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-        #define gl_LastFragData (getFragData())
-        #if sc_FramebufferFetch
-            #error Framebuffer fetch is requested but not supported by this device.
-        #endif
-    #elif defined(sc_EnableFeatureLevelES3)
-        #if sc_FragDataCount>=1
-            #define sc_DeclareFragData0(StorageQualifier) layout(location=0) StorageQualifier sc_FragmentPrecision vec4 sc_FragData0
-        #endif
-        #if sc_FragDataCount>=2
-            #define sc_DeclareFragData1(StorageQualifier) layout(location=1) StorageQualifier sc_FragmentPrecision vec4 sc_FragData1
-        #endif
-        #if sc_FragDataCount>=3
-            #define sc_DeclareFragData2(StorageQualifier) layout(location=2) StorageQualifier sc_FragmentPrecision vec4 sc_FragData2
-        #endif
-        #if sc_FragDataCount>=4
-            #define sc_DeclareFragData3(StorageQualifier) layout(location=3) StorageQualifier sc_FragmentPrecision vec4 sc_FragData3
-        #endif
-        #ifndef sc_DeclareFragData0
-            #define sc_DeclareFragData0(_) const vec4 sc_FragData0=vec4(0.0)
-        #endif
-        #ifndef sc_DeclareFragData1
-            #define sc_DeclareFragData1(_) const vec4 sc_FragData1=vec4(0.0)
-        #endif
-        #ifndef sc_DeclareFragData2
-            #define sc_DeclareFragData2(_) const vec4 sc_FragData2=vec4(0.0)
-        #endif
-        #ifndef sc_DeclareFragData3
-            #define sc_DeclareFragData3(_) const vec4 sc_FragData3=vec4(0.0)
-        #endif
-        #if sc_FramebufferFetch
-            #ifdef GL_EXT_shader_framebuffer_fetch
-                sc_DeclareFragData0(inout);
-                sc_DeclareFragData1(inout);
-                sc_DeclareFragData2(inout);
-                sc_DeclareFragData3(inout);
-                mediump mat4 getFragData() { return mat4(sc_FragData0,sc_FragData1,sc_FragData2,sc_FragData3); }
-                #define gl_LastFragData (getFragData())
-            #elif defined(GL_ARM_shader_framebuffer_fetch)
-                sc_DeclareFragData0(out);
-                sc_DeclareFragData1(out);
-                sc_DeclareFragData2(out);
-                sc_DeclareFragData3(out);
-                mediump mat4 getFragData() { return mat4(gl_LastFragColorARM,vec4(0.0),vec4(0.0),vec4(0.0)); }
-                #define gl_LastFragData (getFragData())
-            #endif
-        #else
-            #ifdef sc_EnableFeatureLevelES3
-                sc_DeclareFragData0(out);
-                sc_DeclareFragData1(out);
-                sc_DeclareFragData2(out);
-                sc_DeclareFragData3(out);
-                mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-                #define gl_LastFragData (getFragData())
-            #endif
-        #endif
-    #elif defined(sc_EnableFeatureLevelES2)
-        #define sc_FragData0 gl_FragColor
-        mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-    #else
-        #define sc_FragData0 gl_FragColor
-        mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-    #endif
+#ifndef sc_FramebufferFetch
+#define sc_FramebufferFetch 0
+#elif sc_FramebufferFetch==1
+#undef sc_FramebufferFetch
+#define sc_FramebufferFetch 1
+#endif
+#if !defined(GL_ES)&&__VERSION__<420
+#ifdef FRAGMENT_SHADER
+#define sc_FragData0 gl_FragData[0]
+#define sc_FragData1 gl_FragData[1]
+#define sc_FragData2 gl_FragData[2]
+#define sc_FragData3 gl_FragData[3]
+#endif
+mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
+#define gl_LastFragData (getFragData())
+#if sc_FramebufferFetch
+#error Framebuffer fetch is requested but not supported by this device.
+#endif
+#elif defined(sc_EnableFeatureLevelES3)
+#if sc_FragDataCount>=1
+#define sc_DeclareFragData0(StorageQualifier) layout(location=0) StorageQualifier sc_FragmentPrecision vec4 sc_FragData0
+#endif
+#if sc_FragDataCount>=2
+#define sc_DeclareFragData1(StorageQualifier) layout(location=1) StorageQualifier sc_FragmentPrecision vec4 sc_FragData1
+#endif
+#if sc_FragDataCount>=3
+#define sc_DeclareFragData2(StorageQualifier) layout(location=2) StorageQualifier sc_FragmentPrecision vec4 sc_FragData2
+#endif
+#if sc_FragDataCount>=4
+#define sc_DeclareFragData3(StorageQualifier) layout(location=3) StorageQualifier sc_FragmentPrecision vec4 sc_FragData3
+#endif
+#ifndef sc_DeclareFragData0
+#define sc_DeclareFragData0(_) const vec4 sc_FragData0=vec4(0.0)
+#endif
+#ifndef sc_DeclareFragData1
+#define sc_DeclareFragData1(_) const vec4 sc_FragData1=vec4(0.0)
+#endif
+#ifndef sc_DeclareFragData2
+#define sc_DeclareFragData2(_) const vec4 sc_FragData2=vec4(0.0)
+#endif
+#ifndef sc_DeclareFragData3
+#define sc_DeclareFragData3(_) const vec4 sc_FragData3=vec4(0.0)
+#endif
+#if sc_FramebufferFetch
+#ifdef GL_EXT_shader_framebuffer_fetch
+sc_DeclareFragData0(inout);
+sc_DeclareFragData1(inout);
+sc_DeclareFragData2(inout);
+sc_DeclareFragData3(inout);
+mediump mat4 getFragData() { return mat4(sc_FragData0,sc_FragData1,sc_FragData2,sc_FragData3); }
+#define gl_LastFragData (getFragData())
+#elif defined(GL_ARM_shader_framebuffer_fetch)
+sc_DeclareFragData0(out);
+sc_DeclareFragData1(out);
+sc_DeclareFragData2(out);
+sc_DeclareFragData3(out);
+mediump mat4 getFragData() { return mat4(gl_LastFragColorARM,vec4(0.0),vec4(0.0),vec4(0.0)); }
+#define gl_LastFragData (getFragData())
+#endif
+#else
+#ifdef sc_EnableFeatureLevelES3
+sc_DeclareFragData0(out);
+sc_DeclareFragData1(out);
+sc_DeclareFragData2(out);
+sc_DeclareFragData3(out);
+mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
+#define gl_LastFragData (getFragData())
+#endif
+#endif
+#elif defined(sc_EnableFeatureLevelES2)
+#define sc_FragData0 gl_FragColor
+mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
+#else
+#define sc_FragData0 gl_FragColor
+mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
+#endif
 #include <std2.glsl>
+void sc_writeFragData0Internal(vec4 col,float zero,int cacheConst)
+{
+col.x+=zero*float(cacheConst);
+sc_FragData0=col;
+}
 void sc_writeFragData0(vec4 col)
 {
-    sc_FragData0=col;
+sc_writeFragData0Internal(col,sc_UniformConstants.x,sc_ShaderCacheConstant);
 }
 void sc_writeFragData1(vec4 col)
 {
 #if sc_FragDataCount>=2
-    sc_FragData1=col;
+sc_FragData1=col;
 #endif
 }
 void sc_writeFragData2(vec4 col)
 {
 #if sc_FragDataCount>=3
-    sc_FragData2=col;
+sc_FragData2=col;
 #endif
 }
 void sc_writeFragData3(vec4 col)
 {
 #if sc_FragDataCount>=4
-    sc_FragData3=col;
+sc_FragData3=col;
 #endif
 }
 vec4 sc_readFragData0_Platform()
 {
-    return getFragData()[0];
+return getFragData()[0];
 }
 vec4 sc_readFragData1_Platform()
 {
-    return getFragData()[1];
+return getFragData()[1];
 }
 vec4 sc_readFragData2_Platform()
 {
-    return getFragData()[2];
+return getFragData()[2];
 }
 vec4 sc_readFragData3_Platform()
 {
-    return getFragData()[3];
+return getFragData()[3];
 }
 vec4 sc_readFragData0()
 {

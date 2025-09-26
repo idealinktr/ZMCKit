@@ -1,0 +1,54 @@
+<DependencyGraph>
+    <.Resources>
+        <String Name="FaceRegressorPath">FaceRegressorFast.bin</String>
+        <String Name="DenoiseRegressorPath">DenoiseRegressorFast.bin</String>
+        <String Name="EstimateCandide2DRegressorPath">CandideRegressor.bin</String>
+        <String Name="EstimateCandide3DRegressorPath">CandidePespectiveRegressor.bin</String>
+        <String Name="FaceMeshModelPath_V2">Mesh_V2/FaceMeshModel.bin</String>
+        <String Name="FaceMeshFitterPath_V2">Mesh_V2/FaceMeshFitter.bin</String>
+        <String Name="FaceMeshModelPath_V3">Mesh_V3/FaceMeshModel.bin</String>
+        <String Name="FaceMeshFitterPath_V3">Mesh_V3/FaceMeshFitterFast.bin</String>
+        <String Name="EyeballsFitterPath_V3">Mesh_V3/EyeballsFitter.bin</String>
+    </.Resources>
+
+    <FaceDetectorStage Output="Faces"/>
+
+    <TrackingStage Output="FaceLandmarks68Unblurred" TrackingSession.DstShapeId="0" DependsOn="Faces" RegressorPath="{FaceRegressorPath}" InitializeAsync="True">
+        <.SessionDropStrategy>
+            <TrackingSessionDropStrategy Name="TrackingSessionDropStrategy" SoftThreshold="0.2" HardThreshold="0.05" SoftFrameLimit="5"/>
+        </.SessionDropStrategy>
+    </TrackingStage>
+    <TrackingStage Output="FaceLandmarks68" TrackingSession.SrcShapeId="0" TrackingSession.DstShapeId="0" DependsOn="FaceLandmarks68Unblurred" RegressorPath="{DenoiseRegressorPath}" InitializeAsync="True"/>
+    <TrackingStage Output="Candide" TrackingSession.SrcShapeId="0" TrackingSession.DstShapeId="1" DependsOn="FaceLandmarks68" RegressorPath="{EstimateCandide2DRegressorPath}" InitializeAsync="True"/>
+    <TrackingStage Output="CandidePerspective" TrackingSession.SrcShapeId="0" TrackingSession.DstShapeId="2" DependsOn="FaceLandmarks68" RegressorPath="{EstimateCandide3DRegressorPath}" InitializeAsync="True"/>
+
+    <BaseFaceMeshStage Output="BaseFaceMesh_V2" ShapeModel="{FaceMeshModelPath_V2}" InitializeAsync="True"/>
+    <TrackingStage Output="FaceMeshParams_V2" TrackingSession.SrcShapeId="0" TrackingSession.DstShapeId="5" DependsOn="FaceLandmarks68,BaseFaceMesh_V2" RegressorPath="{FaceMeshFitterPath_V2}" InitializeAsync="True"/>
+    <ShapeModelSetterStage Output="FaceMesh_V2" TrackingSession.SrcShapeId="5" TrackingSession.DstShapeId="5" DependsOn="FaceMeshParams_V2" ShapeModel="{FaceMeshModelPath_V2}" InitializeAsync="True"/>
+
+    <TrackingStage Output="FaceMeshParams_V3" TrackingSession.SrcShapeId="0" TrackingSession.DstShapeId="5" DependsOn="FaceLandmarks68,BaseFaceMesh_V3" RegressorPath="{FaceMeshFitterPath_V3}" InitializeAsync="True"/>
+    <ShapeModelSetterStage Output="FaceMeshCombined_V3" TrackingSession.SrcShapeId="5" TrackingSession.DstShapeId="5" DependsOn="FaceMeshParams_V3" ShapeModel="{FaceMeshModelPath_V3}" InitializeAsync="True"/>
+    <TrackingStage Output="Eyeballs_V3" TrackingSession.SrcShapeIds="0,5" TrackingSession.DstShapeIds="6,7" DependsOn="FaceLandmarks68,FaceMeshParams_V3" RegressorPath="{EyeballsFitterPath_V3}" InitializeAsync="True"/>
+
+    <SplitCombinedFaceMeshStage TrackingSession.SrcShapeId="5" TrackingSession.DstShapeIds="5,8,9,10" ShapeModel="{FaceMeshModelPath_V3}" DependsOn="FaceMeshCombined_V3" Output="FaceMesh_V3" InitializeAsync="True"/>
+    <PipelineStage DependsOn="FaceMesh_V3" Output="Skull_V3"/>
+    <PipelineStage DependsOn="FaceMesh_V3" Output="Ears_V3"/>
+    <PipelineStage DependsOn="FaceMesh_V3" Output="BaseFaceMesh_V3"/>
+
+    <PipelineStage Output="FaceLandmarks68Unblurred"/>
+    <PipelineStage DependsOn="FaceLandmarks68" Output="EyeLandmarks"/>
+    <ClearTrackingDataStage Output="FaceLandmarks68" DropTrackingSession="True" TrackingSession.DstShapeId="0"/>
+    <ClearTrackingDataStage Output="Candide" TrackingSession.DstShapeId="1"/>
+    <ClearTrackingDataStage Output="CandidePerspective" TrackingSession.DstShapeId="2"/>
+
+    <ClearTrackingDataStage Output="BaseFaceMesh_V2" TrackingSession.DstShapeId="5"/>
+    <ClearTrackingDataStage Output="FaceMeshParams_V2" TrackingSession.DstShapeId="5"/>
+    <ClearTrackingDataStage Output="FaceMesh_V2" TrackingSession.DstShapeId="5"/>
+
+    <ClearTrackingDataStage Output="BaseFaceMesh_V3" TrackingSession.DstShapeId="5"/>
+    <ClearTrackingDataStage Output="FaceMeshParams_V3" TrackingSession.DstShapeId="5"/>
+    <ClearTrackingDataStage Output="FaceMesh_V3" TrackingSession.DstShapeId="5"/>
+    <ClearTrackingDataStage Output="Eyeballs_V3" TrackingSession.DstShapeIds="6,7"/>
+    <ClearTrackingDataStage Output="Skull_V3" TrackingSession.DstShapeId="8"/>
+    <ClearTrackingDataStage Output="Ears_V3" TrackingSession.DstShapeIds="9,10"/>
+</DependencyGraph>

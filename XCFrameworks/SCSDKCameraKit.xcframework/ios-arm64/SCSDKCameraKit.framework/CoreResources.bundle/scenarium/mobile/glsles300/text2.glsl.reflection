@@ -1,0 +1,87 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute float passIdentifierAttr 5
+//attribute float sdfOffsetAttr 6
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//sampler sampler backgroundFillTextureSmpSC 0:12
+//sampler sampler colorTextureSmpSC 0:13
+//sampler sampler mainFillTextureSmpSC 0:14
+//sampler sampler mainTextureSmpSC 0:15
+//sampler sampler outlineFillTextureSmpSC 0:16
+//sampler sampler shadowFillTextureSmpSC 0:23
+//texture texture2D backgroundFillTexture 0:0:0:12
+//texture texture2D colorTexture 0:1:0:13
+//texture texture2D mainFillTexture 0:2:0:14
+//texture texture2D mainTexture 0:3:0:15
+//texture texture2D outlineFillTexture 0:4:0:16
+//texture texture2D shadowFillTexture 0:11:0:23
+//texture texture2DArray backgroundFillTextureArrSC 0:24:0:12
+//texture texture2DArray colorTextureArrSC 0:25:0:13
+//texture texture2DArray mainFillTextureArrSC 0:26:0:14
+//texture texture2DArray mainTextureArrSC 0:27:0:15
+//texture texture2DArray outlineFillTextureArrSC 0:28:0:16
+//texture texture2DArray shadowFillTextureArrSC 0:32:0:23
+//spec_const bool BACKGROUND_FILL_COLOR 0 0
+//spec_const bool BACKGROUND_FILL_TEXTURE 1 0
+//spec_const bool ENABLE_BACKGROUND 2 0
+//spec_const bool ENABLE_OUTLINE 3 0
+//spec_const bool ENABLE_SDF 4 0
+//spec_const bool ENABLE_SHADOW 5 0
+//spec_const bool MAIN_FILL_COLOR 6 0
+//spec_const bool MAIN_FILL_TEXTURE 7 0
+//spec_const bool OUTLINE_FILL_COLOR 8 0
+//spec_const bool OUTLINE_FILL_TEXTURE 9 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_backgroundFillTexture 10 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_colorTexture 11 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainFillTexture 12 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 13 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_outlineFillTexture 14 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_shadowFillTexture 15 0
+//spec_const bool SC_USE_UV_MIN_MAX_backgroundFillTexture 16 0
+//spec_const bool SC_USE_UV_MIN_MAX_colorTexture 17 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainFillTexture 18 0
+//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 19 0
+//spec_const bool SC_USE_UV_MIN_MAX_outlineFillTexture 20 0
+//spec_const bool SC_USE_UV_MIN_MAX_shadowFillTexture 21 0
+//spec_const bool SC_USE_UV_TRANSFORM_backgroundFillTexture 22 0
+//spec_const bool SC_USE_UV_TRANSFORM_colorTexture 23 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainFillTexture 24 0
+//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 25 0
+//spec_const bool SC_USE_UV_TRANSFORM_outlineFillTexture 26 0
+//spec_const bool SC_USE_UV_TRANSFORM_shadowFillTexture 27 0
+//spec_const bool SHADOW_FILL_COLOR 28 0
+//spec_const bool SHADOW_FILL_TEXTURE 29 0
+//spec_const bool backgroundFillTextureHasSwappedViews 30 0
+//spec_const bool colorTextureHasSwappedViews 31 0
+//spec_const bool mainFillTextureHasSwappedViews 32 0
+//spec_const bool mainTextureHasSwappedViews 33 0
+//spec_const bool outlineFillTextureHasSwappedViews 34 0
+//spec_const bool sc_MotionVectorsPass 35 0
+//spec_const bool shadowFillTextureHasSwappedViews 36 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_backgroundFillTexture 37 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_colorTexture 38 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainFillTexture 39 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 40 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_outlineFillTexture 41 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_shadowFillTexture 42 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_backgroundFillTexture 43 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_colorTexture 44 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainFillTexture 45 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 46 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_outlineFillTexture 47 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_shadowFillTexture 48 -1
+//spec_const int backgroundFillTextureLayout 49 0
+//spec_const int colorTextureLayout 50 0
+//spec_const int mainFillTextureLayout 51 0
+//spec_const int mainTextureLayout 52 0
+//spec_const int outlineFillTextureLayout 53 0
+//spec_const int sc_RenderingSpace 54 -1
+//spec_const int sc_ShaderCacheConstant 55 0
+//spec_const int sc_StereoRenderingMode 56 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 57 0
+//spec_const int sc_StereoViewID 58 0
+//spec_const int shadowFillTextureLayout 59 0
+//SG_REFLECTION_END
