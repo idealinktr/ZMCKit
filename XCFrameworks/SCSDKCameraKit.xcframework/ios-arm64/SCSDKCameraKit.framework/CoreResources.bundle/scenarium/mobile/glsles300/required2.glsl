@@ -1,6 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <required2_gl.glsl>
 #ifndef sc_CanUseTextureLod

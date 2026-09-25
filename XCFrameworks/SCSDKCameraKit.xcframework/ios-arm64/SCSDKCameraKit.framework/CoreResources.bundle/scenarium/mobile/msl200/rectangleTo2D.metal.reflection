@@ -1,0 +1,32 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler rectTextureSmpSC 0:15
+//texture texture2D rectTexture 0:0:0:15
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:32  {
+//float4 rectTextureUvMinMax 0
+//float4 rectTextureBorderColor 16
+//}
+//spec_const bool ARGBTEX_SWIZZLE 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_rectTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_rectTexture 2 0
+//spec_const bool rectTextureHasSwappedViews 3 0
+//spec_const bool sc_ProjectiveShadowsReceiver 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_rectTexture 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_rectTexture 6 -1
+//spec_const int rectTextureLayout 7 0
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_StereoRenderingMode 9 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 10 0
+//SG_REFLECTION_END

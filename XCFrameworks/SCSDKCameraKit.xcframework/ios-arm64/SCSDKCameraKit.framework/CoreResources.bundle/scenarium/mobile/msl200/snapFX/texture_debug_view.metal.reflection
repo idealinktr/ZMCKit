@@ -1,0 +1,50 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler leftTextureSmpSC 0:16
+//sampler sampler rightTextureSmpSC 0:17
+//texture texture2D leftTexture 0:0:0:16
+//texture texture2D rightTexture 0:1:0:17
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4x4 sc_ProjectionMatrixArray 544:[4]:64
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:176  {
+//float3x3 leftTextureTransform 0
+//float4 leftTextureUvMinMax 48
+//float4 leftTextureBorderColor 64
+//float3x3 rightTextureTransform 80
+//float4 rightTextureUvMinMax 128
+//float4 rightTextureBorderColor 144
+//float depthRange 160
+//bool leftTextureIsDepthBuffer 164
+//bool rightTextureIsDepthBuffer 168
+//bool splitView 172
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_leftTexture 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_rightTexture 1 0
+//spec_const bool SC_USE_UV_MIN_MAX_leftTexture 2 0
+//spec_const bool SC_USE_UV_MIN_MAX_rightTexture 3 0
+//spec_const bool SC_USE_UV_TRANSFORM_leftTexture 4 0
+//spec_const bool SC_USE_UV_TRANSFORM_rightTexture 5 0
+//spec_const bool leftTextureHasSwappedViews 6 0
+//spec_const bool rightTextureHasSwappedViews 7 0
+//spec_const bool sc_ProjectiveShadowsReceiver 8 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_leftTexture 9 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_rightTexture 10 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_leftTexture 11 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_rightTexture 12 -1
+//spec_const int leftTextureLayout 13 0
+//spec_const int rightTextureLayout 14 0
+//spec_const int sc_ShaderCacheConstant 15 0
+//spec_const int sc_StereoRenderingMode 16 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 17 0
+//SG_REFLECTION_END

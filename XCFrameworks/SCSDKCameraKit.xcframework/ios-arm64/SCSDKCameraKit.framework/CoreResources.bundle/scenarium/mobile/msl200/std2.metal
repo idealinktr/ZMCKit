@@ -47,7 +47,7 @@ using namespace metal;
 //texture texture2D sc_StrandDataMapTexture 0:12:0:24
 //texture utexture2D z_hitIdAndBarycentric 0:13:0:25
 //texture texture2D z_rayDirections 0:14:0:26
-//ubo int LibraryUniforms 0:27:3152 {
+//ubo int LibraryUniforms 0:27:3152  {
 //float4 sc_EnvmapDiffuseDims 
 //float4 sc_EnvmapSpecularDims 
 //float4x4 sc_ProjectionMatrixArray :[]:64
@@ -65,13 +65,13 @@ using namespace metal;
 //bool noEarlyZ 
 //float4 z_rayDirectionsDims 
 //}
-//ssbo int layoutIndices 0:0:4 {
+//ssbo int layoutIndices 0:0:4  {
 //uint _Triangles 0:[1]:4
 //}
-//ssbo float layoutVerticesPN 0:2:4 {
+//ssbo float layoutVerticesPN 0:2:4  {
 //float _VerticesPN 0:[1]:4
 //}
-//ssbo float layoutVertices 0:1:4 {
+//ssbo float layoutVertices 0:1:4  {
 //float _Vertices 0:[1]:4
 //}
 //SG_REFLECTION_END

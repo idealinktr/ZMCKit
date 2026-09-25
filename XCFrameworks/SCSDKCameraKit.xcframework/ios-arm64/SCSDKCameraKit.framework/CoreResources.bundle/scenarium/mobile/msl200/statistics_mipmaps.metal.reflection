@@ -17,43 +17,35 @@
 //attribute vec3 positionNext 15
 //attribute vec3 positionPrevious 16
 //attribute vec4 strandProperties 17
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
-//ubo float sc_BonesUBO 0:3:96 {
+//output vec4 sc_FragData0 0
+//ubo float sc_BonesUBO 2:6:96  {
 //sc_Bone_t sc_Bones 0:[1]:96
 //float4 sc_Bones.boneMatrix 0:[3]:16
 //float4 sc_Bones.normalMatrix 48:[3]:16
 //}
-//ubo int UserUniforms 0:26:4208 {
-//float4 sc_UniformConstants 1392
-//float4x4 sc_ModelViewProjectionMatrixArray 1424:[2]:64
-//float4x4 sc_ViewProjectionMatrixArray 1680:[2]:64
-//float4x4 sc_ModelViewMatrixArray 1936:[2]:64
-//float4x4 sc_ProjectionMatrixArray 2384:[2]:64
-//float4x4 sc_ProjectionMatrixInverseArray 2512:[2]:64
-//float4x4 sc_ViewMatrixArray 2640:[2]:64
-//float4x4 sc_ModelMatrix 3024
-//float3x3 sc_NormalMatrix 3152
-//sc_Camera_t sc_Camera 3472
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4x4 sc_ViewProjectionMatrixArray 32:[4]:64
+//float4x4 sc_ProjectionMatrixArray 544:[4]:64
+//float4x4 sc_ProjectionMatrixInverseArray 800:[4]:64
+//float4x4 sc_ViewMatrixArray 1056:[4]:64
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//sc_Camera_t sc_Camera 1888
 //float3 sc_Camera.position 0
 //float sc_Camera.aspect 16
 //float2 sc_Camera.clipPlanes 24
-//float4x4 sc_ProjectorMatrix 3536
-//float4 weights0 3616
-//float4 weights1 3632
-//float4 sc_StereoClipPlanes 3664:[2]:16
-//float3 uniMainTextureSize 4192
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
+//ubo float sc_DrawCallUBO 2:3:720  {
+//float4x4 sc_ModelMatrix 0
+//float3x3 sc_NormalMatrix 64
+//float4x4 sc_ProjectorMatrix 112
+//float4 weights0 176
+//float4 weights1 192
+//float4x4 sc_ModelViewProjectionMatrixArray 208:[4]:64
+//float4x4 sc_ModelViewMatrixArray 464:[4]:64
 //}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
+//ubo float UserUniforms 2:0:16  {
+//float3 uniMainTextureSize 0
 //}
 //spec_const bool sc_OITCompositingPass 0 0
 //spec_const bool sc_OITDepthBoundsPass 1 0

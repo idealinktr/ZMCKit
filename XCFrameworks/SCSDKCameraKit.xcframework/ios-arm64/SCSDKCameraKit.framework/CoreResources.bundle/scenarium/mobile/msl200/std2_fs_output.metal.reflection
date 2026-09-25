@@ -1,0 +1,6 @@
+//SG_REFLECTION_BEGIN(100)
+//output vec4 FragColor0 0
+//output vec4 FragColor1 1
+//output vec4 FragColor2 2
+//output vec4 FragColor3 3
+//SG_REFLECTION_END

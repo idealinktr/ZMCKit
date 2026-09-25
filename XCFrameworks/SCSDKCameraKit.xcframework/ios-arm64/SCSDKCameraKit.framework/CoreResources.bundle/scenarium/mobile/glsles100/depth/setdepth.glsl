@@ -1,8 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler depthTextureSmpSC 2:1
-//texture texture2D depthTexture 2:0:2:1
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
@@ -61,6 +57,12 @@ sc_ProcessVertex(sc_LoadVertexAttributes());
 #undef PACKED_DISPARITY
 #define PACKED_DISPARITY 1
 #endif
+#ifndef USE_CUSTOM_PROJECTION
+#define USE_CUSTOM_PROJECTION 0
+#elif USE_CUSTOM_PROJECTION==1
+#undef USE_CUSTOM_PROJECTION
+#define USE_CUSTOM_PROJECTION 1
+#endif
 uniform vec4 depthTextureDims;
 uniform mat3 depthTextureTransform;
 uniform vec4 depthTextureUvMinMax;
@@ -68,6 +70,7 @@ uniform vec4 depthTextureBorderColor;
 uniform float depthToDisparityNumerator;
 uniform float depthScale;
 uniform float defaultDepth;
+uniform mat4 depthProjectionMatrixArray[sc_NumStereoViews];
 uniform mediump sampler2D depthTexture;
 void main()
 {
@@ -107,8 +110,18 @@ l9_5=l9_4;
 float l9_6;
 if (l9_5)
 {
-vec4 l9_7=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()]*vec4(0.0,0.0,-l9_2,1.0);
-l9_6=((0.5*l9_7.z)/l9_7.w)+0.5;
+mat4 l9_7;
+#if (USE_CUSTOM_PROJECTION)
+{
+l9_7=depthProjectionMatrixArray[sc_GetStereoViewIndex()];
+}
+#else
+{
+l9_7=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()];
+}
+#endif
+vec4 l9_8=l9_7*vec4(0.0,0.0,-l9_2,1.0);
+l9_6=((0.5*l9_8.z)/l9_8.w)+0.5;
 }
 else
 {

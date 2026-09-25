@@ -1,0 +1,10 @@
+//SG_REFLECTION_BEGIN(100)
+//attribute vec2 atbPosition_0 0
+//attribute vec2 atbTexCoord_1 1
+//texture texture2D baseTex_0 0:0:0:1
+//texture samplerExternalOES baseTexExternal 0:0:0:1
+//sampler sampler baseSampler 0:1
+//ubo float uniformBuffer_0 0:2:112 {
+//vec4 data 0:[7]:16
+//}
+//SG_REFLECTION_END

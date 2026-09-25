@@ -1,0 +1,83 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler screenTexture0SmpSC 0:32
+//sampler sampler screenTexture1SmpSC 0:33
+//sampler sampler screenTexture2SmpSC 0:34
+//sampler sampler screenTexture3SmpSC 0:35
+//texture texture2D screenTexture0 0:14:0:32
+//texture texture2D screenTexture1 0:15:0:33
+//texture texture2D screenTexture2 0:16:0:34
+//texture texture2D screenTexture3 0:17:0:35
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:496  {
+//float3x3 screenTexture0Transform 0
+//float4 screenTexture0UvMinMax 48
+//float4 screenTexture0BorderColor 64
+//float screenTexture0LOD 80
+//float4 color0 96
+//float3x3 screenTexture1Transform 112
+//float4 screenTexture1UvMinMax 160
+//float4 screenTexture1BorderColor 176
+//float screenTexture1LOD 192
+//float4 color1 208
+//float3x3 screenTexture2Transform 224
+//float4 screenTexture2UvMinMax 272
+//float4 screenTexture2BorderColor 288
+//float screenTexture2LOD 304
+//float4 color2 320
+//float3x3 screenTexture3Transform 336
+//float4 screenTexture3UvMinMax 384
+//float4 screenTexture3BorderColor 400
+//float screenTexture3LOD 416
+//float4 color3 432
+//float3x3 meshTransform 448
+//}
+//spec_const bool GRAYSCALE_AS_ALPHA 0 0
+//spec_const bool ONLY_VERTEX_ATTRIBUTE 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_screenTexture0 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_screenTexture1 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_screenTexture2 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_screenTexture3 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_screenTexture0 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_screenTexture1 7 0
+//spec_const bool SC_USE_UV_MIN_MAX_screenTexture2 8 0
+//spec_const bool SC_USE_UV_MIN_MAX_screenTexture3 9 0
+//spec_const bool SC_USE_UV_TRANSFORM_screenTexture0 10 0
+//spec_const bool SC_USE_UV_TRANSFORM_screenTexture1 11 0
+//spec_const bool SC_USE_UV_TRANSFORM_screenTexture2 12 0
+//spec_const bool SC_USE_UV_TRANSFORM_screenTexture3 13 0
+//spec_const bool SWAP_R_B_CHANNELS 14 0
+//spec_const bool USE_MESH_TRANSFORM 15 0
+//spec_const bool sc_ProjectiveShadowsReceiver 16 0
+//spec_const bool screenTexture0HasSwappedViews 17 0
+//spec_const bool screenTexture1HasSwappedViews 18 0
+//spec_const bool screenTexture2HasSwappedViews 19 0
+//spec_const bool screenTexture3HasSwappedViews 20 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_screenTexture0 21 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_screenTexture1 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_screenTexture2 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_screenTexture3 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_screenTexture0 25 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_screenTexture1 26 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_screenTexture2 27 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_screenTexture3 28 -1
+//spec_const int sc_MultipleRenderTarget 29 1
+//spec_const int sc_ShaderCacheConstant 30 0
+//spec_const int sc_StereoRenderingMode 31 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 32 0
+//spec_const int screenTexture0Layout 33 0
+//spec_const int screenTexture1Layout 34 0
+//spec_const int screenTexture2Layout 35 0
+//spec_const int screenTexture3Layout 36 0
+//SG_REFLECTION_END

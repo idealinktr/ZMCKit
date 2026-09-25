@@ -17,9 +17,10 @@
 //attribute vec3 positionNext 15
 //attribute vec3 positionPrevious 16
 //attribute vec4 strandProperties 17
-//sampler sampler cropTextureSmpSC 0:7
-//texture texture2D cropTexture 0:0:0:7
-//texture texture2DArray cropTextureArrSC 0:14:0:7
+//output vec4 sc_FragData0 0
+//sampler sampler cropTextureSmpSC 0:10
+//texture texture2D cropTexture 0:0:0:10
+//texture texture2DArray cropTextureArrSC 0:20:0:10
 //spec_const bool INVERT_MASK 0 0
 //spec_const bool SC_USE_CLAMP_TO_BORDER_cropTexture 1 0
 //spec_const bool SC_USE_UV_MIN_MAX_cropTexture 2 0

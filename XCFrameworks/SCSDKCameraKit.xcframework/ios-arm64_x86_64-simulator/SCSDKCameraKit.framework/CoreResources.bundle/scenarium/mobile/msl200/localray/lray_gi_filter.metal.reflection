@@ -9,12 +9,12 @@
 //texture texture2D denoiserKernel 0:1:0:8
 //texture utexture2D receiverData0 0:5:0:12
 //texture utexture2D receiverData1 0:6:0:13
-//ubo float UserUniforms 0:14:112 {
+//ubo float UserUniforms 0:14:80  {
 //float4 casterColorSize 0
-//float3 originScaleInv 48
-//float3 originOffset 64
-//float2 kernelMask 88
-//float diMaxRayLen 96
-//float diffuseIntensity 100
+//float3 originScaleInv 16
+//float3 originOffset 32
+//float2 kernelMask 56
+//float diMaxRayLen 64
+//float diffuseIntensity 68
 //}
 //SG_REFLECTION_END

@@ -1,0 +1,4 @@
+//SG_REFLECTION_BEGIN(100)
+//output uvec4 position_and_mask 0
+//output uvec4 normal_and_more 1
+//SG_REFLECTION_END

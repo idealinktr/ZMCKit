@@ -1,10 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler baseTexSmpSC 2:2
-//sampler sampler prevTexSmpSC 2:3
-//texture texture2D baseTex 2:0:2:2
-//texture texture2D prevTex 2:1:2:3
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
 #if defined VERTEX_SHADER

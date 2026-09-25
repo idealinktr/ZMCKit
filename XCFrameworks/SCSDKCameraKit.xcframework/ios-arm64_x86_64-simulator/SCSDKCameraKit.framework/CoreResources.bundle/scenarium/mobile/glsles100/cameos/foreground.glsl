@@ -1,13 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//attribute vec2 texture2 18
-//sampler sampler bgTextureSmpSC 2:3
-//sampler sampler fgAlphaTextureSmpSC 2:4
-//sampler sampler fgTextureSmpSC 2:5
-//texture texture2D bgTexture 2:0:2:3
-//texture texture2D fgAlphaTexture 2:1:2:4
-//texture texture2D fgTexture 2:2:2:5
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #if defined VERTEX_SHADER

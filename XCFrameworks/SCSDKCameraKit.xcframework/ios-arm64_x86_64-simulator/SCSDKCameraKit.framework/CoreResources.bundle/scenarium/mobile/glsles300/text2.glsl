@@ -1,92 +1,5 @@
 #version 300 es
 //#include <required.glsl> // [HACK 4/6/2023] See SCC shader_merger.cpp
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//attribute vec2 texture0 3
-//attribute vec2 texture1 4
-//attribute float passIdentifierAttr 5
-//attribute float sdfOffsetAttr 6
-//attribute vec3 normal 1
-//attribute vec4 tangent 2
-//sampler sampler backgroundFillTextureSmpSC 0:12
-//sampler sampler colorTextureSmpSC 0:13
-//sampler sampler mainFillTextureSmpSC 0:14
-//sampler sampler mainTextureSmpSC 0:15
-//sampler sampler outlineFillTextureSmpSC 0:16
-//sampler sampler shadowFillTextureSmpSC 0:23
-//texture texture2D backgroundFillTexture 0:0:0:12
-//texture texture2D colorTexture 0:1:0:13
-//texture texture2D mainFillTexture 0:2:0:14
-//texture texture2D mainTexture 0:3:0:15
-//texture texture2D outlineFillTexture 0:4:0:16
-//texture texture2D shadowFillTexture 0:11:0:23
-//texture texture2DArray backgroundFillTextureArrSC 0:24:0:12
-//texture texture2DArray colorTextureArrSC 0:25:0:13
-//texture texture2DArray mainFillTextureArrSC 0:26:0:14
-//texture texture2DArray mainTextureArrSC 0:27:0:15
-//texture texture2DArray outlineFillTextureArrSC 0:28:0:16
-//texture texture2DArray shadowFillTextureArrSC 0:32:0:23
-//spec_const bool BACKGROUND_FILL_COLOR 0 0
-//spec_const bool BACKGROUND_FILL_TEXTURE 1 0
-//spec_const bool ENABLE_BACKGROUND 2 0
-//spec_const bool ENABLE_OUTLINE 3 0
-//spec_const bool ENABLE_SDF 4 0
-//spec_const bool ENABLE_SHADOW 5 0
-//spec_const bool MAIN_FILL_COLOR 6 0
-//spec_const bool MAIN_FILL_TEXTURE 7 0
-//spec_const bool OUTLINE_FILL_COLOR 8 0
-//spec_const bool OUTLINE_FILL_TEXTURE 9 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_backgroundFillTexture 10 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_colorTexture 11 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_mainFillTexture 12 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 13 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_outlineFillTexture 14 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_shadowFillTexture 15 0
-//spec_const bool SC_USE_UV_MIN_MAX_backgroundFillTexture 16 0
-//spec_const bool SC_USE_UV_MIN_MAX_colorTexture 17 0
-//spec_const bool SC_USE_UV_MIN_MAX_mainFillTexture 18 0
-//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 19 0
-//spec_const bool SC_USE_UV_MIN_MAX_outlineFillTexture 20 0
-//spec_const bool SC_USE_UV_MIN_MAX_shadowFillTexture 21 0
-//spec_const bool SC_USE_UV_TRANSFORM_backgroundFillTexture 22 0
-//spec_const bool SC_USE_UV_TRANSFORM_colorTexture 23 0
-//spec_const bool SC_USE_UV_TRANSFORM_mainFillTexture 24 0
-//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 25 0
-//spec_const bool SC_USE_UV_TRANSFORM_outlineFillTexture 26 0
-//spec_const bool SC_USE_UV_TRANSFORM_shadowFillTexture 27 0
-//spec_const bool SHADOW_FILL_COLOR 28 0
-//spec_const bool SHADOW_FILL_TEXTURE 29 0
-//spec_const bool backgroundFillTextureHasSwappedViews 30 0
-//spec_const bool colorTextureHasSwappedViews 31 0
-//spec_const bool mainFillTextureHasSwappedViews 32 0
-//spec_const bool mainTextureHasSwappedViews 33 0
-//spec_const bool outlineFillTextureHasSwappedViews 34 0
-//spec_const bool sc_MotionVectorsPass 35 0
-//spec_const bool shadowFillTextureHasSwappedViews 36 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_backgroundFillTexture 37 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_colorTexture 38 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainFillTexture 39 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 40 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_outlineFillTexture 41 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_shadowFillTexture 42 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_backgroundFillTexture 43 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_colorTexture 44 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainFillTexture 45 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 46 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_outlineFillTexture 47 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_shadowFillTexture 48 -1
-//spec_const int backgroundFillTextureLayout 49 0
-//spec_const int colorTextureLayout 50 0
-//spec_const int mainFillTextureLayout 51 0
-//spec_const int mainTextureLayout 52 0
-//spec_const int outlineFillTextureLayout 53 0
-//spec_const int sc_RenderingSpace 54 -1
-//spec_const int sc_ShaderCacheConstant 55 0
-//spec_const int sc_StereoRenderingMode 56 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 57 0
-//spec_const int sc_StereoViewID 58 0
-//spec_const int shadowFillTextureLayout 59 0
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define sc_TAADisabled 1
@@ -119,7 +32,6 @@
 #endif
 #ifdef sc_EnableMultiviewStereoRendering
 #define sc_StereoRenderingMode sc_StereoRendering_Multiview
-#define sc_NumStereoViews 2
 #extension GL_OVR_multiview2 : require
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
@@ -141,7 +53,6 @@
 #endif
 #define sc_StereoRenderingMode sc_StereoRendering_InstancedClipped
 #define sc_NumStereoClipPlanes 1
-#define sc_NumStereoViews 2
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
 #define sc_GlobalInstanceID (sc_FallbackInstanceID*2+gl_InstanceID)
@@ -231,11 +142,11 @@ layout(num_views=sc_NumStereoViews) in;
 #ifndef sc_RenderingSpace
 #define sc_RenderingSpace -1
 #endif
-#ifndef sc_NumStereoViews
-#define sc_NumStereoViews 1
-#endif
 #ifndef sc_StereoRendering_IsClipDistanceEnabled
 #define sc_StereoRendering_IsClipDistanceEnabled 0
+#endif
+#ifndef sc_NumStereoViews
+#define sc_NumStereoViews 1
 #endif
 #ifndef sc_ShaderCacheConstant
 #define sc_ShaderCacheConstant 0
@@ -246,27 +157,40 @@ vec3 position;
 float aspect;
 vec2 clipPlanes;
 };
+#ifndef ENABLE_SDF
+#define ENABLE_SDF 0
+#elif ENABLE_SDF==1
+#undef ENABLE_SDF
+#define ENABLE_SDF 1
+#endif
 uniform mat4 sc_ModelMatrix;
-uniform mat4 sc_ViewProjectionMatrixArray[sc_NumStereoViews];
 uniform vec4 sc_StereoClipPlanes[sc_NumStereoViews];
 uniform vec4 sc_UniformConstants;
+uniform mat4 sc_ViewProjectionMatrixArray[sc_NumStereoViews];
 uniform mat4 sc_ModelViewProjectionMatrixArray[sc_NumStereoViews];
 uniform mat4 sc_ModelViewMatrixArray[sc_NumStereoViews];
 uniform sc_Camera_t sc_Camera;
-out vec4 varPosAndMotion;
-out vec4 varNormalAndMotion;
+uniform mat4 sc_ProjectionMatrixArray[sc_NumStereoViews];
+uniform mat4 sc_ViewMatrixArray[sc_NumStereoViews];
+uniform float textScaledEmHeight;
+uniform vec4 sc_CurrentRenderTargetDims;
 out float varClipDistance;
 flat out int varStereoViewID;
 in vec4 position;
 in vec2 texture0;
 in vec2 texture1;
+out vec4 varPosAndMotion;
 out vec4 varTex01;
 out vec4 varScreenPos;
 out vec2 varScreenTexturePos;
-out float varPassIdentifier;
+out vec4 varSdfParams;
+out vec2 varPassIdDecorThickness;
 in float passIdentifierAttr;
-out float varSdfOffset;
 in float sdfOffsetAttr;
+in float decorThicknessRatioAttr;
+out vec4 varGlyphAtlasUvRect;
+in vec4 glyphAtlasUvRectAttr;
+out vec4 varNormalAndMotion;
 out vec4 varTangent;
 out vec2 varShadowTex;
 in vec3 normal;
@@ -285,6 +209,17 @@ l9_0=sc_StereoViewID;
 #endif
 return l9_0;
 }
+float calculateFrustumHeightAtVertex(vec3 vertexWorldPos)
+{
+if (sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].w!=0.0)
+{
+return abs((2.0*(-(sc_ViewMatrixArray[sc_GetStereoViewIndex()]*vec4(vertexWorldPos,1.0)).z))/sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][1].y);
+}
+else
+{
+return abs(4.0/sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][1].y);
+}
+}
 vec4 sc_ApplyScreenSpaceInstancedClippedShift(vec4 screenPosition)
 {
 #if (sc_StereoRenderingMode==1)
@@ -302,49 +237,69 @@ gl_ClipDistance[0]=dstClipDistance;
 }
 void main()
 {
-vec4 l9_0;
+#if (ENABLE_SDF)
+{
+float l9_0=calculateFrustumHeightAtVertex((sc_ModelMatrix*vec4(position.xyz,1.0)).xyz);
+float l9_1=((textScaledEmHeight/l9_0)*sc_CurrentRenderTargetDims.y)/93.0;
+mat4 l9_2=sc_ViewMatrixArray[sc_GetStereoViewIndex()]*sc_ModelMatrix;
+float l9_3=abs(dot(normalize(mat3(l9_2[0].xyz,l9_2[1].xyz,l9_2[2].xyz)*vec3(0.0,0.0,1.0)),vec3(0.0,0.0,-1.0)));
+float l9_4;
+if (l9_3<0.69999999)
+{
+l9_4=l9_1*clamp(l9_3,0.11,0.69999999);
+}
+else
+{
+l9_4=l9_1;
+}
+varSdfParams.x=clamp(1.0-((l9_4-0.5)/0.5),0.0,1.0);
+varSdfParams.y=clamp((l9_4*31.67)+1.0,1.0,250.0);
+varSdfParams.z=clamp(l9_4*15.83,0.0,124.5);
+}
+#endif
+vec4 l9_5;
 #if (sc_RenderingSpace==3)
 {
-l9_0=sc_ApplyScreenSpaceInstancedClippedShift(position);
+l9_5=sc_ApplyScreenSpaceInstancedClippedShift(position);
 }
 #else
 {
-vec4 l9_1;
+vec4 l9_6;
 #if (sc_RenderingSpace==2)
 {
-l9_1=sc_ViewProjectionMatrixArray[sc_GetStereoViewIndex()]*position;
+l9_6=sc_ViewProjectionMatrixArray[sc_GetStereoViewIndex()]*position;
 }
 #else
 {
-vec4 l9_2;
+vec4 l9_7;
 #if (sc_RenderingSpace==1)
 {
-l9_2=sc_ModelViewProjectionMatrixArray[sc_GetStereoViewIndex()]*position;
+l9_7=sc_ModelViewProjectionMatrixArray[sc_GetStereoViewIndex()]*position;
 }
 #else
 {
-vec4 l9_3;
+vec4 l9_8;
 #if (sc_RenderingSpace==4)
 {
-l9_3=sc_ApplyScreenSpaceInstancedClippedShift((sc_ModelViewMatrixArray[sc_GetStereoViewIndex()]*position)*vec4(1.0/sc_Camera.aspect,1.0,1.0,1.0));
+l9_8=sc_ApplyScreenSpaceInstancedClippedShift((sc_ModelViewMatrixArray[sc_GetStereoViewIndex()]*position)*vec4(1.0/sc_Camera.aspect,1.0,1.0,1.0));
 }
 #else
 {
-l9_3=position;
+l9_8=position;
 }
 #endif
-l9_2=l9_3;
+l9_7=l9_8;
 }
 #endif
-l9_1=l9_2;
+l9_6=l9_7;
 }
 #endif
-l9_0=l9_1;
+l9_5=l9_6;
 }
 #endif
 #if ((sc_RenderingSpace==3)||(sc_RenderingSpace==4))
 {
-varPosAndMotion=vec4(l9_0.x,l9_0.y,l9_0.z,varPosAndMotion.w);
+varPosAndMotion=vec4(l9_5.x,l9_5.y,l9_5.z,varPosAndMotion.w);
 }
 #else
 {
@@ -356,8 +311,8 @@ varPosAndMotion=vec4(position.x,position.y,position.z,varPosAndMotion.w);
 {
 #if (sc_RenderingSpace==1)
 {
-vec4 l9_4=sc_ModelMatrix*position;
-varPosAndMotion=vec4(l9_4.x,l9_4.y,l9_4.z,varPosAndMotion.w);
+vec4 l9_9=sc_ModelMatrix*position;
+varPosAndMotion=vec4(l9_9.x,l9_9.y,l9_9.z,varPosAndMotion.w);
 }
 #endif
 }
@@ -366,32 +321,32 @@ varPosAndMotion=vec4(l9_4.x,l9_4.y,l9_4.z,varPosAndMotion.w);
 #endif
 varTex01=vec4(texture0.x,texture0.y,varTex01.z,varTex01.w);
 varTex01=vec4(varTex01.x,varTex01.y,texture1.x,texture1.y);
-varScreenPos=l9_0;
-vec2 l9_5=((l9_0.xy/vec2(l9_0.w))*0.5)+vec2(0.5);
-vec2 l9_6;
+varScreenPos=l9_5;
+vec2 l9_10=((l9_5.xy/vec2(l9_5.w))*0.5)+vec2(0.5);
+vec2 l9_11;
 #if (sc_StereoRenderingMode==1)
 {
-vec3 l9_7=vec3(l9_5,0.0);
-l9_7.y=((2.0*l9_5.y)+float(sc_GetStereoViewIndex()))-1.0;
-l9_6=l9_7.xy;
+vec3 l9_12=vec3(l9_10,0.0);
+l9_12.y=((2.0*l9_10.y)+float(sc_GetStereoViewIndex()))-1.0;
+l9_11=l9_12.xy;
 }
 #else
 {
-l9_6=l9_5;
+l9_11=l9_10;
 }
 #endif
-varScreenTexturePos=l9_6;
-vec4 l9_8=l9_0*1.0;
-vec4 l9_9;
+varScreenTexturePos=l9_11;
+vec4 l9_13=l9_5*1.0;
+vec4 l9_14;
 #if (sc_ShaderCacheConstant!=0)
 {
-vec4 l9_10=l9_8;
-l9_10.x=l9_8.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
-l9_9=l9_10;
+vec4 l9_15=l9_13;
+l9_15.x=l9_13.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_14=l9_15;
 }
 #else
 {
-l9_9=l9_8;
+l9_14=l9_13;
 }
 #endif
 #if (sc_StereoRenderingMode>0)
@@ -401,21 +356,23 @@ varStereoViewID=sc_StereoViewID;
 #endif
 #if (sc_StereoRenderingMode==1)
 {
-float l9_11=dot(l9_9,sc_StereoClipPlanes[sc_StereoViewID]);
+float l9_16=dot(l9_14,sc_StereoClipPlanes[sc_StereoViewID]);
 #if (sc_StereoRendering_IsClipDistanceEnabled==1)
 {
-sc_SetClipDistancePlatform(l9_11);
+sc_SetClipDistancePlatform(l9_16);
 }
 #else
 {
-varClipDistance=l9_11;
+varClipDistance=l9_16;
 }
 #endif
 }
 #endif
-gl_Position=l9_9;
-varPassIdentifier=passIdentifierAttr;
-varSdfOffset=sdfOffsetAttr;
+gl_Position=l9_14;
+varPassIdDecorThickness.x=passIdentifierAttr;
+varSdfParams.w=sdfOffsetAttr;
+varPassIdDecorThickness.y=decorThicknessRatioAttr;
+varGlyphAtlasUvRect=glyphAtlasUvRectAttr;
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #ifndef sc_FramebufferFetch
@@ -423,68 +380,6 @@ varSdfOffset=sdfOffsetAttr;
 #elif sc_FramebufferFetch==1
 #undef sc_FramebufferFetch
 #define sc_FramebufferFetch 1
-#endif
-#if defined(GL_ES)||__VERSION__>=420
-#if sc_FragDataCount>=1
-#define sc_DeclareFragData0(StorageQualifier) layout(location=0) StorageQualifier sc_FragmentPrecision vec4 sc_FragData0
-#endif
-#if sc_FragDataCount>=2
-#define sc_DeclareFragData1(StorageQualifier) layout(location=1) StorageQualifier sc_FragmentPrecision vec4 sc_FragData1
-#endif
-#if sc_FragDataCount>=3
-#define sc_DeclareFragData2(StorageQualifier) layout(location=2) StorageQualifier sc_FragmentPrecision vec4 sc_FragData2
-#endif
-#if sc_FragDataCount>=4
-#define sc_DeclareFragData3(StorageQualifier) layout(location=3) StorageQualifier sc_FragmentPrecision vec4 sc_FragData3
-#endif
-#ifndef sc_DeclareFragData0
-#define sc_DeclareFragData0(_) const vec4 sc_FragData0=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData1
-#define sc_DeclareFragData1(_) const vec4 sc_FragData1=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData2
-#define sc_DeclareFragData2(_) const vec4 sc_FragData2=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData3
-#define sc_DeclareFragData3(_) const vec4 sc_FragData3=vec4(0.0)
-#endif
-#if sc_FramebufferFetch
-#ifdef GL_EXT_shader_framebuffer_fetch
-sc_DeclareFragData0(inout);
-sc_DeclareFragData1(inout);
-sc_DeclareFragData2(inout);
-sc_DeclareFragData3(inout);
-mediump mat4 getFragData() { return mat4(sc_FragData0,sc_FragData1,sc_FragData2,sc_FragData3); }
-#define gl_LastFragData (getFragData())
-#elif defined(GL_ARM_shader_framebuffer_fetch)
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(gl_LastFragColorARM,vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-#ifdef FRAGMENT_SHADER
-#define sc_FragData0 gl_FragData[0]
-#define sc_FragData1 gl_FragData[1]
-#define sc_FragData2 gl_FragData[2]
-#define sc_FragData3 gl_FragData[3]
-#endif
-mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#if sc_FramebufferFetch
-#error Framebuffer fetch is requested but not supported by this device.
-#endif
 #endif
 #ifndef sc_StereoRenderingMode
 #define sc_StereoRenderingMode 0
@@ -507,17 +402,11 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef mainTextureHasSwappedViews
 #define mainTextureHasSwappedViews 1
 #endif
-#ifndef mainTextureLayout
-#define mainTextureLayout 0
-#endif
 #ifndef colorTextureHasSwappedViews
 #define colorTextureHasSwappedViews 0
 #elif colorTextureHasSwappedViews==1
 #undef colorTextureHasSwappedViews
 #define colorTextureHasSwappedViews 1
-#endif
-#ifndef colorTextureLayout
-#define colorTextureLayout 0
 #endif
 #ifndef mainFillTextureHasSwappedViews
 #define mainFillTextureHasSwappedViews 0
@@ -525,17 +414,11 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef mainFillTextureHasSwappedViews
 #define mainFillTextureHasSwappedViews 1
 #endif
-#ifndef mainFillTextureLayout
-#define mainFillTextureLayout 0
-#endif
 #ifndef shadowFillTextureHasSwappedViews
 #define shadowFillTextureHasSwappedViews 0
 #elif shadowFillTextureHasSwappedViews==1
 #undef shadowFillTextureHasSwappedViews
 #define shadowFillTextureHasSwappedViews 1
-#endif
-#ifndef shadowFillTextureLayout
-#define shadowFillTextureLayout 0
 #endif
 #ifndef outlineFillTextureHasSwappedViews
 #define outlineFillTextureHasSwappedViews 0
@@ -543,17 +426,14 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef outlineFillTextureHasSwappedViews
 #define outlineFillTextureHasSwappedViews 1
 #endif
-#ifndef outlineFillTextureLayout
-#define outlineFillTextureLayout 0
-#endif
 #ifndef backgroundFillTextureHasSwappedViews
 #define backgroundFillTextureHasSwappedViews 0
 #elif backgroundFillTextureHasSwappedViews==1
 #undef backgroundFillTextureHasSwappedViews
 #define backgroundFillTextureHasSwappedViews 1
 #endif
-#ifndef backgroundFillTextureLayout
-#define backgroundFillTextureLayout 0
+#ifndef mainTextureLayout
+#define mainTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_mainTexture
 #define SC_USE_UV_TRANSFORM_mainTexture 0
@@ -596,6 +476,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif MAIN_FILL_TEXTURE==1
 #undef MAIN_FILL_TEXTURE
 #define MAIN_FILL_TEXTURE 1
+#endif
+#ifndef mainFillTextureLayout
+#define mainFillTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_mainFillTexture
 #define SC_USE_UV_TRANSFORM_mainFillTexture 0
@@ -645,6 +528,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef SHADOW_FILL_TEXTURE
 #define SHADOW_FILL_TEXTURE 1
 #endif
+#ifndef shadowFillTextureLayout
+#define shadowFillTextureLayout 0
+#endif
 #ifndef SC_USE_UV_TRANSFORM_shadowFillTexture
 #define SC_USE_UV_TRANSFORM_shadowFillTexture 0
 #elif SC_USE_UV_TRANSFORM_shadowFillTexture==1
@@ -680,6 +566,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif OUTLINE_FILL_TEXTURE==1
 #undef OUTLINE_FILL_TEXTURE
 #define OUTLINE_FILL_TEXTURE 1
+#endif
+#ifndef outlineFillTextureLayout
+#define outlineFillTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_outlineFillTexture
 #define SC_USE_UV_TRANSFORM_outlineFillTexture 0
@@ -723,6 +612,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef BACKGROUND_FILL_TEXTURE
 #define BACKGROUND_FILL_TEXTURE 1
 #endif
+#ifndef backgroundFillTextureLayout
+#define backgroundFillTextureLayout 0
+#endif
 #ifndef SC_USE_UV_TRANSFORM_backgroundFillTexture
 #define SC_USE_UV_TRANSFORM_backgroundFillTexture 0
 #elif SC_USE_UV_TRANSFORM_backgroundFillTexture==1
@@ -746,6 +638,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif SC_USE_CLAMP_TO_BORDER_backgroundFillTexture==1
 #undef SC_USE_CLAMP_TO_BORDER_backgroundFillTexture
 #define SC_USE_CLAMP_TO_BORDER_backgroundFillTexture 1
+#endif
+#ifndef colorTextureLayout
+#define colorTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_colorTexture
 #define SC_USE_UV_TRANSFORM_colorTexture 0
@@ -772,13 +667,10 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #define SC_USE_CLAMP_TO_BORDER_colorTexture 1
 #endif
 uniform vec4 sc_UniformConstants;
-uniform float sdfOpacityVal1;
-uniform float sdfOpacityVal2;
 uniform mat3 mainTextureTransform;
 uniform vec4 mainTextureUvMinMax;
 uniform vec4 mainTextureBorderColor;
 uniform float backgroundCornerRadius;
-uniform float multisampleBlend;
 uniform vec4 mainColor;
 uniform mat3 mainFillTextureTransform;
 uniform vec4 mainFillTextureUvMinMax;
@@ -816,36 +708,18 @@ uniform mediump sampler2D backgroundFillTexture;
 uniform mediump sampler2DArray colorTextureArrSC;
 uniform mediump sampler2D colorTexture;
 flat in int varStereoViewID;
-in vec2 varShadowTex;
+in float varClipDistance;
+layout(location=0) out vec4 sc_FragData0;
+in vec4 varSdfParams;
+in vec4 varTex01;
+in vec4 varGlyphAtlasUvRect;
+in vec2 varPassIdDecorThickness;
 in vec4 varPosAndMotion;
 in vec4 varNormalAndMotion;
-in float varClipDistance;
-in vec4 varTex01;
-in float varPassIdentifier;
-in float varSdfOffset;
 in vec4 varTangent;
 in vec4 varScreenPos;
 in vec2 varScreenTexturePos;
-bool isPass(float pass,float identifier)
-{
-float l9_0=identifier;
-float l9_1=pass;
-bool l9_2=l9_0>(l9_1-0.050000001);
-bool l9_3;
-if (l9_2)
-{
-l9_3=identifier<(pass+0.050000001);
-}
-else
-{
-l9_3=l9_2;
-}
-if (l9_3)
-{
-return true;
-}
-return false;
-}
+in vec2 varShadowTex;
 int sc_GetStereoViewIndex()
 {
 int l9_0;
@@ -1055,17 +929,17 @@ l9_11=l9_10;
 }
 return l9_11;
 }
-float calculateSdfOpacityMultisampled(float dist,float multisampleBlend_1)
+float calculateSdfOpacityMultisampled(float dist,float multisampleBlend)
 {
 float l9_0=dist;
-float l9_1=clamp((l9_0*sdfOpacityVal1)-sdfOpacityVal2,0.0,1.0);
+float l9_1=clamp((l9_0*varSdfParams.y)-varSdfParams.z,0.0,1.0);
 float l9_2;
-if (multisampleBlend_1>0.0)
+if (multisampleBlend>0.0)
 {
 vec2 l9_3=dFdx(varTex01.xy);
 vec2 l9_4=dFdy(varTex01.xy);
 vec2 l9_5=(l9_3+l9_4)*0.35355338;
-vec4 l9_6=vec4(varTex01.xy-l9_5,varTex01.xy+l9_5);
+vec4 l9_6=vec4(clamp(varTex01.xy-l9_5,varGlyphAtlasUvRect.xy,varGlyphAtlasUvRect.zw),clamp(varTex01.xy+l9_5,varGlyphAtlasUvRect.xy,varGlyphAtlasUvRect.zw));
 vec4 l9_7;
 #if (mainTextureLayout==2)
 {
@@ -1106,7 +980,7 @@ l9_10=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),l9_
 l9_10=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),l9_6.zw,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
 }
 #endif
-l9_2=mix(l9_1,((((l9_1+clamp((l9_7.x*sdfOpacityVal1)-sdfOpacityVal2,0.0,1.0))+clamp((l9_8.x*sdfOpacityVal1)-sdfOpacityVal2,0.0,1.0))+clamp((l9_9.x*sdfOpacityVal1)-sdfOpacityVal2,0.0,1.0))+clamp((l9_10.x*sdfOpacityVal1)-sdfOpacityVal2,0.0,1.0))*0.2,multisampleBlend_1);
+l9_2=mix(l9_1,((((l9_1+clamp((l9_7.x*varSdfParams.y)-varSdfParams.z,0.0,1.0))+clamp((l9_8.x*varSdfParams.y)-varSdfParams.z,0.0,1.0))+clamp((l9_9.x*varSdfParams.y)-varSdfParams.z,0.0,1.0))+clamp((l9_10.x*varSdfParams.y)-varSdfParams.z,0.0,1.0))*0.2,multisampleBlend);
 }
 else
 {
@@ -1128,18 +1002,18 @@ l9_0=sc_GetStereoViewIndex();
 #endif
 return l9_0;
 }
-float calculateSdfOpacityMultisampledOutline(float dist,float sdfEdge,float multisampleBlend_1)
+float calculateSdfOpacityMultisampledOutline(float dist,float sdfEdge,float multisampleBlend)
 {
 float l9_0=dist;
 float l9_1=sdfEdge;
-float l9_2=clamp(((l9_0-l9_1)*sdfOpacityVal1)+0.5,0.0,1.0);
+float l9_2=clamp(((l9_0-l9_1)*varSdfParams.y)+0.5,0.0,1.0);
 float l9_3;
-if (multisampleBlend_1>0.0)
+if (multisampleBlend>0.0)
 {
 vec2 l9_4=dFdx(varTex01.xy);
 vec2 l9_5=dFdy(varTex01.xy);
 vec2 l9_6=(l9_4+l9_5)*0.35355338;
-vec4 l9_7=vec4(varTex01.xy-l9_6,varTex01.xy+l9_6);
+vec4 l9_7=vec4(clamp(varTex01.xy-l9_6,varGlyphAtlasUvRect.xy,varGlyphAtlasUvRect.zw),clamp(varTex01.xy+l9_6,varGlyphAtlasUvRect.xy,varGlyphAtlasUvRect.zw));
 vec4 l9_8;
 #if (mainTextureLayout==2)
 {
@@ -1183,7 +1057,7 @@ l9_14=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),l9_
 l9_14=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),l9_7.zw,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
 }
 #endif
-l9_3=mix(l9_2,((((l9_2+clamp(((l9_8.x-l9_9)*sdfOpacityVal1)+0.5,0.0,1.0))+clamp(((l9_10.x-l9_11)*sdfOpacityVal1)+0.5,0.0,1.0))+clamp(((l9_12.x-l9_13)*sdfOpacityVal1)+0.5,0.0,1.0))+clamp(((l9_14.x-sdfEdge)*sdfOpacityVal1)+0.5,0.0,1.0))*0.2,multisampleBlend_1);
+l9_3=mix(l9_2,((((l9_2+clamp(((l9_8.x-l9_9)*varSdfParams.y)+0.5,0.0,1.0))+clamp(((l9_10.x-l9_11)*varSdfParams.y)+0.5,0.0,1.0))+clamp(((l9_12.x-l9_13)*varSdfParams.y)+0.5,0.0,1.0))+clamp(((l9_14.x-sdfEdge)*varSdfParams.y)+0.5,0.0,1.0))*0.2,multisampleBlend);
 }
 else
 {
@@ -1238,9 +1112,13 @@ return 0.0;
 }
 return smoothstep(1.0,0.98000002,l9_2);
 }
-void sc_writeFragData0Internal(vec4 col,float zero,int cacheConst)
+void sc_writeFragData0(vec4 col)
 {
-col.x+=zero*float(cacheConst);
+#if (sc_ShaderCacheConstant!=0)
+{
+col.x+=(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+}
+#endif
 sc_FragData0=col;
 }
 int backgroundFillTextureGetStereoViewIndex()
@@ -1287,19 +1165,11 @@ discard;
 }
 #endif
 vec2 l9_0=vec2(fract(varTex01.z),fract(varTex01.w));
-bool l9_1=isPass(0.0,varPassIdentifier);
-bool l9_2;
-if (!l9_1)
-{
-l9_2=isPass(0.1,varPassIdentifier);
-}
-else
-{
-l9_2=l9_1;
-}
+int l9_1=int(varPassIdDecorThickness.x+0.5);
+bool l9_2=l9_1==1;
 vec4 l9_3;
 float l9_4;
-if (l9_2)
+if ((l9_1==0)||l9_2)
 {
 float l9_5;
 #if (ENABLE_SDF)
@@ -1314,7 +1184,7 @@ l9_6=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),varT
 l9_6=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
 }
 #endif
-l9_5=calculateSdfOpacityMultisampled(l9_6.x,multisampleBlend);
+l9_5=calculateSdfOpacityMultisampled(l9_6.x,varSdfParams.x);
 }
 #else
 {
@@ -1365,7 +1235,7 @@ float l9_11;
 {
 vec4 l9_12;
 float l9_13;
-if (isPass(0.2,varPassIdentifier))
+if (l9_1==2)
 {
 float l9_14;
 #if (ENABLE_SDF)
@@ -1383,11 +1253,11 @@ l9_15=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),var
 float l9_16;
 #if (ENABLE_OUTLINE)
 {
-l9_16=calculateSdfOpacityMultisampledOutline(l9_15.x,0.5-varSdfOffset,multisampleBlend);
+l9_16=calculateSdfOpacityMultisampledOutline(l9_15.x,0.5-varSdfParams.w,varSdfParams.x);
 }
 #else
 {
-l9_16=calculateSdfOpacityMultisampled(l9_15.x,multisampleBlend);
+l9_16=calculateSdfOpacityMultisampled(l9_15.x,varSdfParams.x);
 }
 #endif
 l9_14=l9_16;
@@ -1450,7 +1320,7 @@ float l9_21;
 {
 vec4 l9_22;
 float l9_23;
-if (isPass(0.30000001,varPassIdentifier))
+if (l9_1==3)
 {
 float l9_24;
 #if (ENABLE_SDF)
@@ -1465,7 +1335,7 @@ l9_25=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),var
 l9_25=sc_SampleTextureBias(mainTextureLayout,mainTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture),(int(SC_USE_UV_MIN_MAX_mainTexture)!=0),mainTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0),mainTextureBorderColor,0.0,mainTexture);
 }
 #endif
-l9_24=calculateSdfOpacityMultisampledOutline(l9_25.x,0.5-varSdfOffset,multisampleBlend);
+l9_24=calculateSdfOpacityMultisampledOutline(l9_25.x,0.5-varSdfParams.w,varSdfParams.x);
 }
 #else
 {
@@ -1521,7 +1391,7 @@ l9_20=l9_10;
 #endif
 #if (ENABLE_BACKGROUND)
 {
-if (isPass(0.40000001,varPassIdentifier))
+if (l9_1==4)
 {
 float l9_29=getCornerFade(vec2(0.0));
 float l9_30=getCornerFade(vec2(backgroundSize.x,0.0));
@@ -1535,7 +1405,7 @@ discard;
 #if (BACKGROUND_FILL_COLOR)
 {
 float l9_34=backgroundColor.w*l9_33;
-sc_writeFragData0Internal(vec4(backgroundColor.xyz*l9_34,l9_34),sc_UniformConstants.x,sc_ShaderCacheConstant);
+sc_writeFragData0(vec4(backgroundColor.xyz*l9_34,l9_34));
 }
 #else
 {
@@ -1553,7 +1423,7 @@ l9_35=sc_SampleTextureBias(backgroundFillTextureLayout,backgroundFillTextureGetS
 #endif
 vec4 l9_36=l9_35*backgroundFillColorTint;
 float l9_37=l9_36.w*l9_33;
-sc_writeFragData0Internal(vec4(l9_36.xyz*l9_37,l9_37),sc_UniformConstants.x,sc_ShaderCacheConstant);
+sc_writeFragData0(vec4(l9_36.xyz*l9_37,l9_37));
 }
 #endif
 }
@@ -1562,178 +1432,308 @@ return;
 }
 }
 #endif
-if (isPass(0.1,varPassIdentifier))
+bool l9_38=l9_1==6;
+bool l9_39=l9_1==7;
+if (((l9_1==5)||l9_38)||l9_39)
 {
-vec4 l9_38;
-#if (colorTextureLayout==2)
+vec4 l9_40;
+if (l9_38)
 {
-l9_38=sc_SampleTextureBias(colorTextureLayout,colorTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_colorTexture)!=0),colorTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_colorTexture,SC_SOFTWARE_WRAP_MODE_V_colorTexture),(int(SC_USE_UV_MIN_MAX_colorTexture)!=0),colorTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_colorTexture)!=0),colorTextureBorderColor,0.0,colorTextureArrSC);
+vec4 l9_41;
+#if (OUTLINE_FILL_COLOR)
+{
+l9_41=outlineColor;
 }
 #else
 {
-l9_38=sc_SampleTextureBias(colorTextureLayout,colorTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_colorTexture)!=0),colorTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_colorTexture,SC_SOFTWARE_WRAP_MODE_V_colorTexture),(int(SC_USE_UV_MIN_MAX_colorTexture)!=0),colorTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_colorTexture)!=0),colorTextureBorderColor,0.0,colorTexture);
+vec4 l9_42;
+#if (OUTLINE_FILL_TEXTURE)
+{
+vec4 l9_43;
+#if (outlineFillTextureLayout==2)
+{
+l9_43=sc_SampleTextureBias(outlineFillTextureLayout,outlineFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_outlineFillTexture)!=0),outlineFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_outlineFillTexture,SC_SOFTWARE_WRAP_MODE_V_outlineFillTexture),(int(SC_USE_UV_MIN_MAX_outlineFillTexture)!=0),outlineFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_outlineFillTexture)!=0),outlineFillTextureBorderColor,0.0,outlineFillTextureArrSC);
+}
+#else
+{
+l9_43=sc_SampleTextureBias(outlineFillTextureLayout,outlineFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_outlineFillTexture)!=0),outlineFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_outlineFillTexture,SC_SOFTWARE_WRAP_MODE_V_outlineFillTexture),(int(SC_USE_UV_MIN_MAX_outlineFillTexture)!=0),outlineFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_outlineFillTexture)!=0),outlineFillTextureBorderColor,0.0,outlineFillTexture);
 }
 #endif
-float l9_39=l9_38.w*l9_20.w;
-sc_writeFragData0Internal(vec4(l9_38.xyz*l9_39,l9_39),sc_UniformConstants.x,sc_ShaderCacheConstant);
+l9_42=l9_43*outlineFillColorTint;
+}
+#else
+{
+l9_42=l9_20;
+}
+#endif
+l9_41=l9_42;
+}
+#endif
+l9_40=l9_41;
+}
+else
+{
+vec4 l9_44;
+if (l9_39)
+{
+vec4 l9_45;
+#if (SHADOW_FILL_COLOR)
+{
+l9_45=shadowColor;
+}
+#else
+{
+vec4 l9_46;
+#if (SHADOW_FILL_TEXTURE)
+{
+vec4 l9_47;
+#if (shadowFillTextureLayout==2)
+{
+l9_47=sc_SampleTextureBias(shadowFillTextureLayout,shadowFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_shadowFillTexture)!=0),shadowFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_shadowFillTexture,SC_SOFTWARE_WRAP_MODE_V_shadowFillTexture),(int(SC_USE_UV_MIN_MAX_shadowFillTexture)!=0),shadowFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_shadowFillTexture)!=0),shadowFillTextureBorderColor,0.0,shadowFillTextureArrSC);
+}
+#else
+{
+l9_47=sc_SampleTextureBias(shadowFillTextureLayout,shadowFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_shadowFillTexture)!=0),shadowFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_shadowFillTexture,SC_SOFTWARE_WRAP_MODE_V_shadowFillTexture),(int(SC_USE_UV_MIN_MAX_shadowFillTexture)!=0),shadowFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_shadowFillTexture)!=0),shadowFillTextureBorderColor,0.0,shadowFillTexture);
+}
+#endif
+l9_46=l9_47*shadowFillColorTint;
+}
+#else
+{
+l9_46=l9_20;
+}
+#endif
+l9_45=l9_46;
+}
+#endif
+l9_44=l9_45;
+}
+else
+{
+vec4 l9_48;
+#if (MAIN_FILL_COLOR)
+{
+l9_48=mainColor;
+}
+#else
+{
+vec4 l9_49;
+#if (MAIN_FILL_TEXTURE)
+{
+vec4 l9_50;
+#if (mainFillTextureLayout==2)
+{
+l9_50=sc_SampleTextureBias(mainFillTextureLayout,mainFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_mainFillTexture)!=0),mainFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainFillTexture,SC_SOFTWARE_WRAP_MODE_V_mainFillTexture),(int(SC_USE_UV_MIN_MAX_mainFillTexture)!=0),mainFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainFillTexture)!=0),mainFillTextureBorderColor,0.0,mainFillTextureArrSC);
+}
+#else
+{
+l9_50=sc_SampleTextureBias(mainFillTextureLayout,mainFillTextureGetStereoViewIndex(),l9_0,(int(SC_USE_UV_TRANSFORM_mainFillTexture)!=0),mainFillTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainFillTexture,SC_SOFTWARE_WRAP_MODE_V_mainFillTexture),(int(SC_USE_UV_MIN_MAX_mainFillTexture)!=0),mainFillTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_mainFillTexture)!=0),mainFillTextureBorderColor,0.0,mainFillTexture);
+}
+#endif
+l9_49=l9_50*mainFillColorTint;
+}
+#else
+{
+l9_49=l9_20;
+}
+#endif
+l9_48=l9_49;
+}
+#endif
+l9_44=l9_48;
+}
+l9_40=l9_44;
+}
+float l9_51=abs(varTex01.y);
+float l9_52=dFdy(varTex01.y);
+float l9_53;
+if (l9_51>varPassIdDecorThickness.y)
+{
+l9_53=l9_40.w*smoothstep(varPassIdDecorThickness.y+(abs(l9_52)*0.5),varPassIdDecorThickness.y,l9_51);
+}
+else
+{
+l9_53=l9_40.w;
+}
+if (l9_53<0.0099999998)
+{
+discard;
+}
+sc_writeFragData0(vec4(l9_40.xyz*l9_53,l9_53));
+return;
+}
+if (l9_2)
+{
+vec4 l9_54;
+#if (colorTextureLayout==2)
+{
+l9_54=sc_SampleTextureBias(colorTextureLayout,colorTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_colorTexture)!=0),colorTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_colorTexture,SC_SOFTWARE_WRAP_MODE_V_colorTexture),(int(SC_USE_UV_MIN_MAX_colorTexture)!=0),colorTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_colorTexture)!=0),colorTextureBorderColor,0.0,colorTextureArrSC);
+}
+#else
+{
+l9_54=sc_SampleTextureBias(colorTextureLayout,colorTextureGetStereoViewIndex(),varTex01.xy,(int(SC_USE_UV_TRANSFORM_colorTexture)!=0),colorTextureTransform,ivec2(SC_SOFTWARE_WRAP_MODE_U_colorTexture,SC_SOFTWARE_WRAP_MODE_V_colorTexture),(int(SC_USE_UV_MIN_MAX_colorTexture)!=0),colorTextureUvMinMax,(int(SC_USE_CLAMP_TO_BORDER_colorTexture)!=0),colorTextureBorderColor,0.0,colorTexture);
+}
+#endif
+float l9_55=l9_54.w*l9_20.w;
+sc_writeFragData0(vec4(l9_54.xyz*l9_55,l9_55));
 }
 else
 {
 #if (ENABLE_SDF)
 {
-float l9_40=l9_20.w*l9_21;
-sc_writeFragData0Internal(vec4(l9_20.xyz*l9_40,l9_40),sc_UniformConstants.x,sc_ShaderCacheConstant);
+float l9_56=l9_20.w*l9_21;
+sc_writeFragData0(vec4(l9_20.xyz*l9_56,l9_56));
 }
 #else
 {
-vec4 l9_41;
+vec4 l9_57;
 #if (mainTextureLayout==2)
 {
-bool l9_42=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0)&&(!(int(SC_USE_UV_MIN_MAX_mainTexture)!=0));
-float l9_43=varTex01.x;
-sc_SoftwareWrapEarly(l9_43,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x);
-float l9_44=l9_43;
-float l9_45=varTex01.y;
-sc_SoftwareWrapEarly(l9_45,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y);
-float l9_46=l9_45;
-vec2 l9_47;
-float l9_48;
-#if (SC_USE_UV_MIN_MAX_mainTexture)
-{
-bool l9_49;
-#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
-{
-l9_49=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x==3;
-}
-#else
-{
-l9_49=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
-}
-#endif
-float l9_50=l9_44;
-float l9_51=1.0;
-sc_ClampUV(l9_50,mainTextureUvMinMax.x,mainTextureUvMinMax.z,l9_49,l9_51);
-float l9_52=l9_50;
-float l9_53=l9_51;
-bool l9_54;
-#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
-{
-l9_54=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y==3;
-}
-#else
-{
-l9_54=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
-}
-#endif
-float l9_55=l9_46;
-float l9_56=l9_53;
-sc_ClampUV(l9_55,mainTextureUvMinMax.y,mainTextureUvMinMax.w,l9_54,l9_56);
-l9_48=l9_56;
-l9_47=vec2(l9_52,l9_55);
-}
-#else
-{
-l9_48=1.0;
-l9_47=vec2(l9_44,l9_46);
-}
-#endif
-vec2 l9_57=sc_TransformUV(l9_47,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform);
-float l9_58=l9_57.x;
-float l9_59=l9_48;
-sc_SoftwareWrapLate(l9_58,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x,l9_42,l9_59);
-float l9_60=l9_57.y;
-float l9_61=l9_59;
-sc_SoftwareWrapLate(l9_60,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y,l9_42,l9_61);
+bool l9_58=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0)&&(!(int(SC_USE_UV_MIN_MAX_mainTexture)!=0));
+float l9_59=varTex01.x;
+sc_SoftwareWrapEarly(l9_59,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x);
+float l9_60=l9_59;
+float l9_61=varTex01.y;
+sc_SoftwareWrapEarly(l9_61,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y);
 float l9_62=l9_61;
-vec3 l9_63=sc_SamplingCoordsViewToGlobal(vec2(l9_58,l9_60),mainTextureLayout,mainTextureGetStereoViewIndex());
-vec4 l9_64=textureLod(mainTextureArrSC,l9_63,0.0);
-vec4 l9_65;
-#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
-{
-l9_65=mix(mainTextureBorderColor,l9_64,vec4(l9_62));
-}
-#else
-{
-l9_65=l9_64;
-}
-#endif
-l9_41=l9_65;
-}
-#else
-{
-bool l9_66=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0)&&(!(int(SC_USE_UV_MIN_MAX_mainTexture)!=0));
-float l9_67=varTex01.x;
-sc_SoftwareWrapEarly(l9_67,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x);
-float l9_68=l9_67;
-float l9_69=varTex01.y;
-sc_SoftwareWrapEarly(l9_69,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y);
-float l9_70=l9_69;
-vec2 l9_71;
-float l9_72;
+vec2 l9_63;
+float l9_64;
 #if (SC_USE_UV_MIN_MAX_mainTexture)
 {
-bool l9_73;
+bool l9_65;
 #if (SC_USE_CLAMP_TO_BORDER_mainTexture)
 {
-l9_73=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x==3;
+l9_65=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x==3;
 }
 #else
 {
-l9_73=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
+l9_65=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
 }
 #endif
-float l9_74=l9_68;
-float l9_75=1.0;
-sc_ClampUV(l9_74,mainTextureUvMinMax.x,mainTextureUvMinMax.z,l9_73,l9_75);
-float l9_76=l9_74;
+float l9_66=l9_60;
+float l9_67=1.0;
+sc_ClampUV(l9_66,mainTextureUvMinMax.x,mainTextureUvMinMax.z,l9_65,l9_67);
+float l9_68=l9_66;
+float l9_69=l9_67;
+bool l9_70;
+#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
+{
+l9_70=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y==3;
+}
+#else
+{
+l9_70=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
+}
+#endif
+float l9_71=l9_62;
+float l9_72=l9_69;
+sc_ClampUV(l9_71,mainTextureUvMinMax.y,mainTextureUvMinMax.w,l9_70,l9_72);
+l9_64=l9_72;
+l9_63=vec2(l9_68,l9_71);
+}
+#else
+{
+l9_64=1.0;
+l9_63=vec2(l9_60,l9_62);
+}
+#endif
+vec2 l9_73=sc_TransformUV(l9_63,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform);
+float l9_74=l9_73.x;
+float l9_75=l9_64;
+sc_SoftwareWrapLate(l9_74,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x,l9_58,l9_75);
+float l9_76=l9_73.y;
 float l9_77=l9_75;
-bool l9_78;
+sc_SoftwareWrapLate(l9_76,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y,l9_58,l9_77);
+float l9_78=l9_77;
+vec3 l9_79=sc_SamplingCoordsViewToGlobal(vec2(l9_74,l9_76),mainTextureLayout,mainTextureGetStereoViewIndex());
+vec4 l9_80=textureLod(mainTextureArrSC,l9_79,0.0);
+vec4 l9_81;
 #if (SC_USE_CLAMP_TO_BORDER_mainTexture)
 {
-l9_78=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y==3;
+l9_81=mix(mainTextureBorderColor,l9_80,vec4(l9_78));
 }
 #else
 {
-l9_78=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
+l9_81=l9_80;
 }
 #endif
-float l9_79=l9_70;
-float l9_80=l9_77;
-sc_ClampUV(l9_79,mainTextureUvMinMax.y,mainTextureUvMinMax.w,l9_78,l9_80);
-l9_72=l9_80;
-l9_71=vec2(l9_76,l9_79);
+l9_57=l9_81;
 }
 #else
 {
-l9_72=1.0;
-l9_71=vec2(l9_68,l9_70);
-}
-#endif
-vec2 l9_81=sc_TransformUV(l9_71,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform);
-float l9_82=l9_81.x;
-float l9_83=l9_72;
-sc_SoftwareWrapLate(l9_82,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x,l9_66,l9_83);
-float l9_84=l9_81.y;
-float l9_85=l9_83;
-sc_SoftwareWrapLate(l9_84,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y,l9_66,l9_85);
+bool l9_82=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0)&&(!(int(SC_USE_UV_MIN_MAX_mainTexture)!=0));
+float l9_83=varTex01.x;
+sc_SoftwareWrapEarly(l9_83,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x);
+float l9_84=l9_83;
+float l9_85=varTex01.y;
+sc_SoftwareWrapEarly(l9_85,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y);
 float l9_86=l9_85;
-vec3 l9_87=sc_SamplingCoordsViewToGlobal(vec2(l9_82,l9_84),mainTextureLayout,mainTextureGetStereoViewIndex());
-vec4 l9_88=textureLod(mainTexture,l9_87.xy,0.0);
-vec4 l9_89;
+vec2 l9_87;
+float l9_88;
+#if (SC_USE_UV_MIN_MAX_mainTexture)
+{
+bool l9_89;
 #if (SC_USE_CLAMP_TO_BORDER_mainTexture)
 {
-l9_89=mix(mainTextureBorderColor,l9_88,vec4(l9_86));
+l9_89=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x==3;
 }
 #else
 {
-l9_89=l9_88;
+l9_89=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
 }
 #endif
-l9_41=l9_89;
+float l9_90=l9_84;
+float l9_91=1.0;
+sc_ClampUV(l9_90,mainTextureUvMinMax.x,mainTextureUvMinMax.z,l9_89,l9_91);
+float l9_92=l9_90;
+float l9_93=l9_91;
+bool l9_94;
+#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
+{
+l9_94=ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y==3;
+}
+#else
+{
+l9_94=(int(SC_USE_CLAMP_TO_BORDER_mainTexture)!=0);
 }
 #endif
-float l9_90=l9_41.x*l9_20.w;
-sc_writeFragData0Internal(vec4(l9_20.xyz*l9_90,l9_90),sc_UniformConstants.x,sc_ShaderCacheConstant);
+float l9_95=l9_86;
+float l9_96=l9_93;
+sc_ClampUV(l9_95,mainTextureUvMinMax.y,mainTextureUvMinMax.w,l9_94,l9_96);
+l9_88=l9_96;
+l9_87=vec2(l9_92,l9_95);
+}
+#else
+{
+l9_88=1.0;
+l9_87=vec2(l9_84,l9_86);
+}
+#endif
+vec2 l9_97=sc_TransformUV(l9_87,(int(SC_USE_UV_TRANSFORM_mainTexture)!=0),mainTextureTransform);
+float l9_98=l9_97.x;
+float l9_99=l9_88;
+sc_SoftwareWrapLate(l9_98,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).x,l9_82,l9_99);
+float l9_100=l9_97.y;
+float l9_101=l9_99;
+sc_SoftwareWrapLate(l9_100,ivec2(SC_SOFTWARE_WRAP_MODE_U_mainTexture,SC_SOFTWARE_WRAP_MODE_V_mainTexture).y,l9_82,l9_101);
+float l9_102=l9_101;
+vec3 l9_103=sc_SamplingCoordsViewToGlobal(vec2(l9_98,l9_100),mainTextureLayout,mainTextureGetStereoViewIndex());
+vec4 l9_104=textureLod(mainTexture,l9_103.xy,0.0);
+vec4 l9_105;
+#if (SC_USE_CLAMP_TO_BORDER_mainTexture)
+{
+l9_105=mix(mainTextureBorderColor,l9_104,vec4(l9_102));
+}
+#else
+{
+l9_105=l9_104;
+}
+#endif
+l9_57=l9_105;
+}
+#endif
+float l9_106=l9_57.x*l9_20.w;
+sc_writeFragData0(vec4(l9_20.xyz*l9_106,l9_106));
 }
 #endif
 }

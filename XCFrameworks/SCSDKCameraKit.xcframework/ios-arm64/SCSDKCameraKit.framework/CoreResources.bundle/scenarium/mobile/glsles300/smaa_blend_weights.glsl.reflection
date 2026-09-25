@@ -1,0 +1,54 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler areaTexSmpSC 0:13
+//sampler sampler edgesTexSmpSC 0:14
+//sampler sampler inputTextureSmpSC 0:15
+//sampler sampler searchTexSmpSC 0:25
+//texture texture2D areaTex 0:0:0:13
+//texture texture2D edgesTex 0:1:0:14
+//texture texture2D inputTexture 0:2:0:15
+//texture texture2D searchTex 0:12:0:25
+//texture texture2DArray areaTexArrSC 0:26:0:13
+//texture texture2DArray edgesTexArrSC 0:27:0:14
+//texture texture2DArray inputTextureArrSC 0:28:0:15
+//texture texture2DArray searchTexArrSC 0:32:0:25
+//spec_const bool SC_USE_CLAMP_TO_BORDER_areaTex 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_edgesTex 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_inputTexture 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_searchTex 3 0
+//spec_const bool SC_USE_UV_MIN_MAX_areaTex 4 0
+//spec_const bool SC_USE_UV_MIN_MAX_edgesTex 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_inputTexture 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_searchTex 7 0
+//spec_const bool SC_USE_UV_TRANSFORM_areaTex 8 0
+//spec_const bool SC_USE_UV_TRANSFORM_edgesTex 9 0
+//spec_const bool SC_USE_UV_TRANSFORM_inputTexture 10 0
+//spec_const bool SC_USE_UV_TRANSFORM_searchTex 11 0
+//spec_const bool areaTexHasSwappedViews 12 0
+//spec_const bool edgesTexHasSwappedViews 13 0
+//spec_const bool inputTextureHasSwappedViews 14 0
+//spec_const bool sc_ProjectiveShadowsReceiver 15 0
+//spec_const bool searchTexHasSwappedViews 16 0
+//spec_const int DEBUG_MODE 17 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_areaTex 18 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_edgesTex 19 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTexture 20 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_searchTex 21 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_areaTex 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_edgesTex 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTexture 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_searchTex 25 -1
+//spec_const int SMAA_AREATEX_MAX_DISTANCE 26 16
+//spec_const int SMAA_AREATEX_MAX_DISTANCE_DIAG 27 20
+//spec_const int SMAA_QUALITY 28 0
+//spec_const int areaTexLayout 29 0
+//spec_const int edgesTexLayout 30 0
+//spec_const int inputTextureLayout 31 0
+//spec_const int sc_ShaderCacheConstant 32 0
+//spec_const int searchTexLayout 33 0
+//SG_REFLECTION_END

@@ -1,21 +1,6 @@
 #include <metal_stdlib>
 #include <simd/simd.h>
 using namespace metal;
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//output vec4 sc_FragData0 0
-//sampler sampler baseTexSmpSC 0:2
-//sampler sampler baseUTexSmpSC 0:3
-//texture texture2D baseTex 0:0:0:2
-//texture utexture2D baseUTex 0:1:0:3
-//ubo float UserUniforms 0:4:32 {
-//float4 baseColor 0
-//float maxDepth 16
-//float distanceScale 20
-//int maxCasterId 24
-//}
-//spec_const int PROGRAM_INDEX 0 0
-//SG_REFLECTION_END
 constant int PROGRAM_INDEX [[function_constant(0)]];
 constant int PROGRAM_INDEX_tmp = is_function_constant_defined(PROGRAM_INDEX) ? PROGRAM_INDEX : 0;
 
@@ -164,13 +149,13 @@ out.sc_FragData0=float4(0.0,0.0,0.0,1.0);
 else
 {
 float3 col=float3(receiverData0.xyz)/float3(65535.0);
-out.sc_FragData0=float4(col,1.0);
-}
 uint mask=receiverData0.w;
 if (mask==0u)
 {
 int2 m=(screenPos/int2(4))%int2(2);
-out.sc_FragData0*=float4(float(abs(m.x-m.y)));
+col*=float3(float(abs(m.x-m.y)));
+}
+out.sc_FragData0=float4(col,1.0);
 }
 }
 else
