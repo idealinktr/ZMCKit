@@ -1,6 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//SG_REFLECTION_END
 #ifndef sc_TextureRenderingLayout_Regular
 #define sc_TextureRenderingLayout_Regular 0
 #define sc_TextureRenderingLayout_StereoInstancedClipped 1

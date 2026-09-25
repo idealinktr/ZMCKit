@@ -1,0 +1,4 @@
+//SG_REFLECTION_BEGIN(100)
+//sampler sampler maskTextureSmpSC 2:1
+//texture texture2D maskTexture 2:0:2:1
+//SG_REFLECTION_END

@@ -1,0 +1,37 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler ambientOcclusionSmpSC 0:15
+//texture texture2D ambientOcclusion 0:0:0:15
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:160  {
+//float3x3 ambientOcclusionTransform 0
+//float4 ambientOcclusionUvMinMax 48
+//float4 ambientOcclusionBorderColor 64
+//float sampleCount 80
+//float farPlaneOverBlurThreshold 84
+//float kernel0 88:[16]:4
+//float2 axis 152
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_ambientOcclusion 0 0
+//spec_const bool SC_USE_UV_MIN_MAX_ambientOcclusion 1 0
+//spec_const bool SC_USE_UV_TRANSFORM_ambientOcclusion 2 0
+//spec_const bool ambientOcclusionHasSwappedViews 3 0
+//spec_const bool sc_ProjectiveShadowsReceiver 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_ambientOcclusion 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_ambientOcclusion 6 -1
+//spec_const int ambientOcclusionLayout 7 0
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_StereoRenderingMode 9 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 10 0
+//SG_REFLECTION_END

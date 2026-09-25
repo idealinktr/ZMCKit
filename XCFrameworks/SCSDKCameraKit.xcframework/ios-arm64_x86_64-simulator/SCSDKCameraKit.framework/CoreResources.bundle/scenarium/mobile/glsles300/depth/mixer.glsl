@@ -1,72 +1,5 @@
 #version 300 es
 //#include <required.glsl> // [HACK 4/6/2023] See SCC shader_merger.cpp
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//attribute vec2 texture0 3
-//attribute vec3 normal 1
-//attribute vec4 tangent 2
-//attribute vec2 texture1 4
-//sampler sampler mainTextureSmpSC 0:12
-//sampler sampler tex_BY_YSmpSC 0:19
-//sampler sampler tex_RG_RB_GBSmpSC 0:20
-//sampler sampler tex_RR_GG_BBSmpSC 0:21
-//sampler sampler tex_RY_GYSmpSC 0:22
-//sampler sampler tex_R_G_BSmpSC 0:23
-//texture texture2D mainTexture 0:0:0:12
-//texture texture2D tex_BY_Y 0:7:0:19
-//texture texture2D tex_RG_RB_GB 0:8:0:20
-//texture texture2D tex_RR_GG_BB 0:9:0:21
-//texture texture2D tex_RY_GY 0:10:0:22
-//texture texture2D tex_R_G_B 0:11:0:23
-//texture texture2DArray mainTextureArrSC 0:24:0:12
-//texture texture2DArray tex_BY_YArrSC 0:28:0:19
-//texture texture2DArray tex_RG_RB_GBArrSC 0:29:0:20
-//texture texture2DArray tex_RR_GG_BBArrSC 0:30:0:21
-//texture texture2DArray tex_RY_GYArrSC 0:31:0:22
-//texture texture2DArray tex_R_G_BArrSC 0:32:0:23
-//spec_const bool CAMEOS_MATTING 0 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_mainTexture 1 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_BY_Y 2 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB 3 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RR_GG_BB 4 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_RY_GY 5 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_tex_R_G_B 6 0
-//spec_const bool SC_USE_UV_MIN_MAX_mainTexture 7 0
-//spec_const bool SC_USE_UV_MIN_MAX_tex_BY_Y 8 0
-//spec_const bool SC_USE_UV_MIN_MAX_tex_RG_RB_GB 9 0
-//spec_const bool SC_USE_UV_MIN_MAX_tex_RR_GG_BB 10 0
-//spec_const bool SC_USE_UV_MIN_MAX_tex_RY_GY 11 0
-//spec_const bool SC_USE_UV_MIN_MAX_tex_R_G_B 12 0
-//spec_const bool SC_USE_UV_TRANSFORM_mainTexture 13 0
-//spec_const bool mainTextureHasSwappedViews 14 0
-//spec_const bool tex_BY_YHasSwappedViews 15 0
-//spec_const bool tex_RG_RB_GBHasSwappedViews 16 0
-//spec_const bool tex_RR_GG_BBHasSwappedViews 17 0
-//spec_const bool tex_RY_GYHasSwappedViews 18 0
-//spec_const bool tex_R_G_BHasSwappedViews 19 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_mainTexture 20 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_BY_Y 21 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RG_RB_GB 22 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RR_GG_BB 23 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_RY_GY 24 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_tex_R_G_B 25 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_mainTexture 26 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_BY_Y 27 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RG_RB_GB 28 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RR_GG_BB 29 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_RY_GY 30 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_tex_R_G_B 31 -1
-//spec_const int mainTextureLayout 32 0
-//spec_const int sc_ShaderCacheConstant 33 0
-//spec_const int sc_StereoRenderingMode 34 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 35 0
-//spec_const int sc_StereoViewID 36 0
-//spec_const int tex_BY_YLayout 37 0
-//spec_const int tex_RG_RB_GBLayout 38 0
-//spec_const int tex_RR_GG_BBLayout 39 0
-//spec_const int tex_RY_GYLayout 40 0
-//spec_const int tex_R_G_BLayout 41 0
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
@@ -99,7 +32,6 @@
 #endif
 #ifdef sc_EnableMultiviewStereoRendering
 #define sc_StereoRenderingMode sc_StereoRendering_Multiview
-#define sc_NumStereoViews 2
 #extension GL_OVR_multiview2 : require
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
@@ -121,7 +53,6 @@
 #endif
 #define sc_StereoRenderingMode sc_StereoRendering_InstancedClipped
 #define sc_NumStereoClipPlanes 1
-#define sc_NumStereoViews 2
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
 #define sc_GlobalInstanceID (sc_FallbackInstanceID*2+gl_InstanceID)
@@ -208,28 +139,35 @@ layout(num_views=sc_NumStereoViews) in;
 #ifndef sc_StereoViewID
 #define sc_StereoViewID 0
 #endif
-#ifndef sc_NumStereoViews
-#define sc_NumStereoViews 1
-#endif
 #ifndef sc_StereoRendering_IsClipDistanceEnabled
 #define sc_StereoRendering_IsClipDistanceEnabled 0
+#endif
+#ifndef sc_NumStereoViews
+#define sc_NumStereoViews 1
 #endif
 #ifndef sc_ShaderCacheConstant
 #define sc_ShaderCacheConstant 0
 #endif
+#ifndef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 0
+#elif sc_ProjectiveShadowsReceiver==1
+#undef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 1
+#endif
+uniform mat4 sc_ProjectorMatrix;
 uniform vec4 sc_StereoClipPlanes[sc_NumStereoViews];
 uniform vec4 sc_UniformConstants;
-out vec4 varPosAndMotion;
-out vec4 varNormalAndMotion;
 out float varClipDistance;
 flat out int varStereoViewID;
 in vec4 position;
 in vec2 texture0;
+out vec4 varPosAndMotion;
 out vec4 varTex01;
 out vec4 varScreenPos;
 out vec2 varScreenTexturePos;
-out vec4 varTangent;
 out vec2 varShadowTex;
+out vec4 varNormalAndMotion;
+out vec4 varTangent;
 in vec3 normal;
 in vec4 tangent;
 in vec2 texture1;
@@ -284,17 +222,23 @@ l9_3=l9_2;
 }
 #endif
 varScreenTexturePos=l9_3;
-vec4 l9_5=l9_0*1.0;
-vec4 l9_6;
+#if (sc_ProjectiveShadowsReceiver)
+{
+vec4 l9_5=sc_ProjectorMatrix*position;
+varShadowTex=((l9_5.xy/vec2(l9_5.w))*0.5)+vec2(0.5);
+}
+#endif
+vec4 l9_6=l9_0*1.0;
+vec4 l9_7;
 #if (sc_ShaderCacheConstant!=0)
 {
-vec4 l9_7=l9_5;
-l9_7.x=l9_5.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
-l9_6=l9_7;
+vec4 l9_8=l9_6;
+l9_8.x=l9_6.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_7=l9_8;
 }
 #else
 {
-l9_6=l9_5;
+l9_7=l9_6;
 }
 #endif
 #if (sc_StereoRenderingMode>0)
@@ -304,19 +248,19 @@ varStereoViewID=sc_StereoViewID;
 #endif
 #if (sc_StereoRenderingMode==1)
 {
-float l9_8=dot(l9_6,sc_StereoClipPlanes[sc_StereoViewID]);
+float l9_9=dot(l9_7,sc_StereoClipPlanes[sc_StereoViewID]);
 #if (sc_StereoRendering_IsClipDistanceEnabled==1)
 {
-sc_SetClipDistancePlatform(l9_8);
+sc_SetClipDistancePlatform(l9_9);
 }
 #else
 {
-varClipDistance=l9_8;
+varClipDistance=l9_9;
 }
 #endif
 }
 #endif
-gl_Position=l9_6;
+gl_Position=l9_7;
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #ifndef sc_FramebufferFetch
@@ -324,68 +268,6 @@ gl_Position=l9_6;
 #elif sc_FramebufferFetch==1
 #undef sc_FramebufferFetch
 #define sc_FramebufferFetch 1
-#endif
-#if defined(GL_ES)||__VERSION__>=420
-#if sc_FragDataCount>=1
-#define sc_DeclareFragData0(StorageQualifier) layout(location=0) StorageQualifier sc_FragmentPrecision vec4 sc_FragData0
-#endif
-#if sc_FragDataCount>=2
-#define sc_DeclareFragData1(StorageQualifier) layout(location=1) StorageQualifier sc_FragmentPrecision vec4 sc_FragData1
-#endif
-#if sc_FragDataCount>=3
-#define sc_DeclareFragData2(StorageQualifier) layout(location=2) StorageQualifier sc_FragmentPrecision vec4 sc_FragData2
-#endif
-#if sc_FragDataCount>=4
-#define sc_DeclareFragData3(StorageQualifier) layout(location=3) StorageQualifier sc_FragmentPrecision vec4 sc_FragData3
-#endif
-#ifndef sc_DeclareFragData0
-#define sc_DeclareFragData0(_) const vec4 sc_FragData0=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData1
-#define sc_DeclareFragData1(_) const vec4 sc_FragData1=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData2
-#define sc_DeclareFragData2(_) const vec4 sc_FragData2=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData3
-#define sc_DeclareFragData3(_) const vec4 sc_FragData3=vec4(0.0)
-#endif
-#if sc_FramebufferFetch
-#ifdef GL_EXT_shader_framebuffer_fetch
-sc_DeclareFragData0(inout);
-sc_DeclareFragData1(inout);
-sc_DeclareFragData2(inout);
-sc_DeclareFragData3(inout);
-mediump mat4 getFragData() { return mat4(sc_FragData0,sc_FragData1,sc_FragData2,sc_FragData3); }
-#define gl_LastFragData (getFragData())
-#elif defined(GL_ARM_shader_framebuffer_fetch)
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(gl_LastFragColorARM,vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-#ifdef FRAGMENT_SHADER
-#define sc_FragData0 gl_FragData[0]
-#define sc_FragData1 gl_FragData[1]
-#define sc_FragData2 gl_FragData[2]
-#define sc_FragData3 gl_FragData[3]
-#endif
-mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#if sc_FramebufferFetch
-#error Framebuffer fetch is requested but not supported by this device.
-#endif
 #endif
 #ifndef sc_StereoRenderingMode
 #define sc_StereoRenderingMode 0
@@ -402,17 +284,11 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef tex_RY_GYHasSwappedViews
 #define tex_RY_GYHasSwappedViews 1
 #endif
-#ifndef tex_RY_GYLayout
-#define tex_RY_GYLayout 0
-#endif
 #ifndef tex_BY_YHasSwappedViews
 #define tex_BY_YHasSwappedViews 0
 #elif tex_BY_YHasSwappedViews==1
 #undef tex_BY_YHasSwappedViews
 #define tex_BY_YHasSwappedViews 1
-#endif
-#ifndef tex_BY_YLayout
-#define tex_BY_YLayout 0
 #endif
 #ifndef tex_R_G_BHasSwappedViews
 #define tex_R_G_BHasSwappedViews 0
@@ -420,17 +296,11 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef tex_R_G_BHasSwappedViews
 #define tex_R_G_BHasSwappedViews 1
 #endif
-#ifndef tex_R_G_BLayout
-#define tex_R_G_BLayout 0
-#endif
 #ifndef tex_RR_GG_BBHasSwappedViews
 #define tex_RR_GG_BBHasSwappedViews 0
 #elif tex_RR_GG_BBHasSwappedViews==1
 #undef tex_RR_GG_BBHasSwappedViews
 #define tex_RR_GG_BBHasSwappedViews 1
-#endif
-#ifndef tex_RR_GG_BBLayout
-#define tex_RR_GG_BBLayout 0
 #endif
 #ifndef tex_RG_RB_GBHasSwappedViews
 #define tex_RG_RB_GBHasSwappedViews 0
@@ -438,17 +308,14 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef tex_RG_RB_GBHasSwappedViews
 #define tex_RG_RB_GBHasSwappedViews 1
 #endif
-#ifndef tex_RG_RB_GBLayout
-#define tex_RG_RB_GBLayout 0
-#endif
 #ifndef mainTextureHasSwappedViews
 #define mainTextureHasSwappedViews 0
 #elif mainTextureHasSwappedViews==1
 #undef mainTextureHasSwappedViews
 #define mainTextureHasSwappedViews 1
 #endif
-#ifndef mainTextureLayout
-#define mainTextureLayout 0
+#ifndef tex_RY_GYLayout
+#define tex_RY_GYLayout 0
 #endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_tex_RY_GY
 #define SC_SOFTWARE_WRAP_MODE_U_tex_RY_GY -1
@@ -468,6 +335,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef SC_USE_CLAMP_TO_BORDER_tex_RY_GY
 #define SC_USE_CLAMP_TO_BORDER_tex_RY_GY 1
 #endif
+#ifndef tex_BY_YLayout
+#define tex_BY_YLayout 0
+#endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_tex_BY_Y
 #define SC_SOFTWARE_WRAP_MODE_U_tex_BY_Y -1
 #endif
@@ -485,6 +355,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif SC_USE_CLAMP_TO_BORDER_tex_BY_Y==1
 #undef SC_USE_CLAMP_TO_BORDER_tex_BY_Y
 #define SC_USE_CLAMP_TO_BORDER_tex_BY_Y 1
+#endif
+#ifndef tex_R_G_BLayout
+#define tex_R_G_BLayout 0
 #endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_tex_R_G_B
 #define SC_SOFTWARE_WRAP_MODE_U_tex_R_G_B -1
@@ -504,6 +377,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef SC_USE_CLAMP_TO_BORDER_tex_R_G_B
 #define SC_USE_CLAMP_TO_BORDER_tex_R_G_B 1
 #endif
+#ifndef tex_RR_GG_BBLayout
+#define tex_RR_GG_BBLayout 0
+#endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_tex_RR_GG_BB
 #define SC_SOFTWARE_WRAP_MODE_U_tex_RR_GG_BB -1
 #endif
@@ -522,6 +398,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef SC_USE_CLAMP_TO_BORDER_tex_RR_GG_BB
 #define SC_USE_CLAMP_TO_BORDER_tex_RR_GG_BB 1
 #endif
+#ifndef tex_RG_RB_GBLayout
+#define tex_RG_RB_GBLayout 0
+#endif
 #ifndef SC_SOFTWARE_WRAP_MODE_U_tex_RG_RB_GB
 #define SC_SOFTWARE_WRAP_MODE_U_tex_RG_RB_GB -1
 #endif
@@ -539,6 +418,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB==1
 #undef SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB
 #define SC_USE_CLAMP_TO_BORDER_tex_RG_RB_GB 1
+#endif
+#ifndef mainTextureLayout
+#define mainTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_mainTexture
 #define SC_USE_UV_TRANSFORM_mainTexture 0
@@ -598,14 +480,15 @@ uniform mediump sampler2D tex_RG_RB_GB;
 uniform mediump sampler2DArray mainTextureArrSC;
 uniform mediump sampler2D mainTexture;
 flat in int varStereoViewID;
-in vec2 varShadowTex;
+in float varClipDistance;
+layout(location=0) out vec4 sc_FragData0;
+in vec4 varTex01;
 in vec4 varPosAndMotion;
 in vec4 varNormalAndMotion;
-in float varClipDistance;
-in vec4 varTex01;
 in vec4 varTangent;
 in vec4 varScreenPos;
 in vec2 varScreenTexturePos;
+in vec2 varShadowTex;
 int sc_GetStereoViewIndex()
 {
 int l9_0;
@@ -885,11 +768,6 @@ l9_0=sc_GetStereoViewIndex();
 #endif
 return l9_0;
 }
-void sc_writeFragData0Internal(vec4 col,float zero,int cacheConst)
-{
-col.x+=zero*float(cacheConst);
-sc_FragData0=col;
-}
 void main()
 {
 #if ((sc_StereoRenderingMode==1)&&(sc_StereoRendering_IsClipDistanceEnabled==0))
@@ -987,6 +865,18 @@ float l9_23=l9_22.y;
 l9_21=vec4(l9_22.x-(l9_23/255.0),l9_23,0.0,1.0);
 }
 #endif
-sc_writeFragData0Internal(l9_21,sc_UniformConstants.x,sc_ShaderCacheConstant);
+vec4 l9_24;
+#if (sc_ShaderCacheConstant!=0)
+{
+vec4 l9_25=l9_21;
+l9_25.x=l9_21.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_24=l9_25;
+}
+#else
+{
+l9_24=l9_21;
+}
+#endif
+sc_FragData0=l9_24;
 }
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

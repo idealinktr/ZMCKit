@@ -112,7 +112,6 @@ NS_SWIFT_NAME(CameraKitProtocol)
         (nullable id<SCCameraKitAgreementsPresentationContextProvider>)agreementsPresentationContextProvider
                      lensUIEventsDelegate:(nullable id<SCCameraKitLensUIEventsDelegate>)lensUIEventsDelegate
     NS_SWIFT_NAME(start(input:arInput:cameraPosition:videoOrientation:dataProvider:hintDelegate:textInputContextProvider:agreementsPresentationContextProvider:lensUIEventsDelegate:));
-
 /// End processing input frames.
 - (void)stop;
 

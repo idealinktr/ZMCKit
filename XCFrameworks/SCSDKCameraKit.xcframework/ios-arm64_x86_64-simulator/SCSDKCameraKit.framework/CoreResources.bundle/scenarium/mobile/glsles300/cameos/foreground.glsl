@@ -1,60 +1,5 @@
 #version 300 es
 //#include <required.glsl> // [HACK 4/6/2023] See SCC shader_merger.cpp
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//attribute vec2 texture0 3
-//attribute vec2 texture1 4
-//attribute vec2 texture2 5
-//attribute vec3 normal 1
-//attribute vec4 tangent 2
-//sampler sampler bgTextureSmpSC 0:9
-//sampler sampler fgAlphaTextureSmpSC 0:10
-//sampler sampler fgTextureSmpSC 0:11
-//texture texture2D bgTexture 0:0:0:9
-//texture texture2D fgAlphaTexture 0:1:0:10
-//texture texture2D fgTexture 0:2:0:11
-//texture texture2DArray bgTextureArrSC 0:18:0:9
-//texture texture2DArray fgAlphaTextureArrSC 0:19:0:10
-//texture texture2DArray fgTextureArrSC 0:20:0:11
-//spec_const bool ADDITION_BLENDING 0 0
-//spec_const bool ALPHA_EXISTS 1 0
-//spec_const bool COLOR_DODGE_BLENDING 2 0
-//spec_const bool CUSTOM_BLENDING 3 0
-//spec_const bool HARD_LIGHT_BLENDING 4 0
-//spec_const bool LIGHTEN_BLENDING 5 0
-//spec_const bool LINEAR_LIGHT_BLENDING 6 0
-//spec_const bool MULTIPLY_BLENDING 7 0
-//spec_const bool NONE_BLENDING 8 0
-//spec_const bool OVERLAY_BLENDING 9 0
-//spec_const bool SCREEN_BLENDING 10 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_bgTexture 11 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_fgAlphaTexture 12 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_fgTexture 13 0
-//spec_const bool SC_USE_UV_MIN_MAX_bgTexture 14 0
-//spec_const bool SC_USE_UV_MIN_MAX_fgAlphaTexture 15 0
-//spec_const bool SC_USE_UV_MIN_MAX_fgTexture 16 0
-//spec_const bool SC_USE_UV_TRANSFORM_bgTexture 17 0
-//spec_const bool SC_USE_UV_TRANSFORM_fgAlphaTexture 18 0
-//spec_const bool SC_USE_UV_TRANSFORM_fgTexture 19 0
-//spec_const bool SOFT_LIGHT_BLENDING 20 0
-//spec_const bool VIVID_LIGHT_BLENDING 21 0
-//spec_const bool bgTextureHasSwappedViews 22 0
-//spec_const bool fgAlphaTextureHasSwappedViews 23 0
-//spec_const bool fgTextureHasSwappedViews 24 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_bgTexture 25 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_fgAlphaTexture 26 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_fgTexture 27 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_bgTexture 28 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_fgAlphaTexture 29 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_fgTexture 30 -1
-//spec_const int bgTextureLayout 31 0
-//spec_const int fgAlphaTextureLayout 32 0
-//spec_const int fgTextureLayout 33 0
-//spec_const int sc_ShaderCacheConstant 34 0
-//spec_const int sc_StereoRenderingMode 35 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 36 0
-//spec_const int sc_StereoViewID 37 0
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define sc_StereoRendering_Disabled 0
@@ -86,7 +31,6 @@
 #endif
 #ifdef sc_EnableMultiviewStereoRendering
 #define sc_StereoRenderingMode sc_StereoRendering_Multiview
-#define sc_NumStereoViews 2
 #extension GL_OVR_multiview2 : require
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
@@ -108,7 +52,6 @@
 #endif
 #define sc_StereoRenderingMode sc_StereoRendering_InstancedClipped
 #define sc_NumStereoClipPlanes 1
-#define sc_NumStereoViews 2
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
 #define sc_GlobalInstanceID (sc_FallbackInstanceID*2+gl_InstanceID)
@@ -195,32 +138,39 @@ layout(num_views=sc_NumStereoViews) in;
 #ifndef sc_StereoViewID
 #define sc_StereoViewID 0
 #endif
-#ifndef sc_NumStereoViews
-#define sc_NumStereoViews 1
-#endif
 #ifndef sc_StereoRendering_IsClipDistanceEnabled
 #define sc_StereoRendering_IsClipDistanceEnabled 0
+#endif
+#ifndef sc_NumStereoViews
+#define sc_NumStereoViews 1
 #endif
 #ifndef sc_ShaderCacheConstant
 #define sc_ShaderCacheConstant 0
 #endif
+#ifndef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 0
+#elif sc_ProjectiveShadowsReceiver==1
+#undef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 1
+#endif
+uniform mat4 sc_ProjectorMatrix;
 uniform vec4 sc_StereoClipPlanes[sc_NumStereoViews];
 uniform vec4 sc_UniformConstants;
 uniform mat4 modelView;
-out vec4 varPosAndMotion;
-out vec4 varNormalAndMotion;
 out float varClipDistance;
 flat out int varStereoViewID;
 in vec4 position;
 in vec2 texture0;
 in vec2 texture1;
+out vec4 varPosAndMotion;
 out vec4 varTex01;
 out vec4 varScreenPos;
 out vec2 varScreenTexturePos;
+out vec2 varShadowTex;
 out vec2 varTex2;
 in vec2 texture2;
+out vec4 varNormalAndMotion;
 out vec4 varTangent;
-out vec2 varShadowTex;
 in vec3 normal;
 in vec4 tangent;
 int sc_GetStereoViewIndex()
@@ -276,17 +226,23 @@ l9_4=l9_3;
 }
 #endif
 varScreenTexturePos=l9_4;
-vec4 l9_6=l9_1*1.0;
-vec4 l9_7;
+#if (sc_ProjectiveShadowsReceiver)
+{
+vec4 l9_6=sc_ProjectorMatrix*l9_0;
+varShadowTex=((l9_6.xy/vec2(l9_6.w))*0.5)+vec2(0.5);
+}
+#endif
+vec4 l9_7=l9_1*1.0;
+vec4 l9_8;
 #if (sc_ShaderCacheConstant!=0)
 {
-vec4 l9_8=l9_6;
-l9_8.x=l9_6.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
-l9_7=l9_8;
+vec4 l9_9=l9_7;
+l9_9.x=l9_7.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_8=l9_9;
 }
 #else
 {
-l9_7=l9_6;
+l9_8=l9_7;
 }
 #endif
 #if (sc_StereoRenderingMode>0)
@@ -296,19 +252,19 @@ varStereoViewID=sc_StereoViewID;
 #endif
 #if (sc_StereoRenderingMode==1)
 {
-float l9_9=dot(l9_7,sc_StereoClipPlanes[sc_StereoViewID]);
+float l9_10=dot(l9_8,sc_StereoClipPlanes[sc_StereoViewID]);
 #if (sc_StereoRendering_IsClipDistanceEnabled==1)
 {
-sc_SetClipDistancePlatform(l9_9);
+sc_SetClipDistancePlatform(l9_10);
 }
 #else
 {
-varClipDistance=l9_9;
+varClipDistance=l9_10;
 }
 #endif
 }
 #endif
-gl_Position=l9_7;
+gl_Position=l9_8;
 varTex2=texture2;
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
@@ -317,68 +273,6 @@ varTex2=texture2;
 #elif sc_FramebufferFetch==1
 #undef sc_FramebufferFetch
 #define sc_FramebufferFetch 1
-#endif
-#if defined(GL_ES)||__VERSION__>=420
-#if sc_FragDataCount>=1
-#define sc_DeclareFragData0(StorageQualifier) layout(location=0) StorageQualifier sc_FragmentPrecision vec4 sc_FragData0
-#endif
-#if sc_FragDataCount>=2
-#define sc_DeclareFragData1(StorageQualifier) layout(location=1) StorageQualifier sc_FragmentPrecision vec4 sc_FragData1
-#endif
-#if sc_FragDataCount>=3
-#define sc_DeclareFragData2(StorageQualifier) layout(location=2) StorageQualifier sc_FragmentPrecision vec4 sc_FragData2
-#endif
-#if sc_FragDataCount>=4
-#define sc_DeclareFragData3(StorageQualifier) layout(location=3) StorageQualifier sc_FragmentPrecision vec4 sc_FragData3
-#endif
-#ifndef sc_DeclareFragData0
-#define sc_DeclareFragData0(_) const vec4 sc_FragData0=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData1
-#define sc_DeclareFragData1(_) const vec4 sc_FragData1=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData2
-#define sc_DeclareFragData2(_) const vec4 sc_FragData2=vec4(0.0)
-#endif
-#ifndef sc_DeclareFragData3
-#define sc_DeclareFragData3(_) const vec4 sc_FragData3=vec4(0.0)
-#endif
-#if sc_FramebufferFetch
-#ifdef GL_EXT_shader_framebuffer_fetch
-sc_DeclareFragData0(inout);
-sc_DeclareFragData1(inout);
-sc_DeclareFragData2(inout);
-sc_DeclareFragData3(inout);
-mediump mat4 getFragData() { return mat4(sc_FragData0,sc_FragData1,sc_FragData2,sc_FragData3); }
-#define gl_LastFragData (getFragData())
-#elif defined(GL_ARM_shader_framebuffer_fetch)
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(gl_LastFragColorARM,vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-sc_DeclareFragData0(out);
-sc_DeclareFragData1(out);
-sc_DeclareFragData2(out);
-sc_DeclareFragData3(out);
-mediump mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#endif
-#else
-#ifdef FRAGMENT_SHADER
-#define sc_FragData0 gl_FragData[0]
-#define sc_FragData1 gl_FragData[1]
-#define sc_FragData2 gl_FragData[2]
-#define sc_FragData3 gl_FragData[3]
-#endif
-mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
-#define gl_LastFragData (getFragData())
-#if sc_FramebufferFetch
-#error Framebuffer fetch is requested but not supported by this device.
-#endif
 #endif
 #ifndef sc_StereoRenderingMode
 #define sc_StereoRenderingMode 0
@@ -392,17 +286,11 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef fgTextureHasSwappedViews
 #define fgTextureHasSwappedViews 1
 #endif
-#ifndef fgTextureLayout
-#define fgTextureLayout 0
-#endif
 #ifndef fgAlphaTextureHasSwappedViews
 #define fgAlphaTextureHasSwappedViews 0
 #elif fgAlphaTextureHasSwappedViews==1
 #undef fgAlphaTextureHasSwappedViews
 #define fgAlphaTextureHasSwappedViews 1
-#endif
-#ifndef fgAlphaTextureLayout
-#define fgAlphaTextureLayout 0
 #endif
 #ifndef bgTextureHasSwappedViews
 #define bgTextureHasSwappedViews 0
@@ -410,8 +298,8 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef bgTextureHasSwappedViews
 #define bgTextureHasSwappedViews 1
 #endif
-#ifndef bgTextureLayout
-#define bgTextureLayout 0
+#ifndef fgTextureLayout
+#define fgTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_fgTexture
 #define SC_USE_UV_TRANSFORM_fgTexture 0
@@ -443,6 +331,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #undef ALPHA_EXISTS
 #define ALPHA_EXISTS 1
 #endif
+#ifndef fgAlphaTextureLayout
+#define fgAlphaTextureLayout 0
+#endif
 #ifndef SC_USE_UV_TRANSFORM_fgAlphaTexture
 #define SC_USE_UV_TRANSFORM_fgAlphaTexture 0
 #elif SC_USE_UV_TRANSFORM_fgAlphaTexture==1
@@ -472,6 +363,9 @@ mat4 getFragData() { return mat4(vec4(0.0),vec4(0.0),vec4(0.0),vec4(0.0)); }
 #elif CUSTOM_BLENDING==1
 #undef CUSTOM_BLENDING
 #define CUSTOM_BLENDING 1
+#endif
+#ifndef bgTextureLayout
+#define bgTextureLayout 0
 #endif
 #ifndef SC_USE_UV_TRANSFORM_bgTexture
 #define SC_USE_UV_TRANSFORM_bgTexture 0
@@ -581,15 +475,16 @@ uniform mediump sampler2D fgAlphaTexture;
 uniform mediump sampler2DArray bgTextureArrSC;
 uniform mediump sampler2D bgTexture;
 flat in int varStereoViewID;
-in vec2 varShadowTex;
-in vec4 varPosAndMotion;
-in vec4 varNormalAndMotion;
-in float varClipDistance;
+layout(location=0) out vec4 sc_FragData0;
 in vec4 varTex01;
 in vec2 varTex2;
+in vec4 varPosAndMotion;
+in vec4 varNormalAndMotion;
 in vec4 varTangent;
 in vec4 varScreenPos;
 in vec2 varScreenTexturePos;
+in vec2 varShadowTex;
+in float varClipDistance;
 int sc_GetStereoViewIndex()
 {
 int l9_0;
@@ -827,11 +722,6 @@ l9_0=sc_GetStereoViewIndex();
 #endif
 return l9_0;
 }
-void sc_writeFragData0Internal(vec4 col,float zero,int cacheConst)
-{
-col.x+=zero*float(cacheConst);
-sc_FragData0=col;
-}
 void main()
 {
 vec4 l9_0;
@@ -1020,6 +910,18 @@ l9_4=l9_6;
 l9_4=vec4(l9_0.xyz,l9_3);
 }
 #endif
-sc_writeFragData0Internal(l9_4,sc_UniformConstants.x,sc_ShaderCacheConstant);
+vec4 l9_19;
+#if (sc_ShaderCacheConstant!=0)
+{
+vec4 l9_20=l9_4;
+l9_20.x=l9_4.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_19=l9_20;
+}
+#else
+{
+l9_19=l9_4;
+}
+#endif
+sc_FragData0=l9_19;
 }
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

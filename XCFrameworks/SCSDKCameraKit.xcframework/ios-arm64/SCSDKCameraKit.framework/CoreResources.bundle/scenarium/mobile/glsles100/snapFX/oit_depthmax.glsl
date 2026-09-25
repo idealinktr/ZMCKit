@@ -1,8 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler sc_OITDepthBoundsTextureSmpSC 2:1
-//texture texture2D sc_OITDepthBoundsTexture 2:0:2:1
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1

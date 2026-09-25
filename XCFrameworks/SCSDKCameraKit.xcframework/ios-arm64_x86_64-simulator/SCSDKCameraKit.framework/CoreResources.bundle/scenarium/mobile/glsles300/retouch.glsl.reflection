@@ -14,18 +14,16 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture0 3
-//attribute vec3 positionNext 15
-//attribute vec3 positionPrevious 16
-//attribute vec4 strandProperties 17
-//sampler sampler lookupTextureSmpSC 0:8
-//sampler sampler maskTextureSmpSC 0:9
-//sampler sampler sc_ScreenTextureSmpSC 0:13
-//texture texture2D lookupTexture 0:0:0:8
-//texture texture2D maskTexture 0:1:0:9
-//texture texture2D sc_ScreenTexture 0:5:0:13
-//texture texture2DArray lookupTextureArrSC 0:16:0:8
-//texture texture2DArray maskTextureArrSC 0:17:0:9
-//texture texture2DArray sc_ScreenTextureArrSC 0:20:0:13
+//output vec4 sc_FragData0 0
+//sampler sampler lookupTextureSmpSC 0:11
+//sampler sampler maskTextureSmpSC 0:12
+//sampler sampler sc_ScreenTextureSmpSC 0:16
+//texture texture2D lookupTexture 0:0:0:11
+//texture texture2D maskTexture 0:1:0:12
+//texture texture2D sc_ScreenTexture 0:5:0:16
+//texture texture2DArray lookupTextureArrSC 0:22:0:11
+//texture texture2DArray maskTextureArrSC 0:23:0:12
+//texture texture2DArray sc_ScreenTextureArrSC 0:26:0:16
 //spec_const bool ADD_NOISE 0 1
 //spec_const bool EYE_SHARPEN 1 0
 //spec_const bool EYE_WHITENING 2 0

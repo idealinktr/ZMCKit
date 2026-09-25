@@ -132,6 +132,20 @@ NS_SWIFT_NAME(LensMediaPickerProviderUIDelegate)
 /// @param provider the provider sending the request
 - (void)mediaPickerProviderRequestedUIDismissal:(id<SCCameraKitLensMediaPickerProvider>)provider;
 
+@optional
+
+/// Requests media picker UI be displayed.
+/// @param provider the provider sending the request
+/// @param lensIdentifier the identifier of the lens requesting presentation
+- (void)mediaPickerProviderRequestedUIPresentation:(id<SCCameraKitLensMediaPickerProvider>)provider
+                                 forLensIdentifier:(NSString *)lensIdentifier;
+
+/// Requests media picker UI be dismissed.
+/// @param provider the provider sending the request
+/// @param lensIdentifier the identifier of the lens requesting dismissal
+- (void)mediaPickerProviderRequestedUIDismissal:(id<SCCameraKitLensMediaPickerProvider>)provider
+                              forLensIdentifier:(NSString *)lensIdentifier;
+
 @end
 
 NS_SWIFT_NAME(LensMediaPickerProviderMediaApplicationDelegate)

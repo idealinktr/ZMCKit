@@ -4,6 +4,7 @@
 #import <SCSDKCameraKit/SCCameraKitExplicitViewportProvider.h>
 #import <SCSDKCameraKit/SCCameraKitOutput.h>
 #import <SCSDKCameraKit/SCCameraKitOutputViewportProviding.h>
+#import <UIKit/UIKit.h>
 
 @class SCCameraKitSession;
 

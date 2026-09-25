@@ -1,0 +1,10 @@
+//SG_REFLECTION_BEGIN(100)
+//sampler sampler areaTexSmpSC 2:4
+//sampler sampler edgesTexSmpSC 2:5
+//sampler sampler inputTextureSmpSC 2:6
+//sampler sampler searchTexSmpSC 2:7
+//texture texture2D areaTex 2:0:2:4
+//texture texture2D edgesTex 2:1:2:5
+//texture texture2D inputTexture 2:2:2:6
+//texture texture2D searchTex 2:3:2:7
+//SG_REFLECTION_END

@@ -47,7 +47,7 @@ NS_SWIFT_NAME(LensProcessor)
        completion:(nullable void (^)(BOOL success))completion NS_SWIFT_NAME(apply(lens:launchData:completion:));
 
 /// Prepares a specified lens for quick activation by applying it to preload resources without rendering it to the screen.
-/// Warmup is limited to the first two frames; resources loaded after this period will not be preloaded.
+/// Warmup is limited to the first frame; resources loaded after this will not be preloaded.
 /// Multiple lenses can be warmed up, but doing so may impact the performance of the currently applied lens.
 /// All warmed-up lenses are cleared when a new lens is applied.
 /// @param lens the lens to apply. This should be a lens provided by the repository.
@@ -64,6 +64,12 @@ NS_SWIFT_NAME(LensProcessor)
 /// Removes any applied lenses.
 /// @param completion a completion handler called once the operation finishes.
 - (void)clearWithCompletion:(nullable void (^)(BOOL success))completion NS_SWIFT_NAME(clear(completion:));
+
+/// Removes a single lens by its identifier without cleaning up tracking reources.
+/// @param lensId the identifier of the lens to remove.
+/// @param completion a completion handler called once the operation finishes.
+- (void)removeLensById:(NSString *)lensId
+            completion:(nullable void (^)(BOOL success))completion NS_SWIFT_NAME(removeLens(lensId:completion:));
 
 /// Configures touch handling for a given view.
 /// @param view the view to configure.

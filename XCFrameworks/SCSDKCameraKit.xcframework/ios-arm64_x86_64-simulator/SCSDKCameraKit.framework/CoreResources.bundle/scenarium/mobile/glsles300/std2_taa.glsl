@@ -1,6 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <std2.glsl>
 vec4 sc_ApplyTAAJitter(vec4 screenPosition)

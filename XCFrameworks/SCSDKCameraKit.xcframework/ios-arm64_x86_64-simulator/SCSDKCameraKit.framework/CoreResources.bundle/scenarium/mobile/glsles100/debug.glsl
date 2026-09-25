@@ -1,7 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//attribute vec4 color 18
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1

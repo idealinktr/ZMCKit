@@ -14,14 +14,15 @@
 //attribute vec2 texture1 4
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
-//sampler sampler mainTextureSmpSC 0:8
-//sampler sampler maskTextureSmpSC 0:9
-//sampler sampler sc_ShadowTextureSmpSC 0:14
-//texture texture2D mainTexture 0:0:0:8
-//texture texture2D maskTexture 0:1:0:9
-//texture texture2D sc_ShadowTexture 0:6:0:14
-//texture texture2DArray mainTextureArrSC 0:16:0:8
-//texture texture2DArray maskTextureArrSC 0:17:0:9
+//output vec4 sc_FragData0 0
+//sampler sampler mainTextureSmpSC 0:11
+//sampler sampler maskTextureSmpSC 0:12
+//sampler sampler sc_ShadowTextureSmpSC 0:19
+//texture texture2D mainTexture 0:0:0:11
+//texture texture2D maskTexture 0:1:0:12
+//texture texture2D sc_ShadowTexture 0:8:0:19
+//texture texture2DArray mainTextureArrSC 0:22:0:11
+//texture texture2DArray maskTextureArrSC 0:23:0:12
 //spec_const bool EMOCHECKERS 0 0
 //spec_const bool ENABLESHADOWS 1 0
 //spec_const bool NOMASK 2 0

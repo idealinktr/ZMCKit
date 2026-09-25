@@ -7,6 +7,7 @@
 @protocol SCCameraKitUserDataProvider;
 @protocol SCCameraKitLensHintProvider;
 @protocol SCCameraKitLocationDataProvider;
+@protocol SCCameraKitGeoDataProvider;
 @protocol SCCameraKitLensMediaPickerProvider;
 @protocol SCCameraKitLensRemoteApiServiceProvider;
 @protocol SCCameraKitLensHttpHandler;
@@ -29,6 +30,9 @@ NS_SWIFT_NAME(DataProviderComponent)
 /// Location data provider
 @property (nonatomic, strong, nullable) id<SCCameraKitLocationDataProvider> location;
 
+/// Geo data provider
+@property (nonatomic, strong, nullable) id<SCCameraKitGeoDataProvider> geoData;
+
 /// Media picker provider for selecting and loading external images and video into lenses.
 @property (nonatomic, strong, nullable) id<SCCameraKitLensMediaPickerProvider> mediaPicker;
 
@@ -44,6 +48,7 @@ NS_SWIFT_NAME(DataProviderComponent)
 /// @param userData user data provider instance
 /// @param lensHint lens hint provider instance
 /// @param location location provider instance
+/// @param geoData geo data provider instance
 /// @param mediaPicker Media picker provider for selecting and loading external images and video into lenses.
 /// @param remoteApiServiceProviders List of remote api service providers to handle remote api requests sent by lenses.
 /// @param lensHttpHandler Http handler to handle http requests made by lenses.
@@ -51,6 +56,7 @@ NS_SWIFT_NAME(DataProviderComponent)
                             userData:(nullable id<SCCameraKitUserDataProvider>)userData
                             lensHint:(nullable id<SCCameraKitLensHintProvider>)lensHint
                             location:(nullable id<SCCameraKitLocationDataProvider>)location
+                             geoData:(nullable id<SCCameraKitGeoDataProvider>)geoData
                          mediaPicker:(nullable id<SCCameraKitLensMediaPickerProvider>)mediaPicker
            remoteApiServiceProviders:(NSArray<id<SCCameraKitLensRemoteApiServiceProvider>> *)remoteApiServiceProviders
                      lensHttpHandler:(nullable id<SCCameraKitLensHttpHandler>)lensHttpHandler
@@ -88,6 +94,18 @@ NS_SWIFT_NAME(DataProviderComponent)
 /// @param userData user data provider instance
 /// @param lensHint lens hint provider instance
 /// @param location location provider instance
+/// @param remoteApiServiceProviders List of remote api service providers to handle remote api requests sent by lenses.
+- (instancetype)initWithDeviceMotion:(nullable id<SCCameraKitDeviceMotionDataProvider>)deviceMotion
+                            userData:(nullable id<SCCameraKitUserDataProvider>)userData
+                            lensHint:(nullable id<SCCameraKitLensHintProvider>)lensHint
+                            location:(nullable id<SCCameraKitLocationDataProvider>)location
+           remoteApiServiceProviders:(NSArray<id<SCCameraKitLensRemoteApiServiceProvider>> *)remoteApiServiceProviders;
+
+/// Convenience init to mantain API compatibility
+/// @param deviceMotion device motion data provider instance
+/// @param userData user data provider instance
+/// @param lensHint lens hint provider instance
+/// @param location location provider instance
 /// @param mediaPicker Media picker provider for selecting and loading external images and video into lenses.
 - (instancetype)initWithDeviceMotion:(nullable id<SCCameraKitDeviceMotionDataProvider>)deviceMotion
                             userData:(nullable id<SCCameraKitUserDataProvider>)userData
@@ -108,6 +126,22 @@ NS_SWIFT_NAME(DataProviderComponent)
                             location:(nullable id<SCCameraKitLocationDataProvider>)location
                          mediaPicker:(nullable id<SCCameraKitLensMediaPickerProvider>)mediaPicker
            remoteApiServiceProviders:(NSArray<id<SCCameraKitLensRemoteApiServiceProvider>> *)remoteApiServiceProviders;
+
+/// Convenience init to mantain API compatibility
+/// @param deviceMotion device motion data provider instance
+/// @param userData user data provider instance
+/// @param lensHint lens hint provider instance
+/// @param location location provider instance
+/// @param mediaPicker Media picker provider for selecting and loading external images and video into lenses.
+/// @param remoteApiServiceProviders List of remote api service providers to handle remote api requests sent by lenses.
+/// @param lensHttpHandler Http handler to handle http requests made by lenses.
+- (instancetype)initWithDeviceMotion:(nullable id<SCCameraKitDeviceMotionDataProvider>)deviceMotion
+                            userData:(nullable id<SCCameraKitUserDataProvider>)userData
+                            lensHint:(nullable id<SCCameraKitLensHintProvider>)lensHint
+                            location:(nullable id<SCCameraKitLocationDataProvider>)location
+                         mediaPicker:(nullable id<SCCameraKitLensMediaPickerProvider>)mediaPicker
+           remoteApiServiceProviders:(NSArray<id<SCCameraKitLensRemoteApiServiceProvider>> *)remoteApiServiceProviders
+                     lensHttpHandler:(nullable id<SCCameraKitLensHttpHandler>)lensHttpHandler;
 
 @end
 

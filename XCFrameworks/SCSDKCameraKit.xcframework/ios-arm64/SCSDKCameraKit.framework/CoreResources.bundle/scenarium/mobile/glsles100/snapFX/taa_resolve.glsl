@@ -1,12 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler sc_TAAColorTextureSmpSC 2:4
-//sampler sampler sc_TAAHistoryTextureSmpSC 2:6
-//sampler sampler sc_TAAMotionVectorTextureSmpSC 2:7
-//texture texture2D sc_TAAColorTexture 2:0:2:4
-//texture texture2D sc_TAAHistoryTexture 2:2:2:6
-//texture texture2D sc_TAAMotionVectorTexture 2:3:2:7
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <std2_vs.glsl>
 #include <std2_fs.glsl>

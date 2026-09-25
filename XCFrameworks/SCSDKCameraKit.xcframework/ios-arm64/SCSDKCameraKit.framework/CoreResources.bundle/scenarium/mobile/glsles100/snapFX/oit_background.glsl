@@ -1,10 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler sc_OITAlpha0SmpSC 2:2
-//sampler sampler sc_OITAlpha1SmpSC 2:3
-//texture texture2D sc_OITAlpha0 2:0:2:2
-//texture texture2D sc_OITAlpha1 2:1:2:3
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1
@@ -148,11 +142,11 @@ sc_writeFragData0(l9_3);
 return;
 }
 #endif
-int alphas[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
+int alphas[8];
 int l9_6=0;
 for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
 {
-if (l9_6<(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4))
+if (l9_6<8)
 {
 alphas[l9_6]=0;
 l9_6++;
@@ -163,80 +157,96 @@ else
 break;
 }
 }
-vec4 l9_7;
-l9_7=vec4(0.0);
-int l9_8;
-vec4 l9_9;
-int l9_10=0;
-for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
-{
-if (l9_10<((int(sc_OITMaxLayers8)!=0) ? 2 : 1))
-{
-if (l9_10==0)
-{
-int l9_11;
+int l9_7;
 #if (sc_OITAlpha0HasSwappedViews)
 {
-l9_11=1-sc_GetStereoViewIndex();
+l9_7=1-sc_GetStereoViewIndex();
 }
 #else
 {
-l9_11=sc_GetStereoViewIndex();
+l9_7=sc_GetStereoViewIndex();
 }
 #endif
-l9_9=sc_SampleTextureBiasOrLevel(sc_OITAlpha0Dims.xy,sc_OITAlpha0Layout,l9_11,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_sc_OITAlpha0)!=0),sc_OITAlpha0Transform,ivec2(SC_SOFTWARE_WRAP_MODE_U_sc_OITAlpha0,SC_SOFTWARE_WRAP_MODE_V_sc_OITAlpha0),(int(SC_USE_UV_MIN_MAX_sc_OITAlpha0)!=0),sc_OITAlpha0UvMinMax,(int(SC_USE_CLAMP_TO_BORDER_sc_OITAlpha0)!=0),sc_OITAlpha0BorderColor,0.0,sc_OITAlpha0);
-}
-else
-{
-vec4 l9_12;
+vec4 l9_8=sc_SampleTextureBiasOrLevel(sc_OITAlpha0Dims.xy,sc_OITAlpha0Layout,l9_7,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_sc_OITAlpha0)!=0),sc_OITAlpha0Transform,ivec2(SC_SOFTWARE_WRAP_MODE_U_sc_OITAlpha0,SC_SOFTWARE_WRAP_MODE_V_sc_OITAlpha0),(int(SC_USE_UV_MIN_MAX_sc_OITAlpha0)!=0),sc_OITAlpha0UvMinMax,(int(SC_USE_CLAMP_TO_BORDER_sc_OITAlpha0)!=0),sc_OITAlpha0BorderColor,0.0,sc_OITAlpha0);
+float l9_9=floor((l9_8.w*255.0)+0.5);
+alphas[3]=(alphas[3]*4)+int(floor(mod(l9_9,4.0)));
+float l9_10=floor(l9_9/4.0);
+alphas[2]=(alphas[2]*4)+int(floor(mod(l9_10,4.0)));
+float l9_11=floor(l9_10/4.0);
+alphas[1]=(alphas[1]*4)+int(floor(mod(l9_11,4.0)));
+alphas[0]=(alphas[0]*4)+int(floor(mod(floor(l9_11/4.0),4.0)));
+float l9_12=floor((l9_8.z*255.0)+0.5);
+alphas[3]=(alphas[3]*4)+int(floor(mod(l9_12,4.0)));
+float l9_13=floor(l9_12/4.0);
+alphas[2]=(alphas[2]*4)+int(floor(mod(l9_13,4.0)));
+float l9_14=floor(l9_13/4.0);
+alphas[1]=(alphas[1]*4)+int(floor(mod(l9_14,4.0)));
+alphas[0]=(alphas[0]*4)+int(floor(mod(floor(l9_14/4.0),4.0)));
+float l9_15=floor((l9_8.y*255.0)+0.5);
+alphas[3]=(alphas[3]*4)+int(floor(mod(l9_15,4.0)));
+float l9_16=floor(l9_15/4.0);
+alphas[2]=(alphas[2]*4)+int(floor(mod(l9_16,4.0)));
+float l9_17=floor(l9_16/4.0);
+alphas[1]=(alphas[1]*4)+int(floor(mod(l9_17,4.0)));
+alphas[0]=(alphas[0]*4)+int(floor(mod(floor(l9_17/4.0),4.0)));
+float l9_18=floor((l9_8.x*255.0)+0.5);
+alphas[3]=(alphas[3]*4)+int(floor(mod(l9_18,4.0)));
+float l9_19=floor(l9_18/4.0);
+alphas[2]=(alphas[2]*4)+int(floor(mod(l9_19,4.0)));
+float l9_20=floor(l9_19/4.0);
+alphas[1]=(alphas[1]*4)+int(floor(mod(l9_20,4.0)));
+alphas[0]=(alphas[0]*4)+int(floor(mod(floor(l9_20/4.0),4.0)));
 #if (sc_OITMaxLayers8)
 {
-vec4 l9_13;
-if (l9_10==1)
-{
-int l9_14;
+int l9_21;
 #if (sc_OITAlpha1HasSwappedViews)
 {
-l9_14=1-sc_GetStereoViewIndex();
+l9_21=1-sc_GetStereoViewIndex();
 }
 #else
 {
-l9_14=sc_GetStereoViewIndex();
+l9_21=sc_GetStereoViewIndex();
 }
 #endif
-l9_13=sc_SampleTextureBiasOrLevel(sc_OITAlpha1Dims.xy,sc_OITAlpha1Layout,l9_14,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_sc_OITAlpha1)!=0),sc_OITAlpha1Transform,ivec2(SC_SOFTWARE_WRAP_MODE_U_sc_OITAlpha1,SC_SOFTWARE_WRAP_MODE_V_sc_OITAlpha1),(int(SC_USE_UV_MIN_MAX_sc_OITAlpha1)!=0),sc_OITAlpha1UvMinMax,(int(SC_USE_CLAMP_TO_BORDER_sc_OITAlpha1)!=0),sc_OITAlpha1BorderColor,0.0,sc_OITAlpha1);
-}
-else
-{
-l9_13=l9_7;
-}
-l9_12=l9_13;
-}
-#else
-{
-l9_12=l9_7;
+vec4 l9_22=sc_SampleTextureBiasOrLevel(sc_OITAlpha1Dims.xy,sc_OITAlpha1Layout,l9_21,varPackedTex.xy,(int(SC_USE_UV_TRANSFORM_sc_OITAlpha1)!=0),sc_OITAlpha1Transform,ivec2(SC_SOFTWARE_WRAP_MODE_U_sc_OITAlpha1,SC_SOFTWARE_WRAP_MODE_V_sc_OITAlpha1),(int(SC_USE_UV_MIN_MAX_sc_OITAlpha1)!=0),sc_OITAlpha1UvMinMax,(int(SC_USE_CLAMP_TO_BORDER_sc_OITAlpha1)!=0),sc_OITAlpha1BorderColor,0.0,sc_OITAlpha1);
+float l9_23=floor((l9_22.w*255.0)+0.5);
+alphas[7]=(alphas[7]*4)+int(floor(mod(l9_23,4.0)));
+float l9_24=floor(l9_23/4.0);
+alphas[6]=(alphas[6]*4)+int(floor(mod(l9_24,4.0)));
+float l9_25=floor(l9_24/4.0);
+alphas[5]=(alphas[5]*4)+int(floor(mod(l9_25,4.0)));
+alphas[4]=(alphas[4]*4)+int(floor(mod(floor(l9_25/4.0),4.0)));
+float l9_26=floor((l9_22.z*255.0)+0.5);
+alphas[7]=(alphas[7]*4)+int(floor(mod(l9_26,4.0)));
+float l9_27=floor(l9_26/4.0);
+alphas[6]=(alphas[6]*4)+int(floor(mod(l9_27,4.0)));
+float l9_28=floor(l9_27/4.0);
+alphas[5]=(alphas[5]*4)+int(floor(mod(l9_28,4.0)));
+alphas[4]=(alphas[4]*4)+int(floor(mod(floor(l9_28/4.0),4.0)));
+float l9_29=floor((l9_22.y*255.0)+0.5);
+alphas[7]=(alphas[7]*4)+int(floor(mod(l9_29,4.0)));
+float l9_30=floor(l9_29/4.0);
+alphas[6]=(alphas[6]*4)+int(floor(mod(l9_30,4.0)));
+float l9_31=floor(l9_30/4.0);
+alphas[5]=(alphas[5]*4)+int(floor(mod(l9_31,4.0)));
+alphas[4]=(alphas[4]*4)+int(floor(mod(floor(l9_31/4.0),4.0)));
+float l9_32=floor((l9_22.x*255.0)+0.5);
+alphas[7]=(alphas[7]*4)+int(floor(mod(l9_32,4.0)));
+float l9_33=floor(l9_32/4.0);
+alphas[6]=(alphas[6]*4)+int(floor(mod(l9_33,4.0)));
+float l9_34=floor(l9_33/4.0);
+alphas[5]=(alphas[5]*4)+int(floor(mod(l9_34,4.0)));
+alphas[4]=(alphas[4]*4)+int(floor(mod(floor(l9_34/4.0),4.0)));
 }
 #endif
-l9_9=l9_12;
-}
-int param_37[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-param_37[i]=alphas[i];
-}
-l9_8=l9_10+1;
-int l9_15=(l9_8*4)-1;
-int l9_16=l9_15;
-float l9_17=floor((l9_9.w*255.0)+0.5);
-int l9_18;
+float alphas_normalized[8];
+int l9_35=0;
 for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
 {
-l9_18=l9_10*4;
-if (l9_16>=l9_18)
+if (l9_35<8)
 {
-param_37[l9_16]=(param_37[l9_16]*4)+int(floor(mod(l9_17,4.0)));
-l9_17=floor(l9_17/4.0);
-l9_16--;
+alphas_normalized[l9_35]=float(alphas[l9_35])/255.0;
+l9_35++;
 continue;
 }
 else
@@ -244,24 +254,15 @@ else
 break;
 }
 }
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-alphas[i]=param_37[i];
-}
-int param_38[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-param_38[i]=param_37[i];
-}
-int l9_19=l9_15;
-float l9_20=floor((l9_9.z*255.0)+0.5);
+float l9_36;
+l9_36=1.0;
+int l9_37=0;
 for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
 {
-if (l9_19>=l9_18)
+if (l9_37<(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4))
 {
-param_38[l9_19]=(param_38[l9_19]*4)+int(floor(mod(l9_20,4.0)));
-l9_20=floor(l9_20/4.0);
-l9_19--;
+l9_36=(1.0-alphas_normalized[l9_37])*l9_36;
+l9_37++;
 continue;
 }
 else
@@ -269,100 +270,6 @@ else
 break;
 }
 }
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-alphas[i]=param_38[i];
-}
-int param_39[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-param_39[i]=param_38[i];
-}
-int l9_21=l9_15;
-float l9_22=floor((l9_9.y*255.0)+0.5);
-for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
-{
-if (l9_21>=l9_18)
-{
-param_39[l9_21]=(param_39[l9_21]*4)+int(floor(mod(l9_22,4.0)));
-l9_22=floor(l9_22/4.0);
-l9_21--;
-continue;
-}
-else
-{
-break;
-}
-}
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-alphas[i]=param_39[i];
-}
-int param_40[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-param_40[i]=param_39[i];
-}
-int l9_23=l9_15;
-float l9_24=floor((l9_9.x*255.0)+0.5);
-for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
-{
-if (l9_23>=l9_18)
-{
-param_40[l9_23]=(param_40[l9_23]*4)+int(floor(mod(l9_24,4.0)));
-l9_24=floor(l9_24/4.0);
-l9_23--;
-continue;
-}
-else
-{
-break;
-}
-}
-for (int i=0; i<int(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4); i++)
-{
-alphas[i]=param_40[i];
-}
-l9_7=l9_9;
-l9_10=l9_8;
-continue;
-}
-else
-{
-break;
-}
-}
-float alphas_normalized[(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4)];
-int l9_25=0;
-for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
-{
-if (l9_25<(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4))
-{
-alphas_normalized[l9_25]=float(alphas[l9_25])/255.0;
-l9_25++;
-continue;
-}
-else
-{
-break;
-}
-}
-float l9_26;
-l9_26=1.0;
-int l9_27=0;
-for (int snapLoopIndex=0; snapLoopIndex==0; snapLoopIndex+=0)
-{
-if (l9_27<(((int(sc_OITMaxLayers8)!=0) ? 2 : 1)*4))
-{
-l9_26=(1.0-alphas_normalized[l9_27])*l9_26;
-l9_27++;
-continue;
-}
-else
-{
-break;
-}
-}
-sc_writeFragData0(vec4(l9_26,l9_26,l9_26,1.0));
+sc_writeFragData0(vec4(l9_36,l9_36,l9_36,1.0));
 }
 #endif // #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER

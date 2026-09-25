@@ -4,6 +4,7 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
 //spec_const int N_SPHERICAL_GAUSSIANS 0 12
 //spec_const int sc_ShaderCacheConstant 1 0
 //SG_REFLECTION_END
