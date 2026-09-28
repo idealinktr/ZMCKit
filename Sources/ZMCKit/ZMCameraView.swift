@@ -80,7 +80,10 @@ public class ZMCameraView: UIView {
         
         previewView.automaticallyConfiguresTouchHandler = true
         cameraKit.start(input: input, arInput: arInput)
-        
+        // start(input:arInput:) assumes the front camera; CameraKit only switches to
+        // the ARKit input (needed for surface-tracking world lenses) on the back camera.
+        cameraKit.cameraPosition = cameraPosition.avPosition
+
         Task { @MainActor in
             await startCamera(input)
         }
