@@ -1,39 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//attribute vec4 position 0
-//attribute vec3 normal 1
-//attribute vec4 tangent 2
-//attribute vec2 texture0 3
-//attribute vec2 texture1 4
-//attribute vec4 boneData 5
-//attribute vec3 blendShape0Pos 6
-//attribute vec3 blendShape1Pos 7
-//attribute vec3 blendShape2Pos 8
-//attribute vec3 blendShape3Pos 9
-//attribute vec3 blendShape4Pos 10
-//attribute vec3 blendShape5Pos 11
-//attribute vec3 blendShape0Normal 12
-//attribute vec3 blendShape1Normal 13
-//attribute vec3 blendShape2Normal 14
-//attribute vec3 positionNext 15
-//attribute vec3 positionPrevious 16
-//attribute vec4 strandProperties 17
-//sampler sampler sc_EnvmapDiffuseSmpSC 0:6
-//sampler sampler sc_EnvmapSpecularSmpSC 0:7
-//sampler sampler sc_SSAOTextureSmpSC 0:8
-//sampler sampler sc_ScreenTextureSmpSC 0:9
-//sampler sampler sc_ShadowTextureSmpSC 0:10
-//sampler sampler sc_StrandDataMapTextureSmpSC 0:11
-//texture texture2D sc_EnvmapDiffuse 0:0:0:6
-//texture texture2D sc_EnvmapSpecular 0:1:0:7
-//texture texture2D sc_SSAOTexture 0:2:0:8
-//texture texture2D sc_ScreenTexture 0:3:0:9
-//texture texture2D sc_ShadowTexture 0:4:0:10
-//texture texture2D sc_StrandDataMapTexture 0:5:0:11
-//texture texture2DArray sc_EnvmapDiffuseArrSC 0:12:0:6
-//texture texture2DArray sc_EnvmapSpecularArrSC 0:13:0:7
-//texture texture2DArray sc_ScreenTextureArrSC 0:14:0:9
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <required2.glsl>
 #include <std2_texture.glsl>

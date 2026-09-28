@@ -1,0 +1,10 @@
+//SG_REFLECTION_BEGIN(100)
+//attribute vec2 position_0 0
+//texture texture2D yTexture_0 0:0:0:2
+//texture texture2D uvTexture_1 0:1:0:3
+//sampler sampler yTexture_0Sampler 0:2
+//sampler sampler uvTexture_1Sampler 0:3
+//ubo float uniformBuffer_0 0:4:96 {
+//vec4 data 0:[6]:16
+//}
+//SG_REFLECTION_END

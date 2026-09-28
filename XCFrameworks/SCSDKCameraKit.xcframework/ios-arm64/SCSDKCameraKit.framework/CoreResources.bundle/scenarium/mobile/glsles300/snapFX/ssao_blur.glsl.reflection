@@ -1,0 +1,23 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler ambientOcclusionSmpSC 0:10
+//texture texture2D ambientOcclusion 0:0:0:10
+//texture texture2DArray ambientOcclusionArrSC 0:20:0:10
+//spec_const bool SC_USE_CLAMP_TO_BORDER_ambientOcclusion 0 0
+//spec_const bool SC_USE_UV_MIN_MAX_ambientOcclusion 1 0
+//spec_const bool SC_USE_UV_TRANSFORM_ambientOcclusion 2 0
+//spec_const bool ambientOcclusionHasSwappedViews 3 0
+//spec_const bool sc_ProjectiveShadowsReceiver 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_ambientOcclusion 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_ambientOcclusion 6 -1
+//spec_const int ambientOcclusionLayout 7 0
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_StereoRenderingMode 9 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 10 0
+//spec_const int sc_StereoViewID 11 0
+//SG_REFLECTION_END

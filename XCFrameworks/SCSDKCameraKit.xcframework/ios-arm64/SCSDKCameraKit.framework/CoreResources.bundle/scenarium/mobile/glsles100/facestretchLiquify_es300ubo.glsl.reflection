@@ -1,0 +1,32 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec4 atbCoord2d 5
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler sc_ScreenTextureSmpSC 0:13
+//texture texture2D sc_ScreenTexture 0:4:0:13
+//texture texture2DArray sc_ScreenTextureArrSC 0:21:0:13
+//ubo float UserUniforms 2:0:960  {
+//mat4 ptsInvMat 0:[10]:64
+//vec4 coeffs 640:[10]:16
+//vec3 camDirO 800:[10]:16
+//}
+//ubo float sc_CameraUBO 0:0:1912  {
+//vec4 sc_UniformConstants 16
+//mat4 sc_ViewProjectionMatrixInverseArray 288:[4]:64
+//sc_Camera_t sc_Camera 1888
+//vec3 sc_Camera.position 0
+//float sc_Camera.aspect 12
+//vec2 sc_Camera.clipPlanes 16
+//}
+//spec_const bool CAMERA_ORTHO 0 0
+//spec_const bool LIQUIFY_FACESTRETCH 1 0
+//spec_const bool LIQUIFY_ONLY 2 0
+//spec_const bool sc_ScreenTextureHasSwappedViews 3 0
+//spec_const int MAX_LIQUIFY 4 10
+//spec_const int sc_ScreenTextureLayout 5 0
+//spec_const int sc_ShaderCacheConstant 6 0
+//SG_REFLECTION_END

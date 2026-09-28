@@ -1,0 +1,58 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler inputTextureSmpSC 0:17
+//sampler sampler inputTextureWarpSmpSC 0:18
+//sampler sampler screenTextureSmpSC 0:33
+//texture texture2D inputTexture 0:0:0:17
+//texture texture2D inputTextureWarp 0:1:0:18
+//texture texture2D screenTexture 0:16:0:33
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:272  {
+//float4 screenTextureUvMinMax 0
+//float4 screenTextureBorderColor 16
+//float screenTextureLOD 32
+//float3x3 meshTransform 48
+//float3x3 meshTransformR 96
+//float3x3 inputTextureTransform 144
+//float4 inputTextureUvMinMax 192
+//float4 inputTextureBorderColor 208
+//float4 inputTextureWarpUvMinMax 224
+//float4 inputTextureWarpBorderColor 240
+//float2 inputDenorm 256
+//}
+//spec_const bool ENABLE_WARP 0 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_inputTextureWarp 1 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_inputTexture 2 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_screenTexture 3 0
+//spec_const bool SC_USE_UV_MIN_MAX_inputTextureWarp 4 0
+//spec_const bool SC_USE_UV_MIN_MAX_inputTexture 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_screenTexture 6 0
+//spec_const bool USE_FLOAT_WARP 7 0
+//spec_const bool inputTextureHasSwappedViews 8 0
+//spec_const bool inputTextureWarpHasSwappedViews 9 0
+//spec_const bool sc_ProjectiveShadowsReceiver 10 0
+//spec_const bool screenTextureHasSwappedViews 11 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTextureWarp 12 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTexture 13 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_screenTexture 14 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTextureWarp 15 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTexture 16 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_screenTexture 17 -1
+//spec_const int inputTextureLayout 18 0
+//spec_const int inputTextureWarpLayout 19 0
+//spec_const int sc_ShaderCacheConstant 20 0
+//spec_const int sc_StereoRenderingMode 21 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 22 0
+//spec_const int screenTextureLayout 23 0
+//SG_REFLECTION_END

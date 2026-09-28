@@ -17,6 +17,7 @@
 //attribute vec3 positionNext 15
 //attribute vec3 positionPrevious 16
 //attribute vec4 strandProperties 17
+//output vec4 sc_FragData0 0
 //spec_const bool sc_OITCompositingPass 0 0
 //spec_const bool sc_OITDepthBoundsPass 1 0
 //spec_const bool sc_OITDepthGatherPass 2 0

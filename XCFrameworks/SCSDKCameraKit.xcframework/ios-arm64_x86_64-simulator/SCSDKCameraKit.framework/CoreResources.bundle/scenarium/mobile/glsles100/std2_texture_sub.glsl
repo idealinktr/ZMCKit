@@ -1,6 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//SG_REFLECTION_END
 #if __VERSION__==100||defined(SCC_VALIDATION)
 #define sampler2DArray vec2
 #define sampler3D vec3

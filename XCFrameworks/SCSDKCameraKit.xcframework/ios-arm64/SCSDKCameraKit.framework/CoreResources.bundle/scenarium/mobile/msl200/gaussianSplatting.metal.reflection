@@ -1,60 +1,64 @@
 //SG_REFLECTION_BEGIN(200)
-//attribute vec4 boneData 5
-//attribute vec3 blendShape0Pos 6
-//attribute vec3 blendShape0Normal 12
-//attribute vec3 blendShape1Pos 7
-//attribute vec3 blendShape1Normal 13
-//attribute vec3 blendShape2Pos 8
-//attribute vec3 blendShape2Normal 14
-//attribute vec3 blendShape3Pos 9
-//attribute vec3 blendShape4Pos 10
-//attribute vec3 blendShape5Pos 11
+//attribute ivec2 uv 5
 //attribute vec4 position 0
-//attribute ivec2 uv 18
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture0 3
 //attribute vec2 texture1 4
-//attribute vec3 positionNext 15
-//attribute vec3 positionPrevious 16
-//attribute vec4 strandProperties 17
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
-//sampler sampler texCenterXYZScaleXSmp 0:31
-//sampler sampler texChunkInfoSmp 0:32
-//sampler sampler texColorSmp 0:33
-//sampler sampler texRotationSmp 0:34
-//sampler sampler texScaleYZSmp 0:35
-//texture texture2D texCenterXYZScaleX 0:15:0:31
-//texture texture2D texChunkInfo 0:16:0:32
-//texture texture2D texColor 0:17:0:33
-//texture texture2D texRotation 0:18:0:34
-//texture texture2D texScaleYZ 0:19:0:35
-//ubo float sc_BonesUBO 0:3:96 {
+//output vec4 sc_FragData0 0
+//sampler sampler texCenterDelta2SmpSC 0:37
+//sampler sampler texCenterDeltaSmpSC 0:38
+//sampler sampler texCenterXYZScaleXSmpSC 0:39
+//sampler sampler texChunkInfoSmpSC 0:40
+//sampler sampler texColorSmpSC 0:41
+//sampler sampler texRotationOverride2SmpSC 0:42
+//sampler sampler texRotationOverrideSmpSC 0:43
+//sampler sampler texRotationSmpSC 0:44
+//sampler sampler texScaleYZSmpSC 0:45
+//texture texture2D texCenterDelta 0:14:0:38
+//texture texture2D texCenterDelta2 0:15:0:37
+//texture texture2D texCenterXYZScaleX 0:16:0:39
+//texture texture2D texChunkInfo 0:17:0:40
+//texture texture2D texColor 0:18:0:41
+//texture texture2D texRotation 0:19:0:44
+//texture texture2D texRotationOverride 0:20:0:43
+//texture texture2D texRotationOverride2 0:21:0:42
+//texture texture2D texScaleYZ 0:22:0:45
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4x4 sc_ViewProjectionMatrixArray 32:[4]:64
+//float4x4 sc_ProjectionMatrixArray 544:[4]:64
+//float4x4 sc_ViewMatrixArray 1056:[4]:64
+//float4x4 sc_PrevFrameViewProjectionMatrixArray 1568:[4]:64
+//float4 sc_CurrentRenderTargetDims 1824
+//float4 sc_StereoClipPlanes 1856:[2]:16
 //}
-//ubo int UserUniforms 0:36:4224 {
-//float4 sc_UniformConstants 1392
-//float4x4 sc_ProjectionMatrixArray 2384:[2]:64
-//float4x4 sc_ViewMatrixArray 2640:[2]:64
-//float4x4 sc_ViewMatrixInverseArray 2768:[2]:64
-//float4x4 sc_ModelMatrix 3024
-//float4 sc_CurrentRenderTargetDims 3456
-//float4 sc_StereoClipPlanes 3664:[2]:16
-//float4 dims 4208
+//ubo float sc_DrawCallUBO 2:3:176  {
+//float4x4 sc_ModelMatrix 0
+//float3 sc_LocalAabbMin 64
+//float3 sc_LocalAabbMax 80
+//float4x4 sc_PrevFrameModelMatrix 96
+//float2 sc_TAAJitterOffset 160
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
+//ubo float UserUniforms 2:0:32  {
+//float4 dims 0
+//float sc_gs_InterpolationFactor 16
+//float sc_gs_AlphaCutoff 20
 //}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
-//}
-//spec_const bool sc_ChunkySplats 0 0
-//spec_const int sc_ShaderCacheConstant 1 0
-//spec_const int sc_StereoRenderingMode 2 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 3 0
+//spec_const bool sc_BlendMode_MultiplyOriginal 0 0
+//spec_const bool sc_BlendMode_PremultipliedAlphaAuto 1 0
+//spec_const bool sc_BlendMode_Screen 2 0
+//spec_const bool sc_ChunkySplats 3 0
+//spec_const bool sc_MotionVectorsPass 4 0
+//spec_const bool sc_TAAEnabled 5 0
+//spec_const bool sc_gs_AlphaCutoffEnabled 6 0
+//spec_const bool sc_gs_ErrorPattern 7 0
+//spec_const bool sc_gs_OrthoProjection 8 0
+//spec_const bool sc_gs_QuatsHalfAngle 9 0
+//spec_const bool sc_gs_QuatsSmallestThree 10 0
+//spec_const bool sc_gs_TwoInterFrames 11 0
+//spec_const bool sc_gs_UseInterFrame 12 0
+//spec_const int sc_ShaderCacheConstant 13 0
+//spec_const int sc_StereoRenderingMode 14 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 15 0
 //SG_REFLECTION_END

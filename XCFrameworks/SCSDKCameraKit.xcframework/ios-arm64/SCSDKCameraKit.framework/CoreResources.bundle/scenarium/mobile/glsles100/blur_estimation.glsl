@@ -1,12 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler inputTextureSmpSC 2:3
-//sampler sampler maskTextureSmpSC 2:4
-//sampler sampler originalTextureSmpSC 2:5
-//texture texture2D inputTexture 2:0:2:3
-//texture texture2D maskTexture 2:1:2:4
-//texture texture2D originalTexture 2:2:2:5
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE0 1

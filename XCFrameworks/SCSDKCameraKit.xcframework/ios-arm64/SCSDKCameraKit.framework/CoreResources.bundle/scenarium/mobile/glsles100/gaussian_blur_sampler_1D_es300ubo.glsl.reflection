@@ -1,0 +1,35 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec2 texture0 3
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler targetTextureSmpSC 0:20
+//texture texture2D targetTexture 0:10:0:20
+//texture texture2DArray targetTextureArrSC 0:24:0:20
+//ubo float UserUniforms 2:0:1104  {
+//mat3 targetTextureTransform 0
+//vec4 targetTextureUvMinMax 48
+//vec4 targetTextureBorderColor 64
+//float gaussianFilterWeights 80:[32]:16
+//float gaussianFilterOffsets 592:[32]:16
+//}
+//ubo float sc_CameraUBO 0:0:1912  {
+//vec4 sc_UniformConstants 16
+//vec4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_targetTexture 0 0
+//spec_const bool SC_USE_UV_MIN_MAX_targetTexture 1 0
+//spec_const bool SC_USE_UV_TRANSFORM_targetTexture 2 0
+//spec_const bool sc_GaussianFilterVerticalPass 3 0
+//spec_const bool targetTextureHasSwappedViews 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_targetTexture 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_targetTexture 6 -1
+//spec_const int sc_GaussianFilterDataLength 7 5
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_StereoRenderingMode 9 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 10 0
+//spec_const int sc_StereoViewID 11 0
+//spec_const int targetTextureLayout 12 0
+//SG_REFLECTION_END

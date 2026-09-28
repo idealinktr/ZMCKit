@@ -13,9 +13,21 @@ NS_SWIFT_NAME(CacheConfig)
 /// @note Default max is 100MB and min is at least 50MB
 @property (nonatomic, assign, readonly) NSUInteger lensContentMaxSize;
 
+/// Max size in bytes for lens asset cache
+/// @note When set to `0`, CameraKit will derive the asset cache limit from `lensContentMaxSize`
+/// using the configured COF ratio split.
+/// @note Default is `0` and min is at least 50MB when explicitly configured.
+@property (nonatomic, assign, readonly) NSUInteger lensAssetsMaxSize;
+
 /// Init with specifed max size for lens content cache
 /// @param lensContentMaxSize max size for lens content cache
-- (instancetype)initWithLensContentMaxSize:(NSUInteger)lensContentMaxSize NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithLensContentMaxSize:(NSUInteger)lensContentMaxSize;
+
+/// Init with specified max sizes for lens content and lens asset caches.
+/// @param lensContentMaxSize max size for lens content cache
+/// @param lensAssetsMaxSize max size for lens asset cache; provide `0` to preserve COF-based asset sizing
+- (instancetype)initWithLensContentMaxSize:(NSUInteger)lensContentMaxSize
+                         lensAssetsMaxSize:(NSUInteger)lensAssetsMaxSize NS_DESIGNATED_INITIALIZER;
 
 @end
 

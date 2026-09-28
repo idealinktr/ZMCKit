@@ -4,43 +4,36 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture1 4
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
-//sampler sampler sc_TAAColorTextureSmpSC 0:29
-//sampler sampler sc_TAAHistoryTextureSmpSC 0:31
-//sampler sampler sc_TAAMotionVectorTextureSmpSC 0:32
-//texture texture2D sc_TAAColorTexture 0:14:0:29
-//texture texture2D sc_TAAHistoryTexture 0:16:0:31
-//texture texture2D sc_TAAMotionVectorTexture 0:17:0:32
-//ubo int UserUniforms 0:33:4736 {
-//float4 sc_UniformConstants 1392
-//float4 sc_StereoClipPlanes 3664:[2]:16
-//float4 sc_TAAColorTextureSize 4192
-//float3x3 sc_TAAColorTextureTransform 4240
-//float4 sc_TAAColorTextureUvMinMax 4288
-//float4 sc_TAAColorTextureBorderColor 4304
-//float4 sc_TAAHistoryTextureSize 4320
-//float3x3 sc_TAAHistoryTextureTransform 4368
-//float4 sc_TAAHistoryTextureUvMinMax 4416
-//float4 sc_TAAHistoryTextureBorderColor 4432
-//float4 sc_TAAMotionVectorTextureSize 4576
-//float3x3 sc_TAAMotionVectorTextureTransform 4624
-//float4 sc_TAAMotionVectorTextureUvMinMax 4672
-//float4 sc_TAAMotionVectorTextureBorderColor 4688
-//float currentFrameWeight 4704
-//float sharpening 4708
-//float4 debugConsts 4720
+//output vec4 sc_FragData0 0
+//sampler sampler sc_TAAColorTextureSmpSC 0:32
+//sampler sampler sc_TAAHistoryTextureSmpSC 0:34
+//sampler sampler sc_TAAMotionVectorTextureSmpSC 0:35
+//texture texture2D sc_TAAColorTexture 0:14:0:32
+//texture texture2D sc_TAAHistoryTexture 0:16:0:34
+//texture texture2D sc_TAAMotionVectorTexture 0:17:0:35
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
 //}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
+//ubo float UserUniforms 2:0:320  {
+//float4 sc_TAAColorTextureSize 0
+//float3x3 sc_TAAColorTextureTransform 16
+//float4 sc_TAAColorTextureUvMinMax 64
+//float4 sc_TAAColorTextureBorderColor 80
+//float4 sc_TAAHistoryTextureSize 96
+//float3x3 sc_TAAHistoryTextureTransform 112
+//float4 sc_TAAHistoryTextureUvMinMax 160
+//float4 sc_TAAHistoryTextureBorderColor 176
+//float4 sc_TAAMotionVectorTextureSize 192
+//float3x3 sc_TAAMotionVectorTextureTransform 208
+//float4 sc_TAAMotionVectorTextureUvMinMax 256
+//float4 sc_TAAMotionVectorTextureBorderColor 272
+//float currentFrameWeight 288
+//float sharpening 292
+//float4 debugConsts 304
 //}
 //spec_const bool DO_BLIT 0 0
 //spec_const bool ENABLE_COLOR_CLAMPING 1 1
@@ -54,19 +47,20 @@
 //spec_const bool SC_USE_UV_TRANSFORM_sc_TAAColorTexture 9 0
 //spec_const bool SC_USE_UV_TRANSFORM_sc_TAAHistoryTexture 10 0
 //spec_const bool SC_USE_UV_TRANSFORM_sc_TAAMotionVectorTexture 11 0
-//spec_const bool sc_TAAColorTextureHasSwappedViews 12 0
-//spec_const bool sc_TAAHistoryTextureHasSwappedViews 13 0
-//spec_const bool sc_TAAMotionVectorTextureHasSwappedViews 14 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAColorTexture 15 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAHistoryTexture 16 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAMotionVectorTexture 17 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAColorTexture 18 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAHistoryTexture 19 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAMotionVectorTexture 20 -1
-//spec_const int sc_ShaderCacheConstant 21 0
-//spec_const int sc_StereoRenderingMode 22 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 23 0
-//spec_const int sc_TAAColorTextureLayout 24 0
-//spec_const int sc_TAAHistoryTextureLayout 25 0
-//spec_const int sc_TAAMotionVectorTextureLayout 26 0
+//spec_const bool sc_ProjectiveShadowsReceiver 12 0
+//spec_const bool sc_TAAColorTextureHasSwappedViews 13 0
+//spec_const bool sc_TAAHistoryTextureHasSwappedViews 14 0
+//spec_const bool sc_TAAMotionVectorTextureHasSwappedViews 15 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAColorTexture 16 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAHistoryTexture 17 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_sc_TAAMotionVectorTexture 18 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAColorTexture 19 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAHistoryTexture 20 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_sc_TAAMotionVectorTexture 21 -1
+//spec_const int sc_ShaderCacheConstant 22 0
+//spec_const int sc_StereoRenderingMode 23 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 24 0
+//spec_const int sc_TAAColorTextureLayout 25 0
+//spec_const int sc_TAAHistoryTextureLayout 26 0
+//spec_const int sc_TAAMotionVectorTextureLayout 27 0
 //SG_REFLECTION_END

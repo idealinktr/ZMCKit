@@ -1,0 +1,71 @@
+//SG_REFLECTION_BEGIN(100)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 positionNext 15
+//attribute vec3 positionPrevious 16
+//attribute vec4 strandProperties 17
+//sampler sampler sc_EnvmapDiffuseSmpSC 0:15
+//sampler sampler sc_EnvmapSpecularSmpSC 0:16
+//sampler sampler sc_RayTracedAoTextureSmpSC 0:17
+//sampler sampler sc_RayTracedDiffIndTextureSmpSC 0:18
+//sampler sampler sc_RayTracedReflectionTextureSmpSC 0:19
+//sampler sampler sc_RayTracedShadowTextureSmpSC 0:20
+//sampler sampler sc_SSAOTextureSmpSC 0:21
+//sampler sampler sc_ScreenTextureSmpSC 0:22
+//sampler sampler sc_ShadowTextureSmpSC 0:23
+//sampler sampler sc_StrandDataMapTextureSmpSC 0:24
+//sampler sampler z_hitIdAndBarycentricSmp 0:25
+//sampler sampler z_rayDirectionsSmpSC 0:26
+//texture texture2D sc_EnvmapDiffuse 0:3:0:15
+//texture texture2D sc_EnvmapSpecular 0:4:0:16
+//texture texture2D sc_RayTracedAoTexture 0:5:0:17
+//texture texture2D sc_RayTracedDiffIndTexture 0:6:0:18
+//texture texture2D sc_RayTracedReflectionTexture 0:7:0:19
+//texture texture2D sc_RayTracedShadowTexture 0:8:0:20
+//texture texture2D sc_SSAOTexture 0:9:0:21
+//texture texture2D sc_ScreenTexture 0:10:0:22
+//texture texture2D sc_ShadowTexture 0:11:0:23
+//texture texture2D sc_StrandDataMapTexture 0:12:0:24
+//texture utexture2D z_hitIdAndBarycentric 0:13:0:25
+//texture texture2D z_rayDirections 0:14:0:26
+//ubo int LibraryUniforms 0:27:3152  {
+//float4 sc_EnvmapDiffuseDims 
+//float4 sc_EnvmapSpecularDims 
+//float4x4 sc_ProjectionMatrixArray :[]:64
+//float4 sc_CurrentRenderTargetDims 
+//float4 sc_ScreenTextureDims 
+//bool receivesRayTracedReflections 
+//bool isProxyMode 
+//bool receivesRayTracedShadows 
+//bool receivesRayTracedDiffuseIndirect 
+//bool receivesRayTracedAo 
+//float4 sc_RayTracedReflectionTextureDims 
+//float4 sc_RayTracedShadowTextureDims 
+//float4 sc_RayTracedDiffIndTextureDims 
+//float4 sc_RayTracedAoTextureDims 
+//bool noEarlyZ 
+//float4 z_rayDirectionsDims 
+//}
+//ssbo int layoutIndices 0:0:4  {
+//uint _Triangles 0:[1]:4
+//}
+//ssbo float layoutVerticesPN 0:2:4  {
+//float _VerticesPN 0:[1]:4
+//}
+//ssbo float layoutVertices 0:1:4  {
+//float _Vertices 0:[1]:4
+//}
+//SG_REFLECTION_END

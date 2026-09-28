@@ -113,7 +113,6 @@
 #if defined(sc_EnableMultiviewStereoRendering)
 
     #define sc_StereoRenderingMode sc_StereoRendering_Multiview
-    #define sc_NumStereoViews 2
 
     #extension GL_OVR_multiview2 : require
 
@@ -155,7 +154,6 @@
 
     #define sc_StereoRenderingMode sc_StereoRendering_InstancedClipped
     #define sc_NumStereoClipPlanes 1
-    #define sc_NumStereoViews 2
 
     #ifdef VERTEX_SHADER
 

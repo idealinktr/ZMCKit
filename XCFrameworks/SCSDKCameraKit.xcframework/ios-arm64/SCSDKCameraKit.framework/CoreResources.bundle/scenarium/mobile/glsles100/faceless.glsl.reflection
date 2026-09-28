@@ -1,0 +1,4 @@
+//SG_REFLECTION_BEGIN(100)
+//sampler sampler cameraTextureSmpSC 2:1
+//texture texture2D cameraTexture 2:0:2:1
+//SG_REFLECTION_END

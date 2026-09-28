@@ -5,6 +5,7 @@
 //attribute vec4 tangent 2
 //attribute vec2 texture0 3
 //attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
 //spec_const int sc_DepthBufferMode 0 0
 //spec_const int sc_RenderingSpace 1 -1
 //spec_const int sc_ShaderCacheConstant 2 0

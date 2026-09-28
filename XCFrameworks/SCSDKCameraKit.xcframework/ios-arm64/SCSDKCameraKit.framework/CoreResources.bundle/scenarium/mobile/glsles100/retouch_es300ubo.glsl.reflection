@@ -1,0 +1,102 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 boneData 5
+//attribute vec3 blendShape0Pos 6
+//attribute vec3 blendShape0Normal 12
+//attribute vec3 blendShape1Pos 7
+//attribute vec3 blendShape1Normal 13
+//attribute vec3 blendShape2Pos 8
+//attribute vec3 blendShape2Normal 14
+//attribute vec3 blendShape3Pos 9
+//attribute vec3 blendShape4Pos 10
+//attribute vec3 blendShape5Pos 11
+//attribute vec4 position 0
+//attribute vec2 texture1 4
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//output vec4 sc_FragData0 0
+//sampler sampler lookupTextureSmpSC 0:14
+//sampler sampler maskTextureSmpSC 0:15
+//sampler sampler sc_ScreenTextureSmpSC 0:19
+//texture texture2D lookupTexture 0:3:0:14
+//texture texture2D maskTexture 0:4:0:15
+//texture texture2D sc_ScreenTexture 0:8:0:19
+//texture texture2DArray lookupTextureArrSC 0:25:0:14
+//texture texture2DArray maskTextureArrSC 0:26:0:15
+//texture texture2DArray sc_ScreenTextureArrSC 0:29:0:19
+//ubo float UserUniforms 2:0:180  {
+//mat3 lookupTextureTransform 0
+//vec4 lookupTextureUvMinMax 48
+//vec4 lookupTextureBorderColor 64
+//mat3 maskTextureTransform 80
+//vec4 maskTextureUvMinMax 128
+//vec4 maskTextureBorderColor 144
+//float softSkinRadius 160
+//float softSkinIntensity 164
+//float teethWhiteningIntensity 168
+//float eyeWhiteningIntensity 172
+//float sharpenEyeIntensity 176
+//}
+//ubo float sc_BonesUBO 0:0:96  {
+//sc_Bone_t sc_Bones 0:[1]:96
+//vec4 sc_Bones.boneMatrix 0:[3]:16
+//vec4 sc_Bones.normalMatrix 48:[3]:16
+//}
+//ubo float sc_CameraUBO 0:1:1912  {
+//vec4 sc_UniformConstants 16
+//mat4 sc_ViewProjectionMatrixArray 32:[4]:64
+//mat4 sc_ProjectionMatrixArray 544:[4]:64
+//mat4 sc_ProjectionMatrixInverseArray 800:[4]:64
+//mat4 sc_ViewMatrixArray 1056:[4]:64
+//vec4 sc_CurrentRenderTargetDims 1824
+//vec4 sc_StereoClipPlanes 1856:[2]:16
+//sc_Camera_t sc_Camera 1888
+//vec3 sc_Camera.position 0
+//float sc_Camera.aspect 12
+//vec2 sc_Camera.clipPlanes 16
+//}
+//ubo float sc_DrawCallUBO 0:2:672  {
+//mat4 sc_ModelMatrix 0
+//mat4 sc_ProjectorMatrix 64
+//vec4 weights0 128
+//vec4 weights1 144
+//mat4 sc_ModelViewProjectionMatrixArray 160:[4]:64
+//mat4 sc_ModelViewMatrixArray 416:[4]:64
+//}
+//spec_const bool ADD_NOISE 0 1
+//spec_const bool EYE_SHARPEN 1 0
+//spec_const bool EYE_WHITENING 2 0
+//spec_const bool IS_LEGACY_LOOKUP 3 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_lookupTexture 4 0
+//spec_const bool SC_USE_CLAMP_TO_BORDER_maskTexture 5 0
+//spec_const bool SC_USE_UV_MIN_MAX_lookupTexture 6 0
+//spec_const bool SC_USE_UV_MIN_MAX_maskTexture 7 0
+//spec_const bool SC_USE_UV_TRANSFORM_lookupTexture 8 0
+//spec_const bool SC_USE_UV_TRANSFORM_maskTexture 9 0
+//spec_const bool SOFT_SKIN 10 0
+//spec_const bool TEETH_WHITENING 11 0
+//spec_const bool lookupTextureHasSwappedViews 12 0
+//spec_const bool maskTextureHasSwappedViews 13 0
+//spec_const bool sc_FramebufferFetch 14 0
+//spec_const bool sc_OITCompositingPass 15 0
+//spec_const bool sc_OITDepthBoundsPass 16 0
+//spec_const bool sc_OITDepthGatherPass 17 0
+//spec_const bool sc_ProjectiveShadowsReceiver 18 0
+//spec_const bool sc_ScreenTextureHasSwappedViews 19 0
+//spec_const bool sc_VertexBlending 20 0
+//spec_const bool sc_VertexBlendingUseNormals 21 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_lookupTexture 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_maskTexture 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_lookupTexture 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_maskTexture 25 -1
+//spec_const int lookupTextureLayout 26 0
+//spec_const int maskTextureLayout 27 0
+//spec_const int sc_DepthBufferMode 28 0
+//spec_const int sc_RenderingSpace 29 -1
+//spec_const int sc_ScreenTextureLayout 30 0
+//spec_const int sc_ShaderCacheConstant 31 0
+//spec_const int sc_SkinBonesCount 32 0
+//spec_const int sc_StereoRenderingMode 33 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 34 0
+//spec_const int sc_StereoViewID 35 0
+//SG_REFLECTION_END

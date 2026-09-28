@@ -4,15 +4,15 @@
 //output vec4 FragColor0 0
 //sampler sampler screenTextureSmpSC 0:1
 //texture texture2D screenTexture 0:0:0:1
-//ubo float UserUniforms 0:2:256 {
+//ubo float UserUniforms 0:2:192  {
 //sc_Camera_t sc_Camera 0
 //float3 sc_Camera.position 0
 //float sc_Camera.aspect 16
 //float2 sc_Camera.clipPlanes 24
 //float4 sc_StereoClipPlanes 32:[2]:16
 //float3x3 meshTransform 64
-//float screenTextureLevel 116
-//float3x3 screenTextureTransform 176
+//float screenTextureLevel 112
+//float3x3 screenTextureTransform 144
 //}
 //spec_const bool GRAYSCALE_AS_ALPHA 0 0
 //spec_const bool ONLY_VERTEX_ATTRIBUTE 1 0

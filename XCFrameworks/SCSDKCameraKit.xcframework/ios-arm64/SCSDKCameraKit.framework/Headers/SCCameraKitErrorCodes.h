@@ -5,6 +5,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSString * _Nonnull const SCCameraKitErrorDomain;
+
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorUnspecified;
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorLensMetadataNotFound;
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorLensContentNotFound;
@@ -12,5 +14,6 @@ FOUNDATION_EXPORT NSInteger const SCCameraKitErrorLensContentUrlMissing;
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorLensChecksumMissing;
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorCannotWriteToFile;
 FOUNDATION_EXPORT NSInteger const SCCameraKitErrorInvalidExtension;
+FOUNDATION_EXPORT NSInteger const SCCameraKitErrorOperationCancelled;
 
 NS_ASSUME_NONNULL_END

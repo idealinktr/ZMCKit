@@ -1,8 +1,4 @@
 #version 100 sc_convert_to 300 es
-//SG_REFLECTION_BEGIN(100)
-//sampler sampler depthBufferSmpSC 2:1
-//texture texture2D depthBuffer 2:0:2:1
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <required2.glsl>
 #include <std2_vs.glsl>

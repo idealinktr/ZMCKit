@@ -4,37 +4,27 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture1 4
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
-//sampler sampler texAbSmpSC 0:27
-//sampler sampler texMainSmpSC 0:28
-//texture texture2D texAb 0:14:0:27
-//texture texture2D texMain 0:15:0:28
-//ubo int UserUniforms 0:29:4480 {
-//float4 sc_UniformConstants 1392
-//float4 sc_StereoClipPlanes 3664:[2]:16
-//float3x3 texAbTransform 4240
-//float4 texAbUvMinMax 4288
-//float4 texAbBorderColor 4304
-//float3x3 texMainTransform 4368
-//float4 texMainUvMinMax 4416
-//float4 texMainBorderColor 4432
-//float epsilonSq 4448
-//float maskScaleMultiplier 4452
-//float maskSmoothStepMin 4456
-//float maskSmoothStepMax 4460
-//bool invertMask 4464
+//output vec4 sc_FragData0 0
+//sampler sampler texAbSmpSC 0:30
+//sampler sampler texMainSmpSC 0:31
+//texture texture2D texAb 0:14:0:30
+//texture texture2D texMain 0:15:0:31
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
+//ubo float UserUniforms 2:0:192  {
+//float3x3 texAbTransform 0
+//float4 texAbUvMinMax 48
+//float4 texAbBorderColor 64
+//float3x3 texMainTransform 80
+//float4 texMainUvMinMax 128
+//float4 texMainBorderColor 144
+//float epsilonSq 160
+//float maskScaleMultiplier 164
+//float maskSmoothStepMin 168
+//float maskSmoothStepMax 172
+//bool invertMask 176
 //}
 //spec_const bool MASK_PROCESSING_MULTIPLICATION 0 0
 //spec_const bool MASK_PROCESSING_SCALE 1 0

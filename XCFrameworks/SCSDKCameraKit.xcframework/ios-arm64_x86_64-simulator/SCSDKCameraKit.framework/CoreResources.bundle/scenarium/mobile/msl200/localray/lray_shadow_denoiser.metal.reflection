@@ -5,13 +5,13 @@
 //sampler sampler rayOriginAndMaskSmpSC 0:11
 //texture texture2D denoiserKernel 0:1:0:8
 //texture utexture2D rayOriginAndMask 0:4:0:11
-//ubo float UserUniforms 0:14:144 {
-//float3 originScale 32
-//float3 originOffset 64
-//float3 cameraPos 96
-//float3 lightPos 112
-//float sinFovHalf 128
-//int camViewportHeight 132
-//int filterMaxRadius 136
+//ubo float UserUniforms 0:14:80  {
+//float3 originScale 0
+//float3 originOffset 16
+//float3 cameraPos 32
+//float3 lightPos 48
+//float sinFovHalf 64
+//int camViewportHeight 68
+//int filterMaxRadius 72
 //}
 //SG_REFLECTION_END

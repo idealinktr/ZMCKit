@@ -1,29 +1,5 @@
 #version 300 es
 //#include <required.glsl> // [HACK 4/6/2023] See SCC shader_merger.cpp
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//attribute vec2 texture0 3
-//attribute vec3 normal 1
-//attribute vec4 tangent 2
-//attribute vec2 texture1 4
-//sampler sampler depthTextureSmpSC 0:7
-//texture texture2D depthTexture 0:0:0:7
-//texture texture2DArray depthTextureArrSC 0:14:0:7
-//spec_const bool PACKED_DISPARITY 0 0
-//spec_const bool SC_USE_CLAMP_TO_BORDER_depthTexture 1 0
-//spec_const bool SC_USE_UV_MIN_MAX_depthTexture 2 0
-//spec_const bool SC_USE_UV_TRANSFORM_depthTexture 3 0
-//spec_const bool depthTextureHasSwappedViews 4 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_depthTexture 5 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_depthTexture 6 -1
-//spec_const int depthTextureLayout 7 0
-//spec_const int sc_DepthBufferMode 8 0
-//spec_const int sc_RenderingSpace 9 -1
-//spec_const int sc_ShaderCacheConstant 10 0
-//spec_const int sc_StereoRenderingMode 11 0
-//spec_const int sc_StereoRendering_IsClipDistanceEnabled 12 0
-//spec_const int sc_StereoViewID 13 0
-//SG_REFLECTION_END
 #define STD_DISABLE_VERTEX_NORMAL 1
 #define STD_DISABLE_VERTEX_TANGENT 1
 #define STD_DISABLE_VERTEX_TEXTURE1 1
@@ -56,7 +32,6 @@
 #endif
 #ifdef sc_EnableMultiviewStereoRendering
 #define sc_StereoRenderingMode sc_StereoRendering_Multiview
-#define sc_NumStereoViews 2
 #extension GL_OVR_multiview2 : require
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
@@ -78,7 +53,6 @@
 #endif
 #define sc_StereoRenderingMode sc_StereoRendering_InstancedClipped
 #define sc_NumStereoClipPlanes 1
-#define sc_NumStereoViews 2
 #ifdef VERTEX_SHADER
 #ifdef sc_EnableInstancingFallback
 #define sc_GlobalInstanceID (sc_FallbackInstanceID*2+gl_InstanceID)
@@ -168,11 +142,11 @@ layout(num_views=sc_NumStereoViews) in;
 #ifndef sc_RenderingSpace
 #define sc_RenderingSpace -1
 #endif
-#ifndef sc_NumStereoViews
-#define sc_NumStereoViews 1
-#endif
 #ifndef sc_StereoRendering_IsClipDistanceEnabled
 #define sc_StereoRendering_IsClipDistanceEnabled 0
+#endif
+#ifndef sc_NumStereoViews
+#define sc_NumStereoViews 1
 #endif
 #ifndef sc_ShaderCacheConstant
 #define sc_ShaderCacheConstant 0
@@ -186,25 +160,32 @@ vec2 clipPlanes;
 #ifndef sc_DepthBufferMode
 #define sc_DepthBufferMode 0
 #endif
+#ifndef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 0
+#elif sc_ProjectiveShadowsReceiver==1
+#undef sc_ProjectiveShadowsReceiver
+#define sc_ProjectiveShadowsReceiver 1
+#endif
 uniform mat4 sc_ModelMatrix;
-uniform mat4 sc_ViewProjectionMatrixArray[sc_NumStereoViews];
+uniform mat4 sc_ProjectorMatrix;
 uniform vec4 sc_StereoClipPlanes[sc_NumStereoViews];
 uniform vec4 sc_UniformConstants;
+uniform mat4 sc_ViewProjectionMatrixArray[sc_NumStereoViews];
 uniform mat4 sc_ModelViewProjectionMatrixArray[sc_NumStereoViews];
 uniform mat4 sc_ModelViewMatrixArray[sc_NumStereoViews];
 uniform sc_Camera_t sc_Camera;
 uniform mat4 sc_ProjectionMatrixArray[sc_NumStereoViews];
-out vec4 varPosAndMotion;
-out vec4 varNormalAndMotion;
 out float varClipDistance;
 flat out int varStereoViewID;
 in vec4 position;
 in vec2 texture0;
+out vec4 varPosAndMotion;
 out vec4 varTex01;
 out vec4 varScreenPos;
 out vec2 varScreenTexturePos;
-out vec4 varTangent;
 out vec2 varShadowTex;
+out vec4 varNormalAndMotion;
+out vec4 varTangent;
 in vec3 normal;
 in vec4 tangent;
 in vec2 texture1;
@@ -317,38 +298,54 @@ l9_6=l9_5;
 }
 #endif
 varScreenTexturePos=l9_6;
+#if (sc_ProjectiveShadowsReceiver)
+{
 vec4 l9_8;
+#if (sc_RenderingSpace==1)
+{
+l9_8=sc_ModelMatrix*position;
+}
+#else
+{
+l9_8=position;
+}
+#endif
+vec4 l9_9=sc_ProjectorMatrix*l9_8;
+varShadowTex=((l9_9.xy/vec2(l9_9.w))*0.5)+vec2(0.5);
+}
+#endif
+vec4 l9_10;
 #if (sc_DepthBufferMode==1)
 {
-vec4 l9_9;
+vec4 l9_11;
 if (sc_ProjectionMatrixArray[sc_GetStereoViewIndex()][2].w!=0.0)
 {
-vec4 l9_10=l9_0;
-l9_10.z=((log2(max(sc_Camera.clipPlanes.x,1.0+l9_0.w))*(2.0/log2(sc_Camera.clipPlanes.y+1.0)))-1.0)*l9_0.w;
-l9_9=l9_10;
+vec4 l9_12=l9_0;
+l9_12.z=((log2(max(sc_Camera.clipPlanes.x,1.0+l9_0.w))*(2.0/log2(sc_Camera.clipPlanes.y+1.0)))-1.0)*l9_0.w;
+l9_11=l9_12;
 }
 else
 {
-l9_9=l9_0;
+l9_11=l9_0;
 }
-l9_8=l9_9;
+l9_10=l9_11;
 }
 #else
 {
-l9_8=l9_0;
+l9_10=l9_0;
 }
 #endif
-vec4 l9_11=l9_8*1.0;
-vec4 l9_12;
+vec4 l9_13=l9_10*1.0;
+vec4 l9_14;
 #if (sc_ShaderCacheConstant!=0)
 {
-vec4 l9_13=l9_11;
-l9_13.x=l9_11.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
-l9_12=l9_13;
+vec4 l9_15=l9_13;
+l9_15.x=l9_13.x+(sc_UniformConstants.x*float(sc_ShaderCacheConstant));
+l9_14=l9_15;
 }
 #else
 {
-l9_12=l9_11;
+l9_14=l9_13;
 }
 #endif
 #if (sc_StereoRenderingMode>0)
@@ -358,26 +355,23 @@ varStereoViewID=sc_StereoViewID;
 #endif
 #if (sc_StereoRenderingMode==1)
 {
-float l9_14=dot(l9_12,sc_StereoClipPlanes[sc_StereoViewID]);
+float l9_16=dot(l9_14,sc_StereoClipPlanes[sc_StereoViewID]);
 #if (sc_StereoRendering_IsClipDistanceEnabled==1)
 {
-sc_SetClipDistancePlatform(l9_14);
+sc_SetClipDistancePlatform(l9_16);
 }
 #else
 {
-varClipDistance=l9_14;
+varClipDistance=l9_16;
 }
 #endif
 }
 #endif
-gl_Position=l9_12;
+gl_Position=l9_14;
 }
 #elif defined FRAGMENT_SHADER // #if defined VERTEX_SHADER
 #ifndef sc_StereoRenderingMode
 #define sc_StereoRenderingMode 0
-#endif
-#ifndef sc_NumStereoViews
-#define sc_NumStereoViews 1
 #endif
 #ifndef sc_StereoRendering_IsClipDistanceEnabled
 #define sc_StereoRendering_IsClipDistanceEnabled 0
@@ -421,24 +415,34 @@ gl_Position=l9_12;
 #undef PACKED_DISPARITY
 #define PACKED_DISPARITY 1
 #endif
-uniform mat4 sc_ProjectionMatrixArray[sc_NumStereoViews];
+#ifndef USE_CUSTOM_PROJECTION
+#define USE_CUSTOM_PROJECTION 0
+#elif USE_CUSTOM_PROJECTION==1
+#undef USE_CUSTOM_PROJECTION
+#define USE_CUSTOM_PROJECTION 1
+#endif
+#ifndef sc_NumStereoViews
+#define sc_NumStereoViews 1
+#endif
 uniform mat3 depthTextureTransform;
 uniform vec4 depthTextureUvMinMax;
 uniform vec4 depthTextureBorderColor;
 uniform float depthToDisparityNumerator;
 uniform float depthScale;
 uniform float defaultDepth;
+uniform mat4 depthProjectionMatrixArray[sc_NumStereoViews];
+uniform mat4 sc_ProjectionMatrixArray[sc_NumStereoViews];
 uniform mediump sampler2DArray depthTextureArrSC;
 uniform mediump sampler2D depthTexture;
 flat in int varStereoViewID;
-in vec2 varShadowTex;
-in vec4 varPosAndMotion;
-in vec4 varNormalAndMotion;
 in float varClipDistance;
 in vec4 varTex01;
+in vec4 varPosAndMotion;
+in vec4 varNormalAndMotion;
 in vec4 varTangent;
 in vec4 varScreenPos;
 in vec2 varScreenTexturePos;
+in vec2 varShadowTex;
 int sc_GetStereoViewIndex()
 {
 int l9_0;
@@ -706,8 +710,18 @@ l9_52=l9_51;
 float l9_53;
 if (l9_52)
 {
-vec4 l9_54=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()]*vec4(0.0,0.0,-l9_49,1.0);
-l9_53=((0.5*l9_54.z)/l9_54.w)+0.5;
+mat4 l9_54;
+#if (USE_CUSTOM_PROJECTION)
+{
+l9_54=depthProjectionMatrixArray[sc_GetStereoViewIndex()];
+}
+#else
+{
+l9_54=sc_ProjectionMatrixArray[sc_GetStereoViewIndex()];
+}
+#endif
+vec4 l9_55=l9_54*vec4(0.0,0.0,-l9_49,1.0);
+l9_53=((0.5*l9_55.z)/l9_55.w)+0.5;
 }
 else
 {

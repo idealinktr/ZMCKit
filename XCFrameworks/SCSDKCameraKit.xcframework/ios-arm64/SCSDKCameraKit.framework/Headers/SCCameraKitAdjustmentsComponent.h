@@ -1,7 +1,7 @@
 //  Copyright Snap Inc. All rights reserved.
 //  CameraKit
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @protocol SCCameraKitAdjustment;
 @protocol SCCameraKitAdjustmentController;

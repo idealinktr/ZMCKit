@@ -5,6 +5,7 @@
 
 @protocol SCCameraKitLens;
 @protocol SCCameraKitLensPrefetcher;
+@protocol SCCameraKitCancellable;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,10 +35,7 @@ NS_SWIFT_NAME(LensPrefetcherObserver)
 
 NS_SWIFT_NAME(LensPrefetcherTask)
 /// Describes the interface used to cancel an ongoing prefetch task
-@protocol SCCameraKitLensPrefetcherTask <NSObject>
-
-/// Cancel prefetch task if it's ongoing
-- (void)cancel;
+@protocol SCCameraKitLensPrefetcherTask <SCCameraKitCancellable>
 
 @end
 

@@ -4,32 +4,22 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture1 4
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
+//output vec4 sc_FragData0 0
 //sampler sampler backTextureSmpSC 0:17
 //sampler sampler inputTextureSmpSC 0:18
 //sampler sampler maskTextureSmpSC 0:19
-//texture texture2D backTexture 0:3:0:17
-//texture texture2D inputTexture 0:4:0:18
-//texture texture2D maskTexture 0:5:0:19
-//ubo int UserUniforms 0:31:4496 {
-//float4 sc_UniformConstants 1392
-//float4 sc_StereoClipPlanes 3664:[2]:16
-//float3x3 maskTransform 4336
-//float3x3 backTransform 4384
-//float4 backColorMult 4432
-//float3x3 inputTextureTransform 4448
+//texture texture2D backTexture 0:0:0:17
+//texture texture2D inputTexture 0:1:0:18
+//texture texture2D maskTexture 0:2:0:19
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4 sc_StereoClipPlanes 1856:[2]:16
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
+//ubo float UserUniforms 2:0:160  {
+//float3x3 maskTransform 0
+//float3x3 backTransform 48
+//float4 backColorMult 96
+//float3x3 inputTextureTransform 112
 //}
 //spec_const bool backTextureHasSwappedViews 0 0
 //spec_const bool inputTextureHasSwappedViews 1 0

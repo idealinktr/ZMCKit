@@ -1,0 +1,45 @@
+//SG_REFLECTION_BEGIN(200)
+//attribute vec4 position 0
+//attribute vec3 normal 1
+//attribute vec4 tangent 2
+//attribute vec2 texture0 3
+//attribute vec2 texture1 4
+//output vec4 sc_FragData0 0
+//sampler sampler depthBufferSmpSC 0:15
+//texture texture2D depthBuffer 0:0:0:15
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
+//float4x4 sc_ProjectionMatrixArray 544:[4]:64
+//float4x4 sc_ProjectionMatrixInverseArray 800:[4]:64
+//float4 sc_StereoClipPlanes 1856:[2]:16
+//}
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
+//}
+//ubo float UserUniforms 2:0:144  {
+//float4 depthBufferDims 0
+//float3x3 depthBufferTransform 16
+//float4 depthBufferUvMinMax 64
+//float4 depthBufferBorderColor 80
+//float intensity 96
+//float power 100
+//float2 sampleCount 104
+//float2 tapRotationCosSin 112
+//float projectionScaleRadiusInPixels 120
+//float invRadiusSquared 124
+//float selfOcclusionBias 128
+//float peakFalloffSquared 132
+//float invFarPlane 136
+//}
+//spec_const bool SC_USE_CLAMP_TO_BORDER_depthBuffer 0 0
+//spec_const bool SC_USE_UV_MIN_MAX_depthBuffer 1 0
+//spec_const bool SC_USE_UV_TRANSFORM_depthBuffer 2 0
+//spec_const bool depthBufferHasSwappedViews 3 0
+//spec_const bool sc_ProjectiveShadowsReceiver 4 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_depthBuffer 5 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_depthBuffer 6 -1
+//spec_const int depthBufferLayout 7 0
+//spec_const int sc_ShaderCacheConstant 8 0
+//spec_const int sc_StereoRenderingMode 9 0
+//spec_const int sc_StereoRendering_IsClipDistanceEnabled 10 0
+//SG_REFLECTION_END

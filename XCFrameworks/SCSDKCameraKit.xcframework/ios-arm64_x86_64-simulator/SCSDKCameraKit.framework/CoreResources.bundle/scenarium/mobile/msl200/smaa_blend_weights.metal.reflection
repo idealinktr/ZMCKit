@@ -4,42 +4,35 @@
 //attribute vec3 normal 1
 //attribute vec4 tangent 2
 //attribute vec2 texture1 4
-//output vec4 FragColor0 0
-//output vec4 FragColor1 1
-//output vec4 FragColor2 2
-//output vec4 FragColor3 3
+//output vec4 sc_FragData0 0
 //sampler sampler areaTexSmpSC 0:18
 //sampler sampler edgesTexSmpSC 0:19
 //sampler sampler inputTextureSmpSC 0:20
-//sampler sampler searchTexSmpSC 0:32
-//texture texture2D areaTex 0:3:0:18
-//texture texture2D edgesTex 0:4:0:19
-//texture texture2D inputTexture 0:5:0:20
-//texture texture2D searchTex 0:17:0:32
-//ubo int UserUniforms 0:33:4704 {
-//float4 sc_UniformConstants 1392
-//float4 inputTextureSize 4192
-//float3x3 inputTextureTransform 4240
-//float4 inputTextureUvMinMax 4288
-//float4 inputTextureBorderColor 4304
-//float3x3 edgesTexTransform 4368
-//float4 edgesTexUvMinMax 4416
-//float4 edgesTexBorderColor 4432
-//float3x3 areaTexTransform 4496
-//float4 areaTexUvMinMax 4544
-//float4 areaTexBorderColor 4560
-//float3x3 searchTexTransform 4624
-//float4 searchTexUvMinMax 4672
-//float4 searchTexBorderColor 4688
+//sampler sampler searchTexSmpSC 0:35
+//texture texture2D areaTex 0:0:0:18
+//texture texture2D edgesTex 0:1:0:19
+//texture texture2D inputTexture 0:2:0:20
+//texture texture2D searchTex 0:17:0:35
+//ubo float sc_CameraUBO 1:1:1920  {
+//float4 sc_UniformConstants 16
 //}
-//ssbo int sc_RayTracingCasterIndexBuffer 0:0:4 {
-//uint sc_RayTracingCasterTriangles 0:[1]:4
+//ubo float sc_DrawCallUBO 2:3:64  {
+//float4x4 sc_ProjectorMatrix 0
 //}
-//ssbo float sc_RayTracingCasterNonAnimatedVertexBuffer 0:2:4 {
-//float sc_RayTracingCasterNonAnimatedVertices 0:[1]:4
-//}
-//ssbo float sc_RayTracingCasterVertexBuffer 0:1:4 {
-//float sc_RayTracingCasterVertices 0:[1]:4
+//ubo float UserUniforms 2:0:336  {
+//float4 inputTextureSize 0
+//float3x3 inputTextureTransform 16
+//float4 inputTextureUvMinMax 64
+//float4 inputTextureBorderColor 80
+//float3x3 edgesTexTransform 96
+//float4 edgesTexUvMinMax 144
+//float4 edgesTexBorderColor 160
+//float3x3 areaTexTransform 176
+//float4 areaTexUvMinMax 224
+//float4 areaTexBorderColor 240
+//float3x3 searchTexTransform 256
+//float4 searchTexUvMinMax 304
+//float4 searchTexBorderColor 320
 //}
 //spec_const bool SC_USE_CLAMP_TO_BORDER_areaTex 0 0
 //spec_const bool SC_USE_CLAMP_TO_BORDER_edgesTex 1 0
@@ -56,22 +49,23 @@
 //spec_const bool areaTexHasSwappedViews 12 0
 //spec_const bool edgesTexHasSwappedViews 13 0
 //spec_const bool inputTextureHasSwappedViews 14 0
-//spec_const bool searchTexHasSwappedViews 15 0
-//spec_const int DEBUG_MODE 16 0
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_areaTex 17 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_edgesTex 18 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTexture 19 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_U_searchTex 20 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_areaTex 21 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_edgesTex 22 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTexture 23 -1
-//spec_const int SC_SOFTWARE_WRAP_MODE_V_searchTex 24 -1
-//spec_const int SMAA_AREATEX_MAX_DISTANCE_DIAG 25 20
-//spec_const int SMAA_AREATEX_MAX_DISTANCE 26 16
-//spec_const int SMAA_QUALITY 27 0
-//spec_const int areaTexLayout 28 0
-//spec_const int edgesTexLayout 29 0
-//spec_const int inputTextureLayout 30 0
-//spec_const int sc_ShaderCacheConstant 31 0
-//spec_const int searchTexLayout 32 0
+//spec_const bool sc_ProjectiveShadowsReceiver 15 0
+//spec_const bool searchTexHasSwappedViews 16 0
+//spec_const int DEBUG_MODE 17 0
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_areaTex 18 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_edgesTex 19 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_inputTexture 20 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_U_searchTex 21 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_areaTex 22 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_edgesTex 23 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_inputTexture 24 -1
+//spec_const int SC_SOFTWARE_WRAP_MODE_V_searchTex 25 -1
+//spec_const int SMAA_AREATEX_MAX_DISTANCE_DIAG 26 20
+//spec_const int SMAA_AREATEX_MAX_DISTANCE 27 16
+//spec_const int SMAA_QUALITY 28 0
+//spec_const int areaTexLayout 29 0
+//spec_const int edgesTexLayout 30 0
+//spec_const int inputTextureLayout 31 0
+//spec_const int sc_ShaderCacheConstant 32 0
+//spec_const int searchTexLayout 33 0
 //SG_REFLECTION_END

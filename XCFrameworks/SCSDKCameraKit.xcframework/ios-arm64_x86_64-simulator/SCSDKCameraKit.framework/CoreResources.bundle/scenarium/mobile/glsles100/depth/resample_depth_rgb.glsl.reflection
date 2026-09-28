@@ -1,0 +1,6 @@
+//SG_REFLECTION_BEGIN(100)
+//sampler sampler depthTextureSmpSC 2:2
+//sampler sampler mainTextureSmpSC 2:3
+//texture texture2D depthTexture 2:0:2:2
+//texture texture2D mainTexture 2:1:2:3
+//SG_REFLECTION_END

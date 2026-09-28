@@ -1,0 +1,18 @@
+//SG_REFLECTION_BEGIN(100)
+//attribute float passIdentifierAttr 18
+//attribute float sdfOffsetAttr 19
+//attribute float decorThicknessRatioAttr 20
+//attribute vec4 glyphAtlasUvRectAttr 21
+//sampler sampler backgroundFillTextureSmpSC 2:6
+//sampler sampler colorTextureSmpSC 2:7
+//sampler sampler mainFillTextureSmpSC 2:8
+//sampler sampler mainTextureSmpSC 2:9
+//sampler sampler outlineFillTextureSmpSC 2:10
+//sampler sampler shadowFillTextureSmpSC 2:11
+//texture texture2D backgroundFillTexture 2:0:2:6
+//texture texture2D colorTexture 2:1:2:7
+//texture texture2D mainFillTexture 2:2:2:8
+//texture texture2D mainTexture 2:3:2:9
+//texture texture2D outlineFillTexture 2:4:2:10
+//texture texture2D shadowFillTexture 2:5:2:11
+//SG_REFLECTION_END

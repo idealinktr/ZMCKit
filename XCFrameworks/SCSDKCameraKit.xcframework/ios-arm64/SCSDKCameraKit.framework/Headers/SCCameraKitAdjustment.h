@@ -1,7 +1,8 @@
 //  Copyright Snap Inc. All rights reserved.
 //  CameraKit
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -1,11 +1,6 @@
 #include <metal_stdlib>
 #include <simd/simd.h>
 using namespace metal;
-//SG_REFLECTION_BEGIN(200)
-//attribute vec4 position 0
-//output uint tmax 0
-//output uvec4 id_and_barycentrics 1
-//SG_REFLECTION_END
 
 namespace SNAP_VS {
 struct main_vert_out

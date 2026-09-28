@@ -1,0 +1,14 @@
+//SG_REFLECTION_BEGIN(100)
+//sampler sampler mainTextureSmpSC 2:6
+//sampler sampler tex_BY_YSmpSC 2:7
+//sampler sampler tex_RG_RB_GBSmpSC 2:8
+//sampler sampler tex_RR_GG_BBSmpSC 2:9
+//sampler sampler tex_RY_GYSmpSC 2:10
+//sampler sampler tex_R_G_BSmpSC 2:11
+//texture texture2D mainTexture 2:0:2:6
+//texture texture2D tex_BY_Y 2:1:2:7
+//texture texture2D tex_RG_RB_GB 2:2:2:8
+//texture texture2D tex_RR_GG_BB 2:3:2:9
+//texture texture2D tex_RY_GY 2:4:2:10
+//texture texture2D tex_R_G_B 2:5:2:11
+//SG_REFLECTION_END

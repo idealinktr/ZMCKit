@@ -1,6 +1,4 @@
 #pragma once
-//SG_REFLECTION_BEGIN(100)
-//SG_REFLECTION_END
 #if defined VERTEX_SHADER
 #include <std2_shadows.glsl>
 #include <std2_taa.glsl>

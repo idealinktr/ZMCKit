@@ -5,11 +5,11 @@
 //sampler sampler rayOriginAndMaskSmpSC 0:11
 //texture utexture2D hitDistance 0:3:0:10
 //texture utexture2D rayOriginAndMask 0:4:0:11
-//ubo float UserUniforms 0:14:128 {
-//float3 originScale 32
-//float3 originOffset 64
-//float distanceScale 80
-//float3 lightPos 96
-//float4 lightDirectionAndAngle 112
+//ubo float UserUniforms 0:14:80  {
+//float3 originScale 0
+//float3 originOffset 16
+//float distanceScale 32
+//float3 lightPos 48
+//float4 lightDirectionAndAngle 64
 //}
 //SG_REFLECTION_END

@@ -2,8 +2,7 @@
 //  CameraKit
 
 #import <SCSDKCameraKit/SCCameraKitOutputSpecialCase.h>
-
-#import <UIKit/UIKit.h>
+#import <CoreGraphics/CGGeometry.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
