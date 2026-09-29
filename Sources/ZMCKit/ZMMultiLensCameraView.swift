@@ -147,8 +147,11 @@ public class ZMMultiLensCameraView: ZMCameraView {
     }
     
     private func setupCaptureOutputs() {
-        if captureSession.canAddOutput(photoOutput) {
-            captureSession.addOutput(photoOutput)
+        // Session changes go through the same queue that starts the session
+        sessionQueue.async { [captureSession, photoOutput] in
+            if captureSession.canAddOutput(photoOutput) {
+                captureSession.addOutput(photoOutput)
+            }
         }
     }
     
