@@ -28,6 +28,7 @@ public class ZMCameraView: UIView {
     internal let cameraPosition: ZMCameraPosition
     
     public let captureSession = AVCaptureSession()
+    internal let sessionQueue = DispatchQueue(label: "ZMCKit.captureSession")
     public var cameraKit: CameraKitProtocol!
     public let previewView = {
         let preview = PreviewView()
@@ -80,20 +81,25 @@ public class ZMCameraView: UIView {
         
         previewView.automaticallyConfiguresTouchHandler = true
         cameraKit.start(input: input, arInput: arInput)
-        
-        Task { @MainActor in
-            await startCamera(input)
+        // start(input:arInput:) assumes the front camera; CameraKit only switches to
+        // the ARKit input (needed for surface-tracking world lenses) on the back camera.
+        cameraKit.cameraPosition = cameraPosition.avPosition
+
+        // startRunning()/stopRunning() block until the camera is ready, so keep them
+        // off the main thread (otherwise launch freezes and can be killed by the watchdog).
+        let position = cameraPosition.avPosition
+        sessionQueue.async {
+            input.position = position
+            input.startRunning()
         }
     }
-    
-    private func startCamera(_ input: AVSessionInput) async {
-        input.position = cameraPosition.avPosition
-        input.startRunning()
-    }
-    
+
     public func cleanup() {
         cameraKit.remove(output: previewView)
-        captureSession.stopRunning()
+        let session = captureSession
+        sessionQueue.async {
+            session.stopRunning()
+        }
     }
 
     public override func removeFromSuperview() {
